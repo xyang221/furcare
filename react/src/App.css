@@ -5,9 +5,15 @@
 }
 html, body, #root, #defaultLayout, #guestLayout {
     min-height: 100vh;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     text-align: center;
+    background-image: url('../src/assets/furcarebg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -162,7 +168,9 @@ table > tbody > tr > td {
     background: #FFFFFF;
     max-width: 360px;
     padding: 34px;
-    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.80);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .login-signup-form .title {
@@ -173,7 +181,7 @@ table > tbody > tr > td {
 
 .login-signup-form .form .message {
     margin: 15px 0 0;
-    color: #b3b3b3;
+    color: black;
     font-size: 16px;
     text-align: center;
 }
