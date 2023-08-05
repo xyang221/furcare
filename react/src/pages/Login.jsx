@@ -46,7 +46,7 @@ export default function Login() {
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
                 <form onSubmit={onSubmit}>
-                    <h1>LOGIN</h1>
+                    <h1 className="title">LOGIN</h1>
                     {errors && <div className="="alert>
                         {Object.keys(errors).map(key=> (
                             <p key={key}>{errors[key][0]}</p>

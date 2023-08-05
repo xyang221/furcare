@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import axiosClient from "../axios-client";
 import { useStateContext } from "../contexts/ContextProvider";
 
+
 export default function Signup() {
 
     const nameRef = useRef();
@@ -12,6 +13,7 @@ export default function Signup() {
     const [errors,setErrors] = useState(null);
 
     const {setUser, setToken} = useStateContext;
+
 
     const onSubmit = (ev) => {
         ev.preventDefault()
@@ -33,6 +35,7 @@ export default function Signup() {
                     setErrors(response.data.errors);
                 }
             })
+
     }
 
     return (
