@@ -11,8 +11,10 @@ export default function Signup() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title">Sign Up</h1>
-                    <input type="name" placeholder="Full Name" />
-                    <input type="email" placeholder="Email Address" />
+                    <input type="firstname" placeholder="First Name" />
+                    <input type="lastname" placeholder="Last Name" />
+                    <input type="contact_num" placeholder="Contact Number" />
+                    <input type="username" placeholder="UserName" />
                     <input type="password" placeholder="Password" />
                     <input type="password" placeholder="Password Confirmation" />
                     <button className="btn btn-block">Signup</button>
