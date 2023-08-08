@@ -1,22 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 
 * {
     box-sizing: border-box;
 }
-html, body, #root, #defaultLayout, #guestLayout {
-    min-height: 100vh;
-    display: flex;
+
+html,
+body,
+#root,
+#defaultLayout,
+#guestLayout {
+    /* display: flex; */
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+    position: relative;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+.bg-index {
+    opacity: 0.6;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 700px;
+}
+
+.bg-main {
+    /* position: fixed; */
+    background-image: url("../src/assets/furcarebg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    width: 100%;
+    height: 50px;
+    background: black;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: normal;
+    padding-top: 3px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
     margin: 0;
     margin-bottom: 15px;
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
     margin: 0;
     padding: 0;
     font-size: 14px;
@@ -52,13 +94,12 @@ input:focus {
     border: 0;
     text-decoration: none;
     padding: 10px;
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 14px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
     border-radius: 10px;
-    
 }
 
 .btn-block {
@@ -67,7 +108,7 @@ input:focus {
 
 .btn-add,
 .btn-edit,
-.btn-delete{
+.btn-delete {
     padding: 0.5rem 0.75rem;
     font-size: 14px;
     border-radius: 4px;
@@ -93,7 +134,7 @@ input:focus {
 .btn:hover,
 .btn:active,
 .btn:focus {
-    background: #1B1212;
+    background: #1b1212;
 }
 
 .text-center {
@@ -119,7 +160,7 @@ table > tbody > tr > td {
 }
 
 .card {
-    background-color: #FFF;
+    background-color: #fff;
     border-radius: 0.5rem;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1.25rem 1.5rem;
@@ -159,10 +200,11 @@ table > tbody > tr > td {
     width: 360px;
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: #ffffff;
     max-width: 360px;
     padding: 34px;
-    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .login-signup-form .title {
@@ -173,18 +215,17 @@ table > tbody > tr > td {
 
 .login-signup-form .form .message {
     margin: 15px 0 0;
-    color: #b3b3b3;
+    color: black;
     font-size: 16px;
     text-align: center;
 }
 
 .login-signup-form .form .message a {
-    color: #253DB7;
+    color: #253db7;
     text-decoration: none;
 }
 
 /* Login/Signup form */
-
 
 #defaultLayout {
     display: flex;
@@ -192,21 +233,28 @@ table > tbody > tr > td {
 
 #defaultLayout aside {
     width: 240px;
-    background-color: #5b08a7;
-    padding: 1rem
+    background-color: whitesmoke;
+    padding: 1rem;
 }
 
 #defaultLayout aside > a {
+    text-align: left;
     display: block;
     padding: 0.75rem 1rem;
     border-radius: 6px;
-    color: white;
+    color: black;
     text-decoration: none;
     transition: all 0.2s;
+    background: #fff;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    margin-bottom: 15px;
 }
 
 #defaultLayout aside > a:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+    /* border-left: 5px solid #F00; */
+    background: #000;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 #defaultLayout .content {
@@ -223,8 +271,31 @@ table > tbody > tr > td {
     align-items: center;
 }
 
-#defaultLayout main {
-    padding: 2rem;
+/* #defaultLayout main {
+    background-image: url("../src/assets/furcarebg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100;
+    width: 100%;
+} */
+
+.default-form {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.default-form .form {
+    width: 800px;
+    height: 500px;
+    position: relative;
+    z-index: 1;
+    background: #ffffff;
+    padding: 34px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .animated {
