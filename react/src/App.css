@@ -169,8 +169,8 @@ table > tbody > tr > td {
 }
 
 .alert {
-    padding: 1rem;
-    background-color: #ff4040;
+    padding: 5px;
+    background-color: red;
     color: white;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
