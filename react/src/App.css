@@ -170,7 +170,7 @@ table > tbody > tr > td {
 
 .alert {
     padding: 5px;
-    background-color: red;
+    background-color: #ff2400;
     color: white;
     border-radius: 0.5rem;
     margin-bottom: 1rem;

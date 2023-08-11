@@ -9,7 +9,7 @@ export default function Login() {
 
     const [errors, setErrors] = useState(null);
 
-    const { setUser, setToken } = useStateContext;
+    const { setUser, setToken } = useStateContext();
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -20,14 +20,15 @@ export default function Login() {
 
         setErrors(null);
 
-        axiosClient.post('/login', payload)
+        axiosClient
+            .post('/login', payload)
             .then(({ data }) => {
                 setUser(data.user);
                 setToken(data.token);
             })
             .catch((err) => {
                 const response = err.response;
-                if (response && response.status == 422) {
+                if (response && response.status === 422) {
                     if (response.data.errors) {
                         setErrors(response.data.errors);
                     } else {
