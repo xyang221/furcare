@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::dropIfExists('staffs');
+        Schema::create('staffs', function (Blueprint $table) {
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
             $table->integer('contact_num');
-            $table->unsignedBigInteger('users_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('address_id');
             $table->timestamps();
 
-            $table->foreign('users_id')->references('id')->on('users');
-            $table->foreign('address_id')->references('id')->on('address');
+            $table->foreign('user_id')->references('id')->on('users');
+        $table->foreign('address_id')->references('id')->on('addresses');
+
         });
     }
 

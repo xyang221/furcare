@@ -12,7 +12,7 @@ body,
     /* display: flex; */
     justify-content: center;
     text-align: center;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
 }
 
@@ -66,6 +66,11 @@ body {
     background-color: #f6f6f6;
 }
 
+label {
+    font-size: 17px;
+    font-weight: bold;
+}
+
 input {
     outline: 0;
     background: #ffffff;
@@ -84,6 +89,7 @@ input:focus {
     border-color: #ff0000;
 }
 
+
 .btn,
 .btn-add,
 .btn-edit,
@@ -100,6 +106,7 @@ input:focus {
     transition: all 0.3 ease;
     cursor: pointer;
     border-radius: 10px;
+    margin-right: 10px;
 }
 
 .btn-block {
@@ -296,6 +303,11 @@ table > tbody > tr > td {
     padding: 34px;
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.9);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
 }
 
 .animated {

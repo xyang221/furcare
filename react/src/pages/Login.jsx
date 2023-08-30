@@ -4,7 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
 
 export default function Login() {
-    const emailRef = useRef();
+    const usernameRef = useRef();
     const passwordRef = useRef();
 
     const [errors, setErrors] = useState(null);
@@ -14,14 +14,13 @@ export default function Login() {
     const onSubmit = (ev) => {
         ev.preventDefault();
         const payload = {
-            email: emailRef.current.value,
+            username: usernameRef.current.value,
             password: passwordRef.current.value,
         };
 
         setErrors(null);
 
-        axiosClient
-            .post('/login', payload)
+        axiosClient.post('/login', payload)
             .then(({ data }) => {
                 setUser(data.user);
                 setToken(data.token);
@@ -56,9 +55,9 @@ export default function Login() {
                             </div>
                         )}
                         <input
-                            ref={emailRef}
-                            type="email"
-                            placeholder="Email Address"
+                            ref={usernameRef}
+                            type="text"
+                            placeholder="Username"
                         />
                         {/* <input ref={Ref} type="username" placeholder="Username" /> */}
                         <input

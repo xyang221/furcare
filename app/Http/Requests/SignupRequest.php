@@ -27,7 +27,7 @@ class SignupRequest extends FormRequest
             // 'lastname' => 'required|string|max:55',
             // 'contact_num' => 'required|integer|max:11',
             // 'username' => 'required|string|unique:users,username',
-            'name' => 'required|string|max:55',
+            'username' => 'required|string|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => [
                 'required', 
@@ -35,7 +35,6 @@ class SignupRequest extends FormRequest
                 Password::min(8)
                     ->letters()
                     ->mixedCase() // Add this for mixed case letters
-                    ->symbols()
             ]
         ];
     }

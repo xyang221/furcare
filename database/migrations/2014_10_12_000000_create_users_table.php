@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('roles_id');
-            $table->foreign('roles_id')->references('id')->on('roles');
+            $table->string('email');
             $table->string('username');
             $table->string('password');
             $table->string('is_password_verified');

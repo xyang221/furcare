@@ -11,7 +11,9 @@ export default function RegisterClient() {
     const {setNotification} = useStateContext();
     const [user, setUser] = useState({
         id: null,
-        name: "",
+        firstname: "",
+        lastname: "",
+        contact_num: "",
         email: "",
         password: "",
         password_confirmation: "",
@@ -71,7 +73,7 @@ export default function RegisterClient() {
             <div className="card animate fadeInDown">
                 {loading && <div className="text-center">Loading...</div>}
                 {errors && (
-                    <div className="=" alert>
+                    <div className="alert">
                         {Object.keys(errors).map((key) => (
                             <p key={key}>{errors[key][0]}</p>
                         ))}
@@ -79,14 +81,45 @@ export default function RegisterClient() {
                 )}
                 {!loading && (
                     <form onSubmit={onSubmit}>
+                        <h2>Pet Owner Details</h2>
+                        <div style={{flexDirection:'row'}}>
                         <input
-                            value={user.name}
+                            value={user.firstname}
                             onChange={(ev) =>
-                                setUser({ ...user, name: ev.target.value })
+                                setUser({ ...user, firstname: ev.target.value })
                             }
-                            placeholder="Name"
+                            placeholder="First Name"
                         />
                         <input
+                            value={user.lastname}
+                            onChange={(ev) =>
+                                setUser({ ...user, lastname: ev.target.value })
+                            }
+                            placeholder="Last Name"
+                        />
+                        </div>
+                        <label for="city">Address: </label>
+                        <select name="city">
+                            <option>Province:</option>
+                        </select>
+                        <select name="city">
+                            <option>City:</option>
+                        </select>
+                        <select name="city">
+                            <option>Barangay:</option>
+                        </select>
+                        <select name="city">
+                            <option>Street:</option>
+                        </select>
+                        <input
+                            type="number"
+                            value={user.contact_num}
+                            onChange={(ev) =>
+                                setUser({ ...user, contact_num: ev.target.value })
+                            }
+                            placeholder="Contact Number"
+                        />
+                         <input
                             type="email"
                             value={user.email}
                             onChange={(ev) =>
@@ -94,6 +127,49 @@ export default function RegisterClient() {
                             }
                             placeholder="Email"
                         />
+
+                        <h2>Pet Details</h2>
+                        <input
+                            type="file"
+                            value={user.email}
+                            onChange={(ev) =>
+                                setUser({ ...user, email: ev.target.value })
+                            }
+                        />
+                        <input
+                            type="text"
+                            value={user.email}
+                            onChange={(ev) =>
+                                setUser({ ...user, email: ev.target.value })
+                            }
+                            placeholder="Pet Name"
+                        />
+                        <input
+                            type="text"
+                            value={user.email}
+                            onChange={(ev) =>
+                                setUser({ ...user, email: ev.target.value })
+                            }
+                            placeholder="Specie"
+                        />
+                        <input
+                            type="email"
+                            value={user.email}
+                            onChange={(ev) =>
+                                setUser({ ...user, email: ev.target.value })
+                            }
+                            placeholder="Birthdate"
+                        />
+                        <input
+                            type="email"
+                            value={user.email}
+                            onChange={(ev) =>
+                                setUser({ ...user, email: ev.target.value })
+                            }
+                            placeholder="Breed"
+                        />
+
+                        <h2>Create Account</h2>
                         <input
                             type="password"
                             onChange={(ev) =>
@@ -113,6 +189,7 @@ export default function RegisterClient() {
                         />
                         <button className="btn">Save</button>
                     </form>
+                    //add next page to register the client to mobile app
                 )}
             </div>
         </div>

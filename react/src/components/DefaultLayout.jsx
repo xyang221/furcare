@@ -31,13 +31,16 @@ export default function DefaultLayout() {
         <div id="defaultLayout">
             <aside>
                 <Link to="/dashboard">Dashboard</Link>
+                <Link to="/petowners/new">Registration</Link>
                 <Link to="/users">Users</Link>
+                <Link to="/petowners">Pet Owners</Link>
             </aside>
             <div className="content">
                 <header>
                     <div>Header</div>
                     <div>
-                        {user.name}
+                        {user.username}
+                        <Link to={`/user/`+user.id} className="btn-edit">Edit Profile</Link>
                         <a href="#" onClick={onLogout} className="btn-logout">
                             Logout
                         </a>

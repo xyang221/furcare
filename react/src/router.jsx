@@ -8,6 +8,8 @@ import GuestLayout from "./components/GuestLayout";
 import Dashboard from "./pages/Dashboard";
 import UserForm from "./pages/UserForm";
 import RegisterClient from "./pages/RegisterClient";
+import PetOwners from "./pages/PetOwners";
+import PetOwnerForm from "./pages/PetOwnerForm";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +18,7 @@ const router = createBrowserRouter([
         children:[
             {
                 path: '/',
-                element:<Navigate to='/users' />
+                element:<Navigate to='/dashboard' />
             },
             
             {
@@ -39,8 +41,27 @@ const router = createBrowserRouter([
             },
 
             {
+                path:'/user/:id',
+                element:<UserForm key="userUpdate"/>
+            },
+
+            {
                 path:'/register-client',
                 element:<RegisterClient />
+            },
+
+            {
+                path:'/petowners',
+                element:<PetOwners />
+            },
+
+            {
+                path:'/petowners/new',
+                element:<PetOwnerForm key="petownerCreate"/>
+            },
+            {
+                path:'/petowners/:id',
+                element:<PetOwnerForm key="petownerUpdate"/>
             },
            
         ]

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosClient from "../axios-client";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -9,13 +9,10 @@ export default function Users() {
 
     const { setNotification } = useStateContext();
 
-    useEffect(() => {
-        getUsers();
-    }, []);
-
     const getUsers = () => {
+        
         setLoading(true);
-        axiosClient.get('/user')
+        axiosClient.get('/users')
             .then(({ data }) => {
                 setLoading(false);
                 setUsers(data.data);
@@ -36,6 +33,10 @@ export default function Users() {
         });
     };
 
+    useEffect(() => {
+        getUsers();
+    }, []);
+
     return (
         <div>
             <div className="default-form animated fadeInDown">
@@ -50,7 +51,7 @@ export default function Users() {
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Username</th>
                                     <th>Email</th>
                                     <th>Created Date</th>
                                     <th>Actions</th>
@@ -63,25 +64,21 @@ export default function Users() {
                                     </tr>
                                 </tbody>
                             )}
-                            {loading && (
+                            {!loading && (
                                 <tbody>
-                                    {users.map((u) => (
-                                        <tr>
+                                    {users.map(u => (
+                                        <tr key={u.id}>
                                             <td>{u.id}</td>
-                                            <td>{u.name}</td>
+                                            <td>{u.username}</td>
                                             <td>{u.email}</td>
                                             <td>{u.created_at}</td>
                                             <td>
-                                                <Link
-                                                    to={"/users/" + u.id}
-                                                    className="btn-edit"
-                                                >
+                                            <Link to={`/users/`+u.id} className="btn-edit">
                                                     Edit
                                                 </Link>
+                                               
                                                 <button
-                                                    onClick={(ev) =>
-                                                        onDelete(u)
-                                                    }
+                                                    onClick={() => onDelete(u)}
                                                     className="btn-delete"
                                                 >
                                                     Delete
