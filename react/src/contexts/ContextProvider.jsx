@@ -4,11 +4,11 @@ const StateContext = createContext({
     user: null,
     token: null,
     notification: null,
-    petowner: null,
+    // petowner: null,
     setUser: () => {},
     setToken: () => {},
     setNotification: () => {},
-    setPetowner: () => {}
+    // setPetowner: () => {}
 })
 
 export const ContextProvider =({children}) => {
@@ -41,8 +41,8 @@ export const ContextProvider =({children}) => {
             setToken,
             notification,
             setNotification,
-            petowner,
-            setPetowner
+            // petowner,
+            // setPetowner
         }}>
             {children}
         </StateContext.Provider>

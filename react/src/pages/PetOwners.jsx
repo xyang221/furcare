@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../axios-client";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function PetOwners() {
+    const { id } = useParams();
+    const [pets, setPets] = useState([]);
     const [petowners, setPetowners] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -16,7 +18,7 @@ export default function PetOwners() {
         document.title = "Pet Owners";
         
         setLoading(true);
-        axiosClient.get('/petowners')
+        axiosClient.get('/pet_owners')
             .then(({ data }) => {
                 setLoading(false);
                 setPetowners(data.data);
@@ -47,6 +49,8 @@ export default function PetOwners() {
     //         });
     // };
 
+
+
     const onDelete = (po) => {
         if (!window.confirm("Are you sure?")) {
             return;
@@ -59,9 +63,33 @@ export default function PetOwners() {
     };
 
     useEffect(() => {
+    
+            setLoading(true);
+            axiosClient.get(`/pet_owners/${id}`)
+                .then(({ data }) => {
+                    setLoading(false);
+                    setPetowners(data);
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
+
+                axiosClient.get(`/pet_owners/${id}/pets`)
+                .then(({ data }) => {
+                    setLoading(false);
+                    setPets(data);
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
+    }
+
+        , [id]);
+
+    useEffect(() => {
         getPetowners();
-        // fetchAddresses();
     }, []);
+    console.log(petowners)
 
     return (
         <div>
@@ -76,6 +104,7 @@ export default function PetOwners() {
                         <table>
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Contact Number</th>
@@ -94,15 +123,15 @@ export default function PetOwners() {
                                 <tbody>
                                     {petowners.map(po => (
                                         <tr key={po.id}>
+                                            <td><Link to={`/petowners/${po.id}/pets`} className="btn-edit" > Pets </Link></td>
                                             <td>{po.id}</td>
                                             <td>{`${po.firstname} ${po.lastname}`}</td>
                                             <td>{po.contact_num}</td>
-                                            {/* <td>{po.address.zipcode.city} </td> */}
                                             <td>{po.address.barangay}, {po.address.zipcode.city} </td>
-                                           
                                             <td>
                                                 <Link to={`/petowners/`+po.id} className="btn-edit" > Edit </Link>
                                                 <button onClick={() => onDelete(po)} className="btn-delete" > Delete </button>
+                                            
                                             </td>
                                         </tr>
                                     ))}

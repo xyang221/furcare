@@ -19,7 +19,6 @@ class ZipcodeResource extends JsonResource
             'zipcode' => $this->zipcode,
             'city' => $this->city,
             'province' => $this->province,
-            // Other address fields...
         ];
     }
 }

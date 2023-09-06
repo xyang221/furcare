@@ -16,19 +16,21 @@ class PetOwnerController extends Controller
      */
     public function index()
     {
-        // return response()->json("PetOwner Index");
-
-        // return PetOwnerResource::collection(PetOwner::paginate(1)); 
-        $petOwner = PetOwner::with('address')->get();
-        $petOwner = Address::with('zipcode')->get();
+        
+        // $petOwner = PetOwner::with('address')->get();
+        // $petOwner = Address::with('zipcode')->get();
         
 
-        return PetOwnerResource::collection( 
-            PetOwner::query()->orderBy('id','desc')->paginate(10)
-        );
+        // return PetOwnerResource::collection( 
+        //     PetOwner::query()->orderBy('id','desc')->paginate(10)
+        // );
 
-        // $petOwner = PetOwner::with('address')->get();
-        // return response()->json($petOwner);
+        $petOwners = PetOwner::with('address')->orderBy('id', 'desc')->paginate(10);
+
+        return PetOwnerResource::collection($petOwners);
+
+        // return response()->json("index");
+
     }
 
     /**
@@ -36,19 +38,11 @@ class PetOwnerController extends Controller
      */
     public function store(StorePetOwnerRequest $request)
     {
-        // PetOwner::create($request->validated());
-        // return response()->json("PetOwner Created");
-
         $data = $request->validated(); //get the data
         $petOwner = PetOwner::create($data); //create user
-        // return response(new UserResource($user), 201);
-        return new UserResource($petOwner, 201);
+        // return new PetOwnerResource($petOwner, 201);
+        return response()->json('store');
 
-
-        // $data = $request->validate(); //get the data
-        // $data['password'] = bcrypt($data['password']); //encypt the password
-        // $petOwner = PetWoner::create($data); //create user
-        // return response(new UserResource($petOwner), 201);
     }
 
     /**
@@ -56,7 +50,6 @@ class PetOwnerController extends Controller
      */
     public function show(PetOwner $petOwner)
     {
-        // return $petOwner;
         return new PetOwnerResource($petOwner);
     }
 
@@ -65,19 +58,11 @@ class PetOwnerController extends Controller
      */
     public function update(UpdatePetOwnerRequest $request, PetOwner $petOwner)
     {
-        // $petOwner->update($request->validated());
-        // return response()->json("PetOwner Updated");
-
-
-        // $data = $request->validated();
-        // //check
-        // if (isset($data['password'])) {
-        //     $data['password'] = bcrypt($data['password']);
-        // }
         $data = $request->validated();
         $petOwner->update($data);
+        return response()->json('updated');
 
-        return new PetOwnerResource($petOwner);
+        // return new PetOwnerResource($petOwner);
     }
 
     /**
@@ -86,8 +71,8 @@ class PetOwnerController extends Controller
     public function destroy(PetOwner $petOwner)
     {
         $petOwner->delete();
+        // return response()->json(null, 204);
         return response()->json("PetOwner Deleted");
 
-        // return response("", 204);
     }
 }

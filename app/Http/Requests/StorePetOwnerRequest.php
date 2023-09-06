@@ -24,9 +24,10 @@ class StorePetOwnerRequest extends FormRequest
         return [
             'firstname'=>'required|string|max:55',
             'lastname'=>'required|string|max:55',
-            'contact_num'=>'required|digits|digits:10',
-            'address_id' =>'required'
-
+            'contact_num' => 'required|string|min:8|max:11',
+            // 'contact_num'=>'required|digits:11',
+            'user_id' => 'exists:users,id',
+            'address_id' => 'exists:addresses,id',
 
         ];
     }

@@ -23,12 +23,6 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'name'=>'required|string|max:55',
-            // 'firstname'=>'required|string|max:55',
-            // 'lastname'=>'required|string|max:55',
-            // 'contact_num'=>'required|number|digits:11',
-
-            //for account
             'email'=>'required|email|unique:users,email,'.$this->id,
             'username'=>'required|string|unique:users,username',
             'password' => [

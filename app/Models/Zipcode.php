@@ -9,15 +9,7 @@ class Zipcode extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['zipcode','province','city'];
+    protected $table = 'zipcodes';
 
-    // public function addresses()
-    // {
-    //     return $this->belongsTo(Address::class);
-    // }
-
-    // public function staffs()
-    // {
-    //     return $this->hasMany(Staff::class);
-    // }
+    protected $fillable = ['zipcode', 'city', 'province'];
 }

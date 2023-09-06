@@ -10,6 +10,7 @@ import UserForm from "./pages/UserForm";
 import RegisterClient from "./pages/RegisterClient";
 import PetOwners from "./pages/PetOwners";
 import PetOwnerForm from "./pages/PetOwnerForm";
+import Pets from "./pages/Pets";
 
 const router = createBrowserRouter([
     {
@@ -41,11 +42,6 @@ const router = createBrowserRouter([
             },
 
             {
-                path:'/user/:id',
-                element:<UserForm key="userUpdate"/>
-            },
-
-            {
                 path:'/register-client',
                 element:<RegisterClient />
             },
@@ -63,6 +59,10 @@ const router = createBrowserRouter([
                 path:'/petowners/:id',
                 element:<PetOwnerForm key="petownerUpdate"/>
             },
+            // {
+            //     path:'/petowners/:id/pets',
+            //     element:<Pets key="viewPets"/>
+            // },
            
         ]
     },

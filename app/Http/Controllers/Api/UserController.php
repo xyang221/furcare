@@ -18,6 +18,8 @@ class UserController extends Controller
         return UserResource::collection( 
             User::query()->orderBy('id','desc')->paginate(10)
         );
+
+        // return response()->json("index");
     }
 
     /**

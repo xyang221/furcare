@@ -24,7 +24,7 @@ export default function PetOwnerForm() {
     useEffect(() => {
     if (id) {
             setLoading(true);
-            axiosClient.get(`/petowners/${id}`)
+            axiosClient.get(`/pet_owners/${id}/pets`)
                 .then(({ data }) => {
                     setLoading(false);
                     setPet(data);
@@ -51,10 +51,10 @@ export default function PetOwnerForm() {
     const onSubmit = (ev) => {
         ev.preventDefault();
         if (pet.id) {
-            axiosClient.put(`/pet/${pet.id}`, pet)
+            axiosClient.put(`/pets/${pet.id}`, pet)
                 .then(() => {
                     setNotification("User successfully updated");
-                    navigate("/pet");
+                    navigate("/pets");
                 })
                 .catch((err) => {
                     const response = err.response;
@@ -63,10 +63,10 @@ export default function PetOwnerForm() {
                     }
                 });
         } else {
-            axiosClient.post(`/pet`, pet)
+            axiosClient.post(`/pets`, pet)
                 .then(() => {
                     setNotification("User successfully created");
-                    navigate("/pet");
+                    navigate("/pets");
                 })
                 .catch((err) => {
                     const response = err.response;

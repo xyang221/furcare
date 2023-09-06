@@ -22,10 +22,11 @@ class UpdatePetOwnerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'id' => 'integer',
-            'firstname'=>'required|string',
-            'lastname'=>'required|string',
-            'contact_num'=>'required|digits:10'
+            'firstname'=>'required|string|max:55',
+            'lastname'=>'required|string|max:55',
+            'contact_num' => 'required|string|min:8|max:11',
+            // 'user_id' => 'exists:users,id',
+            'address_id' => 'exists:addresses,id',
         ];
     }
 }

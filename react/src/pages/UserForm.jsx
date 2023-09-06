@@ -49,7 +49,7 @@ export default function UserForm() {
             axiosClient.post(`/users`, user)
                 .then(() => {
                     setNotification('User successfully created')
-                    navigate('/users');
+                    navigate('/petowners/new');
                 })
                 .catch((err) => {
                     const response = err.response;
@@ -58,8 +58,8 @@ export default function UserForm() {
                     }
                 });
         }
-
     };
+    
     return (
         <div>
             {user.id && <h1  className="title">Update User</h1>}

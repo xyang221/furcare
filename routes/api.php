@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PetOwnerController;
+use App\Http\Controllers\Api\ZipcodeController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\PetController;
+use App\Http\Controllers\Api\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,18 +28,28 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Route::get('/petowner', function (Request $request) {
+    //     return $request->petowner();
+    // });
+
+    
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/petowners', PetOwnerController::class);
+    Route::apiResource('/pet_owners', PetOwnerController::class);
     // Route::get('/petowners', [PetOwnerController::class, 'index']);
+    // Route::apiResource('/zipcodes', ZipcodeController::class);
     Route::apiResource('/addresses', AddressController::class);
+    Route::apiResource('/pets', PetController::class);
+    Route::apiResource('/appointments', AppointmentController::class);
+
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+   
+
 });
 // });
 
-
 Route::post('/signup', [AuthController::class, 'signup']);
-// Route::get('/signup', [AddressController::class,'addAddress'])->name('address.add');
-
 Route::post('/login', [AuthController::class, 'login']);
 
-// Route::apiResource('petowners', PetOwnerController::class);
+
