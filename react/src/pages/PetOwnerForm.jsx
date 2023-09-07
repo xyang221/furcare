@@ -18,6 +18,8 @@ export default function PetOwnerForm() {
         contact_num: '',
         // address_id: null,
     });
+
+    const [address,setAddress]= useState([]);
  
     useEffect(() => {
         if (id) {
@@ -30,6 +32,7 @@ export default function PetOwnerForm() {
                 .catch(() => {
                     setLoading(false);
                 });
+
     }
 
         }, [id]);
@@ -72,8 +75,22 @@ export default function PetOwnerForm() {
            
         }
     };
+
+    useEffect(() => {
+      
+                axiosClient.get(`/addresses`)
+                .then(({ data }) => {
+                    setLoading(false);
+                    setAddress(data.data);
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
+
+
+        }, []);
     // debugger;
-console.log(petowner)
+console.log(address)
     return (
         <div>
 
@@ -117,9 +134,63 @@ console.log(petowner)
                             }
                             placeholder="Contact Number"
                         />
-                        <label htmlFor="address">Address</label>
-                        <select id=""></select>
+                        <label htmlFor="address">Address</label> <br></br>
+                        <select
+                            // value={petowner.address_id}
+                            // onChange={(ev) =>
+                            //     setPetowner({ ...petowner, address_id: ev.target.value })
+                            // }
+                            >
+                            <option value="">Zipcode</option>
+                            {address.map(item => (
+                                <option key={item.id} value={item.id}>
+                                {item.zipcode.zipcode}
+                                </option>
+                            ))}
+                            </select>
 
+                            <select
+                            // value={petowner.address_id}
+                            // onChange={(ev) =>
+                            //     setPetowner({ ...petowner, address_id: ev.target.value })
+                            // }
+                            >
+                            <option value="">Province</option>
+                            {address.map(item => (
+                                <option key={item.id} value={item.id}>
+                                {item.zipcode.province}
+                                </option>
+                            ))}
+                            </select>
+
+                            <select
+                            // value={petowner.address_id}
+                            // onChange={(ev) =>
+                            //     setPetowner({ ...petowner, address_id: ev.target.value })
+                            // }
+                            >
+                            <option value="">City</option>
+                            {address.map(item => (
+                                <option key={item.id} value={item.id}>
+                                {item.zipcode.city}
+                                </option>
+                            ))}
+                            </select>
+
+                        <select
+                            value={petowner.address_id}
+                            onChange={(ev) =>
+                                setPetowner({ ...petowner, address_id: ev.target.value })
+                            }
+                            >
+                            <option value="">Barangay</option>
+                            {address.map(item => (
+                                <option key={item.id} value={item.id}>
+                                {item.barangay}
+                                </option>
+                            ))}
+                            </select>
+                            <br></br>
                         <button className="btn">Save</button>
                         <Link className="btn" to="/petowners">Back</Link>
                     </form>

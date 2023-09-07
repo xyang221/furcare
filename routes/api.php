@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PetOwnerController;
+use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\ZipcodeController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\PetController;
+use App\Http\Controllers\Api\BreedController;
 use App\Http\Controllers\Api\AppointmentController;
 
 /*
@@ -35,10 +37,10 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/pet_owners', PetOwnerController::class);
-    // Route::get('/petowners', [PetOwnerController::class, 'index']);
-    // Route::apiResource('/zipcodes', ZipcodeController::class);
+    Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/addresses', AddressController::class);
     Route::apiResource('/pets', PetController::class);
+    Route::apiResource('/breeds', BreedController::class);
     Route::apiResource('/appointments', AppointmentController::class);
 
 

@@ -55,6 +55,9 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        //
+        $address->delete();
+        // return response()->json(null, 204);
+        return response()->json("pet Deleted");
+
     }
 }
