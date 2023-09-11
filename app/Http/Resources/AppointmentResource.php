@@ -23,6 +23,9 @@ class AppointmentResource extends JsonResource
             'status' => $this->status,
             'remarks' => $this->remarks,
 
+            'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+            'client_service' => new ClientServiceResource($this->whenLoaded('client_service')),
+
         ];
     }
 }

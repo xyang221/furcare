@@ -11,6 +11,8 @@ class Appointment extends Model
 {
     use HasFactory;
 
+    protected $table = 'appointments';
+
     protected $fillable = ['date', 'purpose', 'status','remarks', 'petowner_id', 'client_service_id'];
 
     public function petowner()

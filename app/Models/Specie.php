@@ -15,5 +15,10 @@ class Specie extends Model
 
     // protected $with = ['specie'];
 
+    public function breed()
+    {
+        return $this->hasMany(Breed::class);
+    }
+
     
 }

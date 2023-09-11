@@ -26,7 +26,7 @@ class StoreAppointmentRequest extends FormRequest
             'purpose'=>'required|string',
             'status' => 'required|string',
             'remarks' => 'string',
-            'petowner_id' => 'exists:pet_owners,id',
+            'petowner_id' => 'exists:petowners,id',
             'client_service_id' => 'exists:client_service,id',
         ];
     }

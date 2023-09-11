@@ -14,7 +14,7 @@ class Breed extends Model
 
     protected $fillable = ['breed', 'description', 'specie_id'];
 
-    // protected $with = ['breed'];
+    protected $with = ['specie'];
 
     public function specie()
     {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Address;
 use App\Models\User;
+use App\Models\Pet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,7 @@ class PetOwner extends Model
 {
     use HasFactory;
 
-    // protected $table = 'pet_owners';
+    protected $table = 'petowners';
 
     protected $fillable = ['firstname', 'lastname', 'contact_num','user_id','address_id'];
 
@@ -20,6 +21,7 @@ class PetOwner extends Model
     //     return $this->belongsTo(User::class, 'users_id', 'id');
     // }
 
+    protected $with = ['user', 'address'];
 
     public function address()
     {
@@ -31,16 +33,14 @@ class PetOwner extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    // protected $with = ['address'];
+    public function pets()
+    {
+        return $this->hasMany(Pet::class);
+    }
 
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 
-    
-
-    
-
-   
-   
-
-    
-    
 }

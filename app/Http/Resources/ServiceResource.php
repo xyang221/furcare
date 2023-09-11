@@ -5,9 +5,10 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PetResource extends JsonResource
+class ServiceResource extends JsonResource
 {
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -17,15 +18,13 @@ class PetResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'birthdate' => $this->birthdate,
-            'gender' => $this->gender,
+            'service' => $this->service,
+            'price' => $this->price,
+            'status' => $this->status,
             'color' => $this->color,
-            'qr_code' => $this->qr_code,
 
-            'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+            'category' => new ServiceCategoryResource($this->whenLoaded('category')),
 
-            'breed' => new BreedResource($this->whenLoaded('breed')),
 
         ];
     }

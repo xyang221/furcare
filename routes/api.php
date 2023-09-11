@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\PetController;
 use App\Http\Controllers\Api\BreedController;
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\ClientServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,19 +35,22 @@ Route::middleware('auth:sanctum')->group(function() {
     //     return $request->petowner();
     // });
 
-    
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/pet_owners', PetOwnerController::class);
+    Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/addresses', AddressController::class);
     Route::apiResource('/pets', PetController::class);
+    // Route::get('/petowners/{id}/pets', [PetController::class,'show']);
+
+   
+    // Route::get('/petowners/{id}/pets', 'PetController@getPetsByOwner');
+   
     Route::apiResource('/breeds', BreedController::class);
     Route::apiResource('/appointments', AppointmentController::class);
+    Route::apiResource('/clientservices', ClientServiceController::class);
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
-
-   
 
 });
 // });
@@ -54,4 +58,7 @@ Route::middleware('auth:sanctum')->group(function() {
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+// Route::get('/petowners/{id}', [PetOwnerController::class,'show']);
+Route::get('/petowners/{id}/pets', [PetController::class,'show']);
 

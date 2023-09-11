@@ -28,7 +28,6 @@ class UpdatePetRequest extends FormRequest
             'color' => 'required|string|max:55',
             'qr_code' => 'required|string|max:55',
             'breed_id' => 'exists:breeds,id',
-            // 'petowner_id' => 'exists:pet_owners,id',
         ];
     }
 }

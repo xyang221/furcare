@@ -22,6 +22,11 @@ class Address extends Model
         return $this->belongsTo(Zipcode::class, 'zipcode_id','id');
     }
 
+    public function petowner()
+    {
+        return $this->hasMany(PetOwner::class);
+    }
+
    
 
     

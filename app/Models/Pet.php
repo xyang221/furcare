@@ -15,7 +15,7 @@ class Pet extends Model
 
     protected $fillable = ['name', 'birthdate', 'gender','color','qr_code', 'breed_id', 'petowner_id'];
 
-    protected $with = ['breed'];
+    protected $with = ['breed', 'petowner'];
 
     public function breed()
     {
@@ -26,4 +26,10 @@ class Pet extends Model
     {
         return $this->belongsTo(PetOwner::class, 'petowner_id','id');
     }
+    // public function petowner()
+    // {
+    //     return $this->belongsTo(PetOwner::class);
+    // }
+
+
 }

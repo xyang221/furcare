@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Pet;
+use App\Models\PetOwner;
+use App\Models\Breed;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
@@ -15,9 +17,16 @@ class PetController extends Controller
      */
     public function index()
     {
-        return PetResource::collection( 
-            Pet::query()->orderBy('id','desc')->paginate(10)
-        );
+
+        $pet = Pet::get();
+
+        // $petOwners = PetOwner::with(['user', 'address'])->orderBy('id', 'desc')->paginate(10);
+
+        return PetResource::collection($pet);
+
+        // $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->paginate(10);
+
+        // return PetResource::collection($pet);
     }
 
     /**
@@ -34,10 +43,13 @@ class PetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pet $pet)
+    public function show(Pet $pet, $id)
     {
+        $petOwner = PetOwner::find($id);
+        $pet = $petOwner->pets;
         return new PetResource($pet);
     }
+
 
     /**
      * Update the specified resource in storage.

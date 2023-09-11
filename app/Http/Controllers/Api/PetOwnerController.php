@@ -16,20 +16,13 @@ class PetOwnerController extends Controller
      */
     public function index()
     {
-        
-        // $petOwner = PetOwner::with('address')->get();
-        // $petOwner = Address::with('zipcode')->get();
-        
 
-        // return PetOwnerResource::collection( 
-        //     PetOwner::query()->orderBy('id','desc')->paginate(10)
-        // );
+        $petOwner = PetOwner::get();
 
-        $petOwners = PetOwner::with('address')->orderBy('id', 'desc')->paginate(10);
+        // $petOwners = PetOwner::with(['user', 'address'])->orderBy('id', 'desc')->paginate(10);
 
-        return PetOwnerResource::collection($petOwners);
+        return PetOwnerResource::collection($petOwner);
 
-        // return response()->json("index");
 
     }
 
@@ -48,8 +41,9 @@ class PetOwnerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PetOwner $petOwner)
+    public function show(PetOwner $petOwner,$id)
     {
+        $petOwner = PetOwner::find($id);
         return new PetOwnerResource($petOwner);
     }
 

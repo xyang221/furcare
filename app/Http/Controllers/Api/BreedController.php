@@ -15,9 +15,14 @@ class BreedController extends Controller
      */
     public function index()
     {
-        $breed = Breed::with('specie')->orderBy('id', 'desc')->paginate(10);
 
-        return BreedResource::collection($breed);
+        return BreedResource::collection( 
+            Breed::query()->orderBy('id','desc')->paginate(10)
+        );
+
+        // $breed = Breed::with('specie')->orderBy('id', 'desc')->paginate(10);
+
+        // return BreedResource::collection($breed);
     }
 
     /**
@@ -27,8 +32,8 @@ class BreedController extends Controller
     {
         $data = $request->validated(); //get the data
         $breed = Breed::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        return new BreedResource($breed, 201);
+        // return response()->json('store');
     }
 
     /**
@@ -57,6 +62,6 @@ class BreedController extends Controller
     {
         $breed->delete();
         // return response()->json(null, 204);
-        return response()->json("pet Deleted");
+        return response()->json("breed Deleted");
     }
 }

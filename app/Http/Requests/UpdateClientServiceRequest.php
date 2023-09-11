@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePetRequest extends FormRequest
+class UpdateClientServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,12 @@ class StorePetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
-            'name'=>'required|string|max:55',
-            'birthdate'=>'required|date',
-            'gender' => 'required|string|max:55',
-            'color' => 'required|string|max:55',
-            'qr_code' => 'required|string|max:55',
-            'breed_id' => 'exists:breeds,id',
-            'petowner_id' => 'exists:petowners,id',
+            'date'=>'required|date',
+            'deposit'=>'double|max:55',
+            'balance'=>'double|max:55',
+            'rendered_by' => 'string',
+            // 'petowner_id' => 'exists:petowners,id',
+            'service_id' => 'exists:services,id',
         ];
     }
 }

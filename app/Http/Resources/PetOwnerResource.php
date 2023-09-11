@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Http\Resources\PetOwnerResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\PetResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,6 +28,8 @@ class PetOwnerResource extends JsonResource
 
             'address' => new AddressResource($this->whenLoaded('address')),
             'user' => new UserResource($this->whenLoaded('user')),
+
+            // 'pets' => new PetResource($this->whenLoaded('pets')),
        
         ];
     }

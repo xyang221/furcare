@@ -20,8 +20,13 @@ class ClientService extends Model
         return $this->belongsTo(PetOwner::class, 'petowner_id','id');
     }
 
-    public function services()
+    public function service()
     {
         return $this->belongsTo(Service::class, 'services_id','id');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }
