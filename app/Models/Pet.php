@@ -24,12 +24,17 @@ class Pet extends Model
 
     public function petowner()
     {
-        return $this->belongsTo(PetOwner::class, 'petowner_id','id');
+        return $this->belongsTo(PetOwner::class, 'petowner_id', 'id');
     }
     // public function petowner()
     // {
     //     return $this->belongsTo(PetOwner::class);
     // }
+
+    // protected $primaryKey = 'petowner_id';
+
+
+
 
 
 }

@@ -16,11 +16,6 @@ class PetOwner extends Model
 
     protected $fillable = ['firstname', 'lastname', 'contact_num','user_id','address_id'];
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'users_id', 'id');
-    // }
-
     protected $with = ['user', 'address'];
 
     public function address()

@@ -35,16 +35,16 @@ Route::middleware('auth:sanctum')->group(function() {
     //     return $request->petowner();
     // });
 
+    
+    // Route::get('/petowners/{id}/pets', [PetController::class,'show']);
+
+   
+    // Route::get('/petowners/{id}/pets', 'PetController@getPetsByOwner');
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/addresses', AddressController::class);
     Route::apiResource('/pets', PetController::class);
-    // Route::get('/petowners/{id}/pets', [PetController::class,'show']);
-
-   
-    // Route::get('/petowners/{id}/pets', 'PetController@getPetsByOwner');
-   
     Route::apiResource('/breeds', BreedController::class);
     Route::apiResource('/appointments', AppointmentController::class);
     Route::apiResource('/clientservices', ClientServiceController::class);
@@ -60,5 +60,23 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 // Route::get('/petowners/{id}', [PetOwnerController::class,'show']);
-Route::get('/petowners/{id}/pets', [PetController::class,'show']);
+// Route::get('/petowners/{id}/pets', [PetController::class,'show']);
+
+// use App\Http\Resources\PetOwnerResource;
+// use App\Http\Resources\PetResource;
+// use App\Models\PetOwner;
+// use App\Models\Pet;
+
+// Route::get('/petowners/{id}/pets', function ($id) {
+//     $petOwner = PetOwner::findOrFail($id);
+//     $petResource = PetResource::collection($petOwner->pets);
+    
+//     return [
+//         'pet_owner' => new PetOwnerResource($petOwner),
+//         'pets' => $petResource
+//     ];
+// });
+
+
+// Route::get('/petowners/{petowner}/pets', [PetController::class, 'index']);
 

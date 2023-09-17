@@ -25,6 +25,7 @@ class PetOwnerResource extends JsonResource
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'contact_num' => $this->contact_num,
+            // 'user_id' => $user->id,
 
             'address' => new AddressResource($this->whenLoaded('address')),
             'user' => new UserResource($this->whenLoaded('user')),

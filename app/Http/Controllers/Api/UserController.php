@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         return UserResource::collection( 
-            User::query()->orderBy('id','desc')->paginate(10)
+            User::query()->orderBy('id','desc')->paginate()
         );
 
         // return response()->json("index");
@@ -64,7 +64,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        // return response("", 204);
-        return response()->json(null, 204);
+        return response("Deleted", 200);
+        // return response()->json(null, 204);
     }
 }

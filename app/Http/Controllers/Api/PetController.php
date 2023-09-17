@@ -18,15 +18,16 @@ class PetController extends Controller
     public function index()
     {
 
-        $pet = Pet::get();
+        // $pet = Pet::get();
 
-        // $petOwners = PetOwner::with(['user', 'address'])->orderBy('id', 'desc')->paginate(10);
+        $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->paginate(10);
 
+        // $petOwner = PetOwner::find($id);
+        // $pet = $petOwner->pets;
+       
+        // return new PetResource($pet);
         return PetResource::collection($pet);
 
-        // $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->paginate(10);
-
-        // return PetResource::collection($pet);
     }
 
     /**
@@ -35,20 +36,29 @@ class PetController extends Controller
     public function store(StorePetRequest $request)
     {
         $data = $request->validated(); //get the data
-        $pet = Pet::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        $pet = Pet::create($data); //create pet
+        return new PetResource($pet, 201);
+        // return response()->json('store');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Pet $pet, $id)
+    public function show(Pet $pet )
     {
-        $petOwner = PetOwner::find($id);
-        $pet = $petOwner->pets;
+        // $petOwner = PetOwner::find($id);
+        // $pet = $petOwner->pets;
+        // return new PetResource($pet);
+
+        // $pet = PetOwner::with('pets.petowner')->find($id);
+        // $pets = $petOwner->pets;
+
         return new PetResource($pet);
+
+        // return response()->json(['success' => true, 'data' => $pets]);
     }
+
+    
 
 
     /**
@@ -58,7 +68,9 @@ class PetController extends Controller
     {
         $data = $request->validated();
         $pet->update($data);
-        return response()->json('updated');
+
+        return new PetResource($pet);
+        // return response()->json('updated');
 
     }
 

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\PetOwner;
 use App\Models\Address;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetOwnerRequest;
 use App\Http\Requests\UpdatePetOwnerRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\PetOwnerResource;
 
 class PetOwnerController extends Controller
@@ -17,13 +19,17 @@ class PetOwnerController extends Controller
     public function index()
     {
 
-        $petOwner = PetOwner::get();
+        // $petOwner = PetOwner::get();
 
         // $petOwners = PetOwner::with(['user', 'address'])->orderBy('id', 'desc')->paginate(10);
 
-        return PetOwnerResource::collection($petOwner);
+        // return PetOwnerResource::collection($petOwners);
 
+        return PetOwnerResource::collection( 
+            PetOwner::query()->orderBy('id','desc')->paginate(10)
+        );
 
+        
     }
 
     /**
@@ -32,16 +38,26 @@ class PetOwnerController extends Controller
     public function store(StorePetOwnerRequest $request)
     {
         $data = $request->validated(); //get the data
+        $user = User::findOrFail($data->user_id);
+        // $petOwner = PetOwner::create([
+        //     $data,
+        //     'user_id' => $user->id,
+        // ]);
+        // $user = User::create($data);
+        $data['user_id'] = $user->id;
         $petOwner = PetOwner::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        
+        // return new UserResource($user, 201);
+        return new PetOwnerResource($petOwner, 201);
+
+        // return response()->json('store');
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(PetOwner $petOwner,$id)
+    public function show(PetOwner $petOwner, $id)
     {
         $petOwner = PetOwner::find($id);
         return new PetOwnerResource($petOwner);
@@ -54,9 +70,9 @@ class PetOwnerController extends Controller
     {
         $data = $request->validated();
         $petOwner->update($data);
-        return response()->json('updated');
+        // return response()->json('updated');
 
-        // return new PetOwnerResource($petOwner);
+        return new PetOwnerResource($petOwner);
     }
 
     /**
