@@ -7,6 +7,7 @@ use App\Models\PetOwner;
 use App\Models\Address;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetOwnerRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdatePetOwnerRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PetOwnerResource;
@@ -32,18 +33,23 @@ class PetOwnerController extends Controller
         
     }
 
+    // public function createuser(StoreUserRequest $request)
+    // {
+    //     $data = $request->validated(); //get the data
+    //     $data['password'] = bcrypt($data['password']); //encypt the password
+    //     $user = User::create($data); //create user
+    //     // return response(new UserResource($user), 201);
+    //     return new UserResource($user, 201);
+    // }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(StorePetOwnerRequest $request)
     {
         $data = $request->validated(); //get the data
-        $user = User::findOrFail($data->user_id);
-        // $petOwner = PetOwner::create([
-        //     $data,
-        //     'user_id' => $user->id,
-        // ]);
         // $user = User::create($data);
+        $user = User::findOrFail($data->user_id);
         $data['user_id'] = $user->id;
         $petOwner = PetOwner::create($data); //create user
         
@@ -51,8 +57,9 @@ class PetOwnerController extends Controller
         return new PetOwnerResource($petOwner, 201);
 
         // return response()->json('store');
-
     }
+
+    
 
     /**
      * Display the specified resource.
@@ -62,6 +69,8 @@ class PetOwnerController extends Controller
         $petOwner = PetOwner::find($id);
         return new PetOwnerResource($petOwner);
     }
+
+
 
     /**
      * Update the specified resource in storage.

@@ -49,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/appointments', AppointmentController::class);
     Route::apiResource('/clientservices', ClientServiceController::class);
 
+Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
+
+
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -79,4 +82,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 // Route::get('/petowners/{petowner}/pets', [PetController::class, 'index']);
+
+// Route::post('/petowners/user', [PetOwnerController::class, 'createuser']);
+// Route::post('/petowners', [PetOwnerController::class, 'store']);
+
 

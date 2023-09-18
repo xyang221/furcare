@@ -13,7 +13,7 @@ class Pet extends Model
 
     protected $table = 'pets';
 
-    protected $fillable = ['name', 'birthdate', 'gender','color','qr_code', 'breed_id', 'petowner_id'];
+    protected $fillable = ['name', 'birthdate', 'gender','color','qr_code', 'photo', 'breed_id', 'petowner_id'];
 
     protected $with = ['breed', 'petowner'];
 
@@ -26,12 +26,7 @@ class Pet extends Model
     {
         return $this->belongsTo(PetOwner::class, 'petowner_id', 'id');
     }
-    // public function petowner()
-    // {
-    //     return $this->belongsTo(PetOwner::class);
-    // }
 
-    // protected $primaryKey = 'petowner_id';
 
 
 

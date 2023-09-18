@@ -22,9 +22,9 @@ class PetResource extends JsonResource
             'gender' => $this->gender,
             'color' => $this->color,
             'qr_code' => $this->qr_code,
+            'photo' => $this->photo,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
-
             'breed' => new BreedResource($this->whenLoaded('breed')),
 
         ];

@@ -58,6 +58,14 @@ class PetController extends Controller
         // return response()->json(['success' => true, 'data' => $pets]);
     }
 
+    public function getPetOwnersPet($ownerId)
+    {
+        $pets = Pet::where('petowner_id', $ownerId)->get();
+        // return response()->json($pets);
+        return response()->json(['success' => true, 'data' => $pets]);
+        // return new PetResource($pet, 201);
+    }
+
     
 
 

@@ -23,10 +23,7 @@ class SignupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'firstname' => 'required|string|max:55',
-            // 'lastname' => 'required|string|max:55',
-            // 'contact_num' => 'required|integer|max:11',
-            // 'username' => 'required|string|unique:users,username',
+          
             'username' => 'required|string|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => [
@@ -34,7 +31,7 @@ class SignupRequest extends FormRequest
                 'confirmed',
                 Password::min(8)
                     ->letters()
-                    ->mixedCase() // Add this for mixed case letters
+                    // ->mixedCase() // Add this for mixed case letters
             ]
         ];
     }
