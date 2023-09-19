@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PetOwnerController;
 use App\Http\Controllers\Api\StaffController;
@@ -35,11 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //     return $request->petowner();
     // });
 
-    
-    // Route::get('/petowners/{id}/pets', [PetController::class,'show']);
-
-   
-    // Route::get('/petowners/{id}/pets', 'PetController@getPetsByOwner');
+    Route::apiResource('/roles', RoleController::class);
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
