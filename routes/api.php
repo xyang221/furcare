@@ -32,10 +32,6 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
-    // Route::get('/petowner', function (Request $request) {
-    //     return $request->petowner();
-    // });
-
     Route::apiResource('/roles', RoleController::class);
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/petowners', PetOwnerController::class);
@@ -57,30 +53,5 @@ Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-
-
-// Route::get('/petowners/{id}', [PetOwnerController::class,'show']);
-// Route::get('/petowners/{id}/pets', [PetController::class,'show']);
-
-// use App\Http\Resources\PetOwnerResource;
-// use App\Http\Resources\PetResource;
-// use App\Models\PetOwner;
-// use App\Models\Pet;
-
-// Route::get('/petowners/{id}/pets', function ($id) {
-//     $petOwner = PetOwner::findOrFail($id);
-//     $petResource = PetResource::collection($petOwner->pets);
-    
-//     return [
-//         'pet_owner' => new PetOwnerResource($petOwner),
-//         'pets' => $petResource
-//     ];
-// });
-
-
-// Route::get('/petowners/{petowner}/pets', [PetController::class, 'index']);
-
-// Route::post('/petowners/user', [PetOwnerController::class, 'createuser']);
-// Route::post('/petowners', [PetOwnerController::class, 'store']);
 
 
