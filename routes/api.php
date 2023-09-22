@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/clientservices', ClientServiceController::class);
 
 Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
+Route::post('/user/{userID}/petowner', [PetOwnerController::class, 'store']);
+Route::post('/user/{userID}/staff', [StaffController::class, 'store']);
 
 
 
@@ -55,3 +57,4 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
+Route::post('/register', [PetOwnerController::class, 'register']);

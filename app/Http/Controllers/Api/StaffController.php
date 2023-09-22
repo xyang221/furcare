@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Staff;
 use App\Models\Address;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStaffRequest;
 use App\Http\Requests\UpdateStaffRequest;
@@ -16,21 +17,28 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staff = Staff::with('address')->orderBy('id', 'desc')->paginate(10);
+        // $staff = Staff::with('address')->orderBy('id', 'desc')->paginate(10);
 
-        return StaffResource::collection($staff);
+        // return StaffResource::collection($staff);
+
+        return StaffResource::collection( 
+            Staff::query()->orderBy('id','desc')->paginate(10)
+        );
 
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStaffRequest $request)
+    public function store(StoreStaffRequest $request, $userID)
     {
         $data = $request->validated(); //get the data
+
+        $user = User::findOrFail($userID);
+        $data['user_id'] = $user->id;
         $staff = Staff::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        return new StaffResource($staff, 201);
+        // return response()->json('store');
     }
 
     /**

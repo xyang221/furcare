@@ -31,7 +31,7 @@ class StoreUserRequest extends FormRequest
                 'confirmed',
                 Password::min(8)
                 ->letters()
-                ->mixedCase() // Add this for mixed case letters
+                // ->mixedCase() // Add this for mixed case letters
             ]
         ];
     }

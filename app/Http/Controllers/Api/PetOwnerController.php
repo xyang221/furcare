@@ -45,19 +45,49 @@ class PetOwnerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePetOwnerRequest $request)
+    public function store(StorePetOwnerRequest $request, $userID)
     {
         $data = $request->validated(); //get the data
         // $user = User::create($data);
-        $user = User::findOrFail($data->user_id);
+        $user = User::findOrFail($userID);
         $data['user_id'] = $user->id;
         $petOwner = PetOwner::create($data); //create user
+        
         
         // return new UserResource($user, 201);
         return new PetOwnerResource($petOwner, 201);
 
         // return response()->json('store');
     }
+
+    public function register(StoreUserRequest $urequest,StorePetOwnerRequest $porequest)
+{
+    // Validate user registration data here.
+
+    // Create a new user.
+    $user = User::create([
+
+        'role_id' => $urequest->input('role_id'),
+        'username' => $urequest->input('username'),
+        'email' => $urequest->input('email'),
+        'password' => bcrypt($urequest->input('password')),
+    ]);
+
+    // Create a pet owner associated with the user.
+    $petOwner = PetOwner::create([
+        'user_id' => $user->id,
+        'firstname' => $porequest->input('firstname'),
+        'lastname' => $porequest->input('lastname'),
+        'contact_num' => $porequest->input('contact_num'),
+        'address_id' => $porequest->input('address_id'),
+        
+        // Add other pet owner information as needed.
+    ]);
+
+    return response()->json("payttsss");
+
+    // Return a response or token for the registered user.
+}
 
     
 

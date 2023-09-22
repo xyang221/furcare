@@ -15,6 +15,8 @@ class Staff extends Model
 
     protected $fillable = ['firstname','lastname', 'contact_num','address_id','user_id'];
 
+    protected $with = ['user', 'address'];
+    
     public function address()
     {
         return $this->belongsTo(Address::class, 'address_id','id');
