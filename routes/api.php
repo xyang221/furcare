@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/roles', RoleController::class);
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/petowners', PetOwnerController::class);
+    // Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/zipcodes', ZipcodeController::class);
     Route::apiResource('/addresses', AddressController::class);
@@ -45,14 +45,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
 Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
 
-Route::post('/users/{userID}/petowners', [PetOwnerController::class, 'store']);
-Route::post('/users/{userID}/petowners/new', [PetOwnerController::class, 'register']);
-
-Route::post('/users/{userID}/staffs', [StaffController::class, 'store']);
-
-
-
-
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });
@@ -60,7 +52,3 @@ Route::post('/users/{userID}/staffs', [StaffController::class, 'store']);
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-
-
-Route::post('/register', [PetOwnerController::class, 'register']);
-

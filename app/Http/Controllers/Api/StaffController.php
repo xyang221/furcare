@@ -7,8 +7,12 @@ use App\Models\Address;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStaffRequest;
+use App\Http\Requests\StoreAddressRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Http\Resources\StaffResource;
+
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -30,16 +34,34 @@ class StaffController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStaffRequest $request, $userID)
-    {
-        $data = $request->validated(); //get the data
+    public function store(StoreStaffRequest $sreq, StoreAddressRequest $addrequest, StoreUserRequest $ureq)
+{
+    // Create a new user.
+    $user = User::create([
+        'role_id' =>$ureq->input('role_id'),
+        'username' => $ureq->input('username'),
+        'email' => $ureq->input('email'),
+        'password' => Hash::make($ureq->input('password')),
+    ]);
+  
+    $address = Address::create([
+        'zipcode_id' => $addrequest->input('zipcode_id'),
+        'barangay' => $addrequest->input('barangay'),
+        'zone' => $addrequest->input('zone'),
+    ]);
 
-        $user = User::findOrFail($userID);
-        $data['user_id'] = $user->id;
-        $staff = Staff::create($data); //create user
-        return new StaffResource($staff, 201);
-        // return response()->json('store');
-    }
+    // Create a pet owner associated with the user.
+    $staff = Staff::create([
+        'user_id' => $user->id,
+        'firstname' => $sreq->input('firstname'),
+        'lastname' => $sreq->input('lastname'),
+        'contact_num' => $sreq->input('contact_num'),
+        'address_id' => $address->id,
+        
+        // Add other pet owner information as needed.
+    ]);
+    return new StaffResource($staff, 201);
+}
 
     /**
      * Display the specified resource.

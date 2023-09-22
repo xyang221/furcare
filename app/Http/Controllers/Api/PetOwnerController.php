@@ -6,12 +6,15 @@ use App\Models\User;
 use App\Models\PetOwner;
 use App\Models\Address;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\StorePetOwnerRequest;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdatePetOwnerRequest;
 use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PetOwnerResource;
+
+use Illuminate\Support\Facades\Hash;
 
 class PetOwnerController extends Controller
 {
@@ -34,41 +37,18 @@ class PetOwnerController extends Controller
         
     }
 
-    // public function createuser(StoreUserRequest $request)
-    // {
-    //     $data = $request->validated(); //get the data
-    //     $data['password'] = bcrypt($data['password']); //encypt the password
-    //     $user = User::create($data); //create user
-    //     // return response(new UserResource($user), 201);
-    //     return new UserResource($user, 201);
-    // }
-
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePetOwnerRequest $request, $userID)
-    {
-        $data = $request->validated(); //get the data
-        // $user = User::create($data);
-        $user = User::findOrFail($userID);
-        $data['user_id'] = $user->id;
-        $petOwner = PetOwner::create($data); //create user
-        
-        
-        // return new UserResource($user, 201);
-        return new PetOwnerResource($petOwner, 201);
-
-        // return response()->json('store');
-    }
-
-    public function register(StorePetOwnerRequest $porequest, StoreAddressRequest $addrequest, $userID)
+    public function store(StorePetOwnerRequest $porequest, StoreAddressRequest $addrequest, StoreUserRequest $ureq)
 {
-    // Validate user registration data here.
-    //get the data
-    // $user = User::create($data);
-    $user = User::findOrFail($userID);
-
     // Create a new user.
+    $user = User::create([
+        'role_id' =>$ureq->input('role_id'),
+        'username' => $ureq->input('username'),
+        'email' => $ureq->input('email'),
+        'password' => Hash::make($ureq->input('password')),
+    ]);
   
     $address = Address::create([
         'zipcode_id' => $addrequest->input('zipcode_id'),
@@ -87,10 +67,6 @@ class PetOwnerController extends Controller
         // Add other pet owner information as needed.
     ]);
     return new PetOwnerResource($petOwner, 201);
-
-    // return response()->json("payttsss");
-
-    // Return a response or token for the registered user.
 }
 
     
