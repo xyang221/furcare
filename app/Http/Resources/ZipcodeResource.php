@@ -17,7 +17,7 @@ class ZipcodeResource extends JsonResource
         return [
             'id' => $this->id,
             'zipcode' => $this->zipcode,
-            'city' => $this->city,
+            'area' => $this->area,
             'province' => $this->province,
         ];
     }

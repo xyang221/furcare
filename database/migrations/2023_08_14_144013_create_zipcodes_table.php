@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('zipcodes', function (Blueprint $table) {
             $table->id();
             $table->integer('zipcode');
+            $table->string('area');
             $table->string('province');
-            $table->string('city');
             $table->timestamps();
         });
     }

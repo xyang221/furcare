@@ -11,5 +11,5 @@ class Zipcode extends Model
 
     protected $table = 'zipcodes';
 
-    protected $fillable = ['zipcode', 'city', 'province'];
+    protected $fillable = ['zipcode', 'area', 'province'];
 }

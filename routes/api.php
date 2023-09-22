@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
+    Route::apiResource('/zipcodes', ZipcodeController::class);
     Route::apiResource('/addresses', AddressController::class);
     Route::apiResource('/pets', PetController::class);
     Route::apiResource('/breeds', BreedController::class);
@@ -43,8 +44,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/clientservices', ClientServiceController::class);
 
 Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
-Route::post('/user/{userID}/petowner', [PetOwnerController::class, 'store']);
-Route::post('/user/{userID}/staff', [StaffController::class, 'store']);
+Route::post('/users/{userID}/petowners', [PetOwnerController::class, 'store']);
+Route::post('/users/{userID}/staffs', [StaffController::class, 'store']);
 
 
 
