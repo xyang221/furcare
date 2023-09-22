@@ -20,7 +20,7 @@ class PetOwner extends Model
 
     public function address()
     {
-        return $this->belongsTo(Address::class, 'address_id','id');
+        return $this->belongsTo(Address::class);
     }
 
     public function user()

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unSignedBigInteger('zipcode_id');
             $table->string('barangay');
+            $table->string('zone');
             $table->timestamps();
             $table->foreign('zipcode_id')->references('id')->on('zipcodes');
         });

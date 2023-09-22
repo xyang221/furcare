@@ -19,6 +19,7 @@ class AddressResource extends JsonResource
         return [
             'id' => $this->id,
             'barangay' => $this->barangay,
+            'zone' => $this->zone,
             'zipcode' => new ZipcodeResource($this->whenLoaded('zipcode')),
         ];
     }

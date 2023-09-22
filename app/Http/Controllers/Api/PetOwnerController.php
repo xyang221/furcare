@@ -7,8 +7,9 @@ use App\Models\PetOwner;
 use App\Models\Address;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetOwnerRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdatePetOwnerRequest;
+use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PetOwnerResource;
 
@@ -60,17 +61,19 @@ class PetOwnerController extends Controller
         // return response()->json('store');
     }
 
-    public function register(StoreUserRequest $urequest,StorePetOwnerRequest $porequest)
+    public function register(StorePetOwnerRequest $porequest, StoreAddressRequest $addrequest, $userID)
 {
     // Validate user registration data here.
+    //get the data
+    // $user = User::create($data);
+    $user = User::findOrFail($userID);
 
     // Create a new user.
-    $user = User::create([
-
-        'role_id' => $urequest->input('role_id'),
-        'username' => $urequest->input('username'),
-        'email' => $urequest->input('email'),
-        'password' => bcrypt($urequest->input('password')),
+  
+    $address = Address::create([
+        'zipcode_id' => $addrequest->input('zipcode_id'),
+        'barangay' => $addrequest->input('barangay'),
+        'zone' => $addrequest->input('zone'),
     ]);
 
     // Create a pet owner associated with the user.
@@ -79,12 +82,13 @@ class PetOwnerController extends Controller
         'firstname' => $porequest->input('firstname'),
         'lastname' => $porequest->input('lastname'),
         'contact_num' => $porequest->input('contact_num'),
-        'address_id' => $porequest->input('address_id'),
+        'address_id' => $address->id,
         
         // Add other pet owner information as needed.
     ]);
+    return new PetOwnerResource($petOwner, 201);
 
-    return response()->json("payttsss");
+    // return response()->json("payttsss");
 
     // Return a response or token for the registered user.
 }
@@ -105,11 +109,25 @@ class PetOwnerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePetOwnerRequest $request, PetOwner $petOwner)
+    public function update(UpdatePetOwnerRequest $porequest, UpdateAddressRequest $addrequest, PetOwner $petOwner)
     {
-        $data = $request->validated();
-        $petOwner->update($data);
+        // $data = $request->validated();
+        // $petOwner->update($data);
         // return response()->json('updated');
+        $address = Address::update([
+            'zipcode_id' => $addrequest->input('zipcode_id'),
+            'barangay' => $addrequest->input('barangay'),
+            'zone' => $addrequest->input('zone'),
+        ]);
+    
+        // Create a pet owner associated with the user.
+        $petOwner = PetOwner::update([
+            'firstname' => $porequest->input('firstname'),
+            'lastname' => $porequest->input('lastname'),
+            'contact_num' => $porequest->input('contact_num'),
+            
+            // Add other pet owner information as needed.
+        ]);
 
         return new PetOwnerResource($petOwner);
     }

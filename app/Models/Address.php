@@ -12,7 +12,7 @@ class Address extends Model
 
     protected $table = 'addresses';
 
-    protected $fillable = ['zipcode_id','barangay'];
+    protected $fillable = ['zipcode_id','barangay', 'zone'];
 
 
     protected $with = ['zipcode'];
