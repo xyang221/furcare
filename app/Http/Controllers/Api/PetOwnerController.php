@@ -30,11 +30,16 @@ class PetOwnerController extends Controller
 
         // return PetOwnerResource::collection($petOwners);
 
-        return PetOwnerResource::collection( 
-            PetOwner::query()->orderBy('id','desc')->paginate(10)
-        );
+        // return PetOwnerResource::collection( 
+        //     PetOwner::query()->orderBy('id','desc')->paginate(10)
+        // );
 
-        
+        return PetOwnerResource::collection(
+            PetOwner::query()
+                ->whereNotNull('user_id')
+                ->orderBy('id', 'desc')
+                ->paginate(10),
+        );
     }
 
     /**

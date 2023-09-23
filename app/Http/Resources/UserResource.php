@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'role_id' => $this->role_id,
             'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at,
 
             // 'role' => new RoleResource($this->whenLoaded('role')),
 

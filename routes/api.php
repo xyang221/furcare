@@ -33,8 +33,18 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
     Route::apiResource('/roles', RoleController::class);
-    Route::apiResource('/users', UserController::class);
-    // Route::apiResource('/petowners', PetOwnerController::class);
+    // Route::apiResource('/users', UserController::class);
+
+    Route::get('/users', [UserController::class, 'index']);
+Route::post('/users', [UserController::class, 'store']);
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::delete('/users/{id}/archive', [UserController::class, 'archive']);
+Route::get('/archives/users', [UserController::class, 'archivelist']);
+Route::put('/users/{id}/restore', [UserController::class, 'restore']);
+Route::put('/users/{id}', [UserController::class, 'update']);
+Route::delete('/archives/{id}/forcedelete', [UserController::class, 'destroy']);
+    
+    Route::apiResource('/petowners', PetOwnerController::class);
     Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/zipcodes', ZipcodeController::class);
     Route::apiResource('/addresses', AddressController::class);

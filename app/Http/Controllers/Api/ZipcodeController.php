@@ -16,7 +16,7 @@ class ZipcodeController extends Controller
     public function index()
     {
         return ZipcodeResource::collection( 
-            Zipcode::query()->orderBy('id','desc')->get()
+            Zipcode::query()->orderBy('id')->get()
         );
 
         // return response()->json(ZipcodeResource($zipcode));
