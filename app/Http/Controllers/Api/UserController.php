@@ -97,7 +97,7 @@ class UserController extends Controller
         $user = User::withTrashed()->findOrFail($id);
         $user->forceDelete();
 
-        return response("archived", Response::HTTP_OK);
+        return response("Permanently Deleted", Response::HTTP_OK);
         // return response()->json(null, 204);
     }
 

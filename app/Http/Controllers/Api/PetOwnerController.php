@@ -24,16 +24,6 @@ class PetOwnerController extends Controller
     public function index()
     {
 
-        // $petOwner = PetOwner::get();
-
-        // $petOwners = PetOwner::with(['user', 'address'])->orderBy('id', 'desc')->paginate(10);
-
-        // return PetOwnerResource::collection($petOwners);
-
-        // return PetOwnerResource::collection( 
-        //     PetOwner::query()->orderBy('id','desc')->paginate(10)
-        // );
-
         return PetOwnerResource::collection(
             PetOwner::query()
                 ->whereNotNull('user_id')
@@ -74,8 +64,6 @@ class PetOwnerController extends Controller
     return new PetOwnerResource($petOwner, 201);
 }
 
-    
-
     /**
      * Display the specified resource.
      */
@@ -95,19 +83,25 @@ class PetOwnerController extends Controller
         // $data = $request->validated();
         // $petOwner->update($data);
         // return response()->json('updated');
-        $address = Address::update([
-            'zipcode_id' => $addrequest->input('zipcode_id'),
-            'barangay' => $addrequest->input('barangay'),
-            'zone' => $addrequest->input('zone'),
-        ]);
+
+     
     
         // Create a pet owner associated with the user.
         $petOwner = PetOwner::update([
             'firstname' => $porequest->input('firstname'),
             'lastname' => $porequest->input('lastname'),
             'contact_num' => $porequest->input('contact_num'),
+
+         
             
             // Add other pet owner information as needed.
+        ]);
+
+        $address = $petOwner->address;
+        $address = Address::update([
+            'zipcode_id' => $addrequest->input('zipcode_id'),
+            'barangay' => $addrequest->input('barangay'),
+            'zone' => $addrequest->input('zone'),
         ]);
 
         return new PetOwnerResource($petOwner);

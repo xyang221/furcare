@@ -31,13 +31,23 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
+
         if (!Auth::attempt($credentials)) {
             return response([
                 'message' => 'Incorrect Email or Password!'
             ], 422);
         }
+        
         /** @var User $user */
          $user = Auth::user();
+        
+        if ($user->trashed()) {
+            Auth::logout(); 
+            return response([
+                'message' => 'Your account has been deactivated.'
+            ], 422);
+        }
+
          $token = $user->createToken('main')->plainTextToken;
          return response(compact('user', 'token'));
     }
