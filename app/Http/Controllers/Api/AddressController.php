@@ -16,7 +16,7 @@ class AddressController extends Controller
     public function index()
     {
         return AddressResource::collection( 
-            Address::query()->orderBy('id','desc')->paginate(10)
+            Address::query()->orderBy('id','desc')->get()
         );
     }
 
@@ -36,6 +36,9 @@ class AddressController extends Controller
      */
     public function show(Address $address)
     {
+        if (!$address) {
+            return response()->json("Address not found", 404);
+        }
         return new AddressResource($address);
     }
 
@@ -55,6 +58,11 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
+
+        if (!$address) {
+            return response()->json("Address not found", 404);
+        }
+
         $address->delete();
         // return response()->json(null, 204);
         return response()->json("pet Deleted");

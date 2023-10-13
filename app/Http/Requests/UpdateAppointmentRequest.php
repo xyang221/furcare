@@ -22,12 +22,12 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'required|date',
-            'purpose'=>'required|string',
-            'status' => 'required|string',
-            'remarks' => 'string',
-            'petowner_id' => 'exists:petowners,id',
-            'client_service_id' => 'exists:client_service,id',
+            'date' => 'required|date',
+            'purpose' => 'required|string',
+            'status' => 'in:pending,cancelled,scheduled,done', 
+            'remarks' => 'sometimes|string',
+            // 'petowner_id' => 'exists:petowners,id',
+            // 'client_service_id' => 'exists:client_service,id',
         ];
     }
 }

@@ -26,7 +26,7 @@ class UpdatePetOwnerRequest extends FormRequest
             'lastname'=>'required|string|max:55',
             'contact_num' => 'required|string|min:8|max:11',
             // 'user_id' => 'exists:users,id',
-            'address_id' => 'exists:addresses,id',
+            // 'address_id' => 'exists:addresses,id',
         ];
     }
 }

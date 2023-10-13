@@ -16,7 +16,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $service = Service::with('category')->orderBy('id', 'desc')->paginate(10);
+        $service = Service::with('category')->orderBy('id', 'desc')->get();
 
         return ServiceResource::collection($service);
 
@@ -49,7 +49,8 @@ class ServiceController extends Controller
     {
         $data = $request->validated();
         $service->update($data);
-        return response()->json('updated');
+        return new ServiceResource($service);
+        // return response()->json('updated');
 
     }
 

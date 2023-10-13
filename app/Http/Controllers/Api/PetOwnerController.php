@@ -28,7 +28,7 @@ class PetOwnerController extends Controller
             PetOwner::query()
                 ->whereNotNull('user_id')
                 ->orderBy('id', 'desc')
-                ->paginate(10),
+                ->get(),
         );
     }
 
@@ -78,33 +78,13 @@ class PetOwnerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePetOwnerRequest $porequest, UpdateAddressRequest $addrequest, PetOwner $petOwner)
+    public function update(UpdatePetOwnerRequest $request, PetOwner $petOwner)
     {
-        // $data = $request->validated();
-        // $petOwner->update($data);
+        $data = $request->validated();
+        $petOwner->update($data);
         // return response()->json('updated');
-
-     
-    
-        // Create a pet owner associated with the user.
-        $petOwner = PetOwner::update([
-            'firstname' => $porequest->input('firstname'),
-            'lastname' => $porequest->input('lastname'),
-            'contact_num' => $porequest->input('contact_num'),
-
-         
-            
-            // Add other pet owner information as needed.
-        ]);
-
-        $address = $petOwner->address;
-        $address = Address::update([
-            'zipcode_id' => $addrequest->input('zipcode_id'),
-            'barangay' => $addrequest->input('barangay'),
-            'zone' => $addrequest->input('zone'),
-        ]);
-
         return new PetOwnerResource($petOwner);
+
     }
 
     /**

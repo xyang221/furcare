@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\PetController;
 use App\Http\Controllers\Api\BreedController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\ClientServiceController;
+use App\Http\Controllers\Api\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,26 +35,41 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/roles', RoleController::class);
     // Route::apiResource('/users', UserController::class);
-
     Route::get('/users', [UserController::class, 'index']);
-Route::post('/users', [UserController::class, 'store']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::delete('/users/{id}/archive', [UserController::class, 'archive']);
-Route::get('/archives/users', [UserController::class, 'archivelist']);
-Route::put('/users/{id}/restore', [UserController::class, 'restore']);
-Route::put('/users/{id}', [UserController::class, 'update']);
-Route::delete('/archives/{id}/forcedelete', [UserController::class, 'destroy']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::delete('/users/{id}/archive', [UserController::class, 'archive']);
+    Route::get('/archives/users', [UserController::class, 'archivelist']);
+    Route::put('/users/{id}/restore', [UserController::class, 'restore']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/archives/{id}/forcedelete', [UserController::class, 'destroy']);
     
-    Route::apiResource('/petowners', PetOwnerController::class);
-    Route::apiResource('/staffs', StaffController::class);
     Route::apiResource('/zipcodes', ZipcodeController::class);
     Route::apiResource('/addresses', AddressController::class);
+    Route::apiResource('/petowners', PetOwnerController::class);
+    Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
     Route::apiResource('/pets', PetController::class);
     Route::apiResource('/breeds', BreedController::class);
-    Route::apiResource('/appointments', AppointmentController::class);
+
+
+    Route::apiResource('/staffs', StaffController::class);
+    
+    Route::apiResource('/services', ServiceController::class);
     Route::apiResource('/clientservices', ClientServiceController::class);
 
-Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
+    Route::get('/appointments/pending', [AppointmentController::class, 'getPending']);
+    Route::put('/appointments/{id}/schedule', [AppointmentController::class, 'schedule']);
+    Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancel']);
+    Route::get('/appointments/scheduled', [AppointmentController::class, 'getScheduled']);
+    Route::put('/appointments/{id}/done', [AppointmentController::class, 'done']);
+    Route::get('/appointments/done', [AppointmentController::class, 'getDone']);
+    Route::get('/appointments/bydate', [AppointmentController::class, 'getbyDate']);
+    
+    Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+    Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::put('/appointments/{id}', [AppointmentController::class, 'update']); //this is not working    
+
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -62,3 +78,7 @@ Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+
+
+
+

@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\PetOwnerResource;
+use App\Http\Resources\ClientServiceResource;
 
 class AppointmentResource extends JsonResource
 {
@@ -24,7 +26,7 @@ class AppointmentResource extends JsonResource
             'remarks' => $this->remarks,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
-            'client_service' => new ClientServiceResource($this->whenLoaded('client_service')),
+            'client_service' => new ClientServiceResource($this->whenLoaded('clientservice')),
 
         ];
     }

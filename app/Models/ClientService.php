@@ -11,9 +11,11 @@ class ClientService extends Model
 {
     use HasFactory;
 
+    protected $table = 'client_service';
+
     protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id', 'services_id'];
 
-    // protected $with = ['breed'];
+    protected $with = ['petowner','service'];
 
     public function petowner()
     {

@@ -21,7 +21,6 @@ class ServiceResource extends JsonResource
             'service' => $this->service,
             'price' => $this->price,
             'status' => $this->status,
-            'color' => $this->color,
 
             'category' => new ServiceCategoryResource($this->whenLoaded('category')),
 

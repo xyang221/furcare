@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
+use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -15,9 +17,8 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return AppointmentResource::collection( 
-            Appointment::query()->orderBy('id','desc')->paginate(10)
-        );
+        $appointments = Appointment::orderBy('id', 'desc')->get();
+        return AppointmentResource::collection($appointments);
     }
 
     /**
@@ -25,29 +26,134 @@ class AppointmentController extends Controller
      */
     public function store(StoreAppointmentRequest $request)
     {
-        $data = $request->validated(); //get the data
-        $appointment = Appointment::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        $data = $request->validated();
+        $data['status'] = "pending";
+        $appointment = Appointment::create($data);
+        return new AppointmentResource($appointment, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Appointment $appointment)
+    public function show($id)
     {
+        $appointment = Appointment::find($id);
+        
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+        }
+
         return new AppointmentResource($appointment);
     }
+
+    public function getPending()
+    {
+        $appointments = Appointment::where('status', 'pending')->get();
+        
+        if ($appointments->isEmpty()) {
+            return response()->json(['message' => 'No pending appointments found'], Response::HTTP_NOT_FOUND);
+        }
+        
+        return AppointmentResource::collection($appointments);
+    }
+
+    public function schedule($id)
+    {
+        $appointment = Appointment::find($id);
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($appointment->status !== "pending") {
+            return response()->json(['message' => 'Appointment is not pending'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $appointment->update(['status' => 'scheduled']);
+
+        return new AppointmentResource($appointment);
+    }
+
+    public function cancel($id)
+    {
+        $appointment = Appointment::find($id);
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($appointment->status !== "pending") {
+            return response()->json(['message' => 'Appointment is not pending'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $appointment->update(['status' => 'cancelled']);
+
+        return new AppointmentResource($appointment);
+    }
+
+    public function getScheduled()
+    {
+        $appointments = Appointment::where('status', 'scheduled')->get();
+        
+        if ($appointments->isEmpty()) {
+            return response()->json(['message' => 'No scheduled appointments found'], Response::HTTP_NOT_FOUND);
+        }
+        
+        return AppointmentResource::collection($appointments);
+    }
+
+    public function done($id)
+    {
+        $appointment = Appointment::find($id);
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($appointment->status !== "scheduled") {
+            return response()->json(['message' => 'Appointment is not scheduled'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $appointment->update(['status' => 'done']);
+
+        return new AppointmentResource($appointment);
+    }
+
+    public function getDone()
+    {
+        $appointments = Appointment::where('status', 'done')->get();
+        
+        if ($appointments->isEmpty()) {
+            return response()->json(['message' => 'No done appointments found'], Response::HTTP_NOT_FOUND);
+        }
+        
+        return AppointmentResource::collection($appointments);
+    }
+
+
+public function getbyDate()
+{
+    // Get the current date
+    $today = Carbon::now()->toDateString();
+
+    // Find appointments with the specified date
+    $appointments = Appointment::whereDate('date', $today)->get();
+
+    if ($appointments->isEmpty()) {
+        return response()->json(['message' => 'No appointments found for the specified date'], Response::HTTP_NOT_FOUND);
+    }
+
+    return AppointmentResource::collection($appointments);
+}
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
-        $data = $request->validated();
-        $appointment->update($data);
-        return response()->json('updated');
-
+        $appointment->update($request->validated());
+        return new AppointmentResource($appointment);
     }
 
     /**
@@ -56,7 +162,6 @@ class AppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         $appointment->delete();
-        // return response()->json(null, 204);
-        return response()->json("appointment Deleted");
+        return response()->json(['message' => 'Appointment deleted'], Response::HTTP_OK);
     }
 }
