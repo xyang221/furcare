@@ -16,7 +16,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $service = Service::with('category')->orderBy('id', 'desc')->get();
+        $service = Service::with('category')->orderBy('id', 'asc')->get();
 
         return ServiceResource::collection($service);
 

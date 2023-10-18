@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientServiceRequest;
 use App\Http\Requests\UpdateClientServiceRequest;
 use App\Http\Resources\ClientServiceResource;
+use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class ClientServiceController extends Controller
 {
@@ -15,9 +17,9 @@ class ClientServiceController extends Controller
      */
     public function index()
     {
-        $clientService = ClientService::with('service')->orderBy('id', 'desc')->paginate(10);
-
+        $clientService = ClientService::query()->orderBy('id', 'desc')->get();
         return ClientServiceResource::collection($clientService);
+    
     }
 
     /**
@@ -26,16 +28,18 @@ class ClientServiceController extends Controller
     public function store(StoreClientServiceRequest $request)
     {
         $data = $request->validated(); //get the data
+        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
+        $data['date'] = (string)$data['date'];
         $clientService = ClientService::create($data); //create user
-        // return new PetOwnerResource($petOwner, 201);
-        return response()->json('store');
+        return new ClientServiceResource($clientService, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ClientService $clientService)
+    public function show(ClientService $clientService, $id)
     {
+        $clientService = ClientService::find($id);
         return new ClientServiceResource($clientService);
     }
 

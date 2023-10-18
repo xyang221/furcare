@@ -17,12 +17,9 @@ class BreedController extends Controller
     {
 
         return BreedResource::collection( 
-            Breed::query()->orderBy('id','desc')->paginate(10)
+            Breed::query()->orderBy('id','desc')->get()
         );
 
-        // $breed = Breed::with('specie')->orderBy('id', 'desc')->paginate(10);
-
-        // return BreedResource::collection($breed);
     }
 
     /**
@@ -31,9 +28,8 @@ class BreedController extends Controller
     public function store(StoreBreedRequest $request)
     {
         $data = $request->validated(); //get the data
-        $breed = Breed::create($data); //create user
+        $breed = Breed::create($data); 
         return new BreedResource($breed, 201);
-        // return response()->json('store');
     }
 
     /**
@@ -61,7 +57,6 @@ class BreedController extends Controller
     public function destroy(Breed $breed)
     {
         $breed->delete();
-        // return response()->json(null, 204);
-        return response()->json("breed Deleted");
+        return response("This breed was permanently deleted");
     }
 }

@@ -23,11 +23,11 @@ class StoreClientServiceRequest extends FormRequest
     {
         return [
             'date'=>'required|date',
-            'deposit'=>'required|double|max:55',
-            'balance'=>'required|double|max:55',
+            'deposit'=>'required|numeric',
+            'balance'=>'required|numeric',
             'rendered_by' => 'string',
             'petowner_id' => 'exists:petowners,id',
-            'service_id' => 'exists:services,id',
+            'services_id' => 'exists:services,id',
         ];
     }
 }

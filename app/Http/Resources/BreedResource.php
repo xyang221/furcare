@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-// use App\Http\Resources\SpecieResource;
+use App\Http\Resources\SpecieResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +20,8 @@ class BreedResource extends JsonResource
             'id' => $this->id,
             'breed' => $this->breed,
             'description' => $this->description,
+            
+            'specie_id' => $this->specie_id,
 
             'specie' => new SpecieResource($this->whenLoaded('specie')),
        

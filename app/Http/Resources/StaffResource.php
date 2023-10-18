@@ -23,6 +23,11 @@ class StaffResource extends JsonResource
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'contact_num' => $this->contact_num,
+            'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at,
+
+            'address_id' => $this->address_id,
+            'user_id' => $this->user_id,
 
             'address' => new AddressResource($this->whenLoaded('address')),
             'user' => new UserResource($this->whenLoaded('user')),

@@ -25,7 +25,7 @@ class StoreAppointmentRequest extends FormRequest
             'date' => 'required|date',
             'purpose' => 'required|string',
             'status' => 'in:pending,cancelled,scheduled,done', // Use 'in' rule for specific values
-            'remarks' => 'sometimes|string',
+            'remarks' => 'string',
             'petowner_id' => 'exists:petowners,id',
             'client_service_id' => 'exists:client_service,id',
         ];

@@ -18,13 +18,9 @@ class UserController extends Controller
     {
 
         return UserResource::collection( 
-            User::query()->orderBy('id','desc')->paginate(10)
+            User::query()->orderBy('id','desc')->get()
         );
         
-        // return UserResource::collection( 
-        //     User::withTrashed()->get()
-        // );
-
     }
 
     /**
@@ -35,7 +31,6 @@ class UserController extends Controller
         $data = $request->validated(); //get the data
         $data['password'] = bcrypt($data['password']); //encypt the password
         $user = User::create($data); //create user
-        // return response(new UserResource($user), 201);
         return new UserResource($user, 201);
     }
 
@@ -98,7 +93,6 @@ class UserController extends Controller
         $user->forceDelete();
 
         return response("Permanently Deleted", Response::HTTP_OK);
-        // return response()->json(null, 204);
     }
 
 

@@ -20,6 +20,8 @@ class AddressResource extends JsonResource
             'id' => $this->id,
             'barangay' => $this->barangay,
             'zone' => $this->zone,
+            'zipcode_id' => $this->zipcode_id,
+            
             'zipcode' => new ZipcodeResource($this->whenLoaded('zipcode')),
         ];
     }

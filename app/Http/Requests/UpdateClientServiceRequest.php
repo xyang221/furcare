@@ -23,11 +23,11 @@ class UpdateClientServiceRequest extends FormRequest
     {
         return [
             'date'=>'required|date',
-            'deposit'=>'double|max:55',
-            'balance'=>'double|max:55',
+            'deposit'=>'required|numeric',
+            'balance'=>'required|numeric',
             'rendered_by' => 'string',
             // 'petowner_id' => 'exists:petowners,id',
-            'service_id' => 'exists:services,id',
+            // 'service_id' => 'exists:services,id',
         ];
     }
 }

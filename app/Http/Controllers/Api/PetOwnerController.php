@@ -14,6 +14,11 @@ use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PetOwnerResource;
 
+use App\Models\Appointment;
+use App\Http\Resources\AppointmentResource;
+use Illuminate\Http\Response;
+use Carbon\Carbon;
+
 use Illuminate\Support\Facades\Hash;
 
 class PetOwnerController extends Controller
@@ -59,7 +64,6 @@ class PetOwnerController extends Controller
         'contact_num' => $porequest->input('contact_num'),
         'address_id' => $address->id,
         
-        // Add other pet owner information as needed.
     ]);
     return new PetOwnerResource($petOwner, 201);
 }
@@ -67,34 +71,66 @@ class PetOwnerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PetOwner $petOwner, $id)
+    public function show($id)
     {
         $petOwner = PetOwner::find($id);
         return new PetOwnerResource($petOwner);
     }
 
+    //get the petowner's list of appointments
+    public function getPetOwnerAppointments($id)
+    {
+        $appointments = Appointment::where('petowner_id', $id)->orderBy('date', 'desc')->get();
 
+        if ($appointments->isEmpty()) {
+            return response()->json(['message' => 'This pet owner have no appointments'], Response::HTTP_NOT_FOUND);
+        }
+
+        return AppointmentResource::collection($appointments);
+    }
+
+    public function archive($id)
+    {
+        $petOwner = PetOwner::findOrFail($id);
+        $petOwner->delete();
+        return new PetOwnerResource($petOwner);
+     
+    }
+
+    public function archivelist()
+    {
+        return PetOwnerResource::collection( 
+            PetOwner::onlyTrashed()->orderBy('id','desc')->get()
+        );
+
+    }
+
+    public function restore($id)
+    {
+        $petOwner = PetOwner::withTrashed()->findOrFail($id);
+        $petOwner->restore();
+        return response("Pet Owner was restored successfully");
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePetOwnerRequest $request, PetOwner $petOwner)
+    public function update(UpdatePetOwnerRequest $request, $id)
     {
+        $petOwner = PetOwner::findOrFail($id);
         $data = $request->validated();
         $petOwner->update($data);
-        // return response()->json('updated');
         return new PetOwnerResource($petOwner);
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PetOwner $petOwner)
+    public function destroy(PetOwner $petOwner, $id)
     {
-        $petOwner->delete();
-        // return response()->json(null, 204);
-        return response()->json("PetOwner Deleted");
+        $petOwner = PetOwner::withTrashed()->findOrFail($id);
+        $petOwner->forceDelete();
+        return response("Permanently Deleted", Response::HTTP_OK);
 
     }
 }

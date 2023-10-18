@@ -17,7 +17,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::orderBy('id', 'desc')->get();
+        $appointments = Appointment::orderBy('date', 'desc')->get();
         return AppointmentResource::collection($appointments);
     }
 
@@ -48,7 +48,7 @@ class AppointmentController extends Controller
 
     public function getPending()
     {
-        $appointments = Appointment::where('status', 'pending')->get();
+        $appointments = Appointment::where('status', 'pending')->orderBy('date', 'desc')->get();
         
         if ($appointments->isEmpty()) {
             return response()->json(['message' => 'No pending appointments found'], Response::HTTP_NOT_FOUND);
@@ -121,7 +121,7 @@ class AppointmentController extends Controller
 
     public function getDone()
     {
-        $appointments = Appointment::where('status', 'done')->get();
+        $appointments = Appointment::where('status', 'done')->orderBy('date', 'desc')->get();
         
         if ($appointments->isEmpty()) {
             return response()->json(['message' => 'No done appointments found'], Response::HTTP_NOT_FOUND);
@@ -131,28 +131,36 @@ class AppointmentController extends Controller
     }
 
 
-public function getbyDate()
-{
-    // Get the current date
-    $today = Carbon::now()->toDateString();
+    public function getbyDate()
+    {
+        // Get the current date
+        $today = Carbon::now()->toDateString();
 
-    // Find appointments with the specified date
-    $appointments = Appointment::whereDate('date', $today)->get();
+        // Find appointments with the specified date
+        $appointments = Appointment::where('status', 'scheduled')
+        ->whereDate('date', $today)
+        ->get();
 
-    if ($appointments->isEmpty()) {
-        return response()->json(['message' => 'No appointments found for the specified date'], Response::HTTP_NOT_FOUND);
+        if ($appointments->isEmpty()) {
+            return response([
+                'message' => 'No appointments found for the specified date'
+            ], 404);
+        }
+
+        return AppointmentResource::collection($appointments);
     }
-
-    return AppointmentResource::collection($appointments);
-}
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment, $id)
     {
-        $appointment->update($request->validated());
+
+        $appointment = Appointment::findOrFail($id);
+        $data = $request->validated();
+
+        $appointment->update($data);
         return new AppointmentResource($appointment);
     }
 

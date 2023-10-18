@@ -21,9 +21,6 @@ class PetController extends Controller
         // $pet = Pet::get();
 
         $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->get();
-
-        // $petOwner = PetOwner::find($id);
-        // $pet = $petOwner->pets;
        
         // return new PetResource($pet);
         return PetResource::collection($pet);
@@ -33,13 +30,41 @@ class PetController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePetRequest $request)
+    public function store(StorePetRequest $request, $id)
     {
+        $petOwner = PetOwner::find($id);
+
         $data = $request->validated(); //get the data
+
+        // if($request->hasFile('photo')) {
+        //     $file = $request->file('photo');
+        //     $filename = $file->getClientOriginalName();
+        //     $fileName = date('His') . $filename;
+
+        //     $request->file('photo')->storeAs('image/', $fileName, 'public');
+        // } else {
+        //     return response()->json(["message" => "select image"]);
+        // }
+
+        $photo_path = $request->file('photo')->store('image', 'public');
+
+        $data['petowner_id'] = $id;
+        $data['photo'] = $photo_path;
+
+
         $pet = Pet::create($data); //create pet
         return new PetResource($pet, 201);
         // return response()->json('store');
     }
+
+    public function uploadImage(StorePetRequest $request)
+    {
+
+       
+
+    }
+
+   
 
     /**
      * Display the specified resource.
@@ -55,15 +80,37 @@ class PetController extends Controller
 
         return new PetResource($pet);
 
-        // return response()->json(['success' => true, 'data' => $pets]);
     }
 
     public function getPetOwnersPet($ownerId)
     {
+        
         $pets = Pet::where('petowner_id', $ownerId)->get();
-        // return response()->json($pets);
-        return response()->json(['success' => true, 'data' => $pets]);
-        // return new PetResource($pet, 201);
+        return PetResource::collection($pets);
+    }
+
+    public function archive($id)
+    {
+        $pet = Pet::findOrFail($id);
+        $pet->delete();
+        return new PetResource($pet);
+     
+    }
+
+    
+    public function archivelist()
+    {
+        return PetResource::collection( 
+            Pet::onlyTrashed()->orderBy('id','desc')->get()
+        );
+
+    }
+
+    public function restore($id)
+    {
+        $pet = Pet::withTrashed()->findOrFail($id);
+        $pet->restore();
+        return response("Pet restored successfully");
     }
 
     
@@ -78,18 +125,17 @@ class PetController extends Controller
         $pet->update($data);
 
         return new PetResource($pet);
-        // return response()->json('updated');
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pet $pet)
+    public function destroy(Pet $pet, $id)
     {
-        $pet->delete();
-        // return response()->json(null, 204);
-        return response()->json("pet Deleted");
+        $pet = Pet::withTrashed()->findOrFail($id);
+        $pet->forceDelete();
+        return response("Permanently Deleted", Response::HTTP_OK);
 
     }
 }

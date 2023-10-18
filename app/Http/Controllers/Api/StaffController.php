@@ -21,12 +21,9 @@ class StaffController extends Controller
      */
     public function index()
     {
-        // $staff = Staff::with('address')->orderBy('id', 'desc')->paginate(10);
-
-        // return StaffResource::collection($staff);
 
         return StaffResource::collection( 
-            Staff::query()->orderBy('id','desc')->paginate(10)
+            Staff::query()->orderBy('id','desc')->get()
         );
 
     }
@@ -50,7 +47,6 @@ class StaffController extends Controller
         'zone' => $addrequest->input('zone'),
     ]);
 
-    // Create a pet owner associated with the user.
     $staff = Staff::create([
         'user_id' => $user->id,
         'firstname' => $sreq->input('firstname'),
@@ -58,7 +54,6 @@ class StaffController extends Controller
         'contact_num' => $sreq->input('contact_num'),
         'address_id' => $address->id,
         
-        // Add other pet owner information as needed.
     ]);
     return new StaffResource($staff, 201);
 }
@@ -66,28 +61,54 @@ class StaffController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Staff $staff)
+    public function show($id)
     {
+        $staff = Staff::find($id);
         return new StaffResource($staff);
+    }
+
+    public function archive($id)
+    {
+        $staff = Staff::findOrFail($id);
+        $staff->delete();
+        return new StaffResource($staff);
+     
+    }
+
+    public function archivelist()
+    {
+        return StaffResource::collection( 
+            Staff::onlyTrashed()->orderBy('id','desc')->get()
+        );
+
+    }
+
+    public function restore($id)
+    {
+        $staff = Staff::withTrashed()->findOrFail($id);
+        $staff->restore();
+        return response("Staff was restored successfully");
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStaffRequest $request, Staff $staff)
+    public function update(UpdateStaffRequest $request, $id)
     {
+        $staff = Staff::findOrFail($id);
         $data = $request->validated();
         $staff->update($data);
-        return response()->json('updated');
+        return new StaffResource($staff);
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Staff $staff)
+    public function destroy(Staff $staff, $id)
     {
+        $staff = Staff::withTrashed()->findOrFail($id);
         $staff->delete();
-        return response()->json(null, 204);
+        return response("Permanently Deleted", 204);
     }
 }

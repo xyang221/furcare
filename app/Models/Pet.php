@@ -6,14 +6,18 @@ use App\Models\Breed;
 use App\Models\PetOwner;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Pet extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'pets';
 
     protected $fillable = ['name', 'birthdate', 'gender','color','qr_code', 'photo', 'breed_id', 'petowner_id'];
+
+    protected $dates = ['deleted_at'];
 
     protected $with = ['breed', 'petowner'];
 

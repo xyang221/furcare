@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClientServiceResource extends JsonResource
 {
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -20,6 +21,9 @@ class ClientServiceResource extends JsonResource
             'deposit' => $this->deposit,
             'balance' => $this->balance,
             'rendered_by' => $this->rendered_by,
+
+            'petowner_id' => $this->petowner_id,
+            'services_id' => $this->services_id,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
             'service' => new ServiceResource($this->whenLoaded('service')),
