@@ -16,7 +16,7 @@ class AddressController extends Controller
     public function index()
     {
         return AddressResource::collection( 
-            Address::query()->orderBy('id','desc')->get()
+            Address::query()->orderBy('id','desc')->paginate(50)
         );
     }
 

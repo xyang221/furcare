@@ -16,7 +16,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $service = Service::with('category')->orderBy('id', 'asc')->get();
+        $service = Service::with('category')->orderBy('id', 'asc')->paginate(50);
 
         return ServiceResource::collection($service);
 
@@ -29,8 +29,7 @@ class ServiceController extends Controller
     {
         $data = $request->validated(); //get the data
         $service = Service::create($data); //create user
-        // return new ServiceResource($service, 201);
-        return response()->json('store');
+        return new ServiceResource($service, 201);
     }
 
     /**
@@ -50,7 +49,6 @@ class ServiceController extends Controller
         $data = $request->validated();
         $service->update($data);
         return new ServiceResource($service);
-        // return response()->json('updated');
 
     }
 
@@ -60,7 +58,6 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         $service->delete();
-        // return response()->json(null, 204);
         return response()->json("Service Deleted");
 
     }

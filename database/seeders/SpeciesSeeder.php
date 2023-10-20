@@ -15,16 +15,28 @@ class SpeciesSeeder extends Seeder
     public function run(): void
     {
         DB::table('species')->insert([
-            0 => 
+            1 => 
             array (
               'specie' => 'Canine',
               'description' => 'dogs',
               'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ),
-            1 => 
+            2 => 
             array (
               'specie' => 'Feline',
               'description' => 'cats',
+              'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ),
+            3 => 
+            array (
+              'specie' => 'Wildlife',
+              'description' => 'rabbits,turtle',
+              'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ),
+            4 => 
+            array (
+              'specie' => 'Avian',
+              'description' => 'chickens,birds',
               'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ),
           

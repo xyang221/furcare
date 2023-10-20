@@ -20,7 +20,7 @@ class PetController extends Controller
 
         // $pet = Pet::get();
 
-        $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->get();
+        $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->paginate(50);
        
         // return new PetResource($pet);
         return PetResource::collection($pet);

@@ -17,7 +17,7 @@ class ClientServiceController extends Controller
      */
     public function index()
     {
-        $clientService = ClientService::query()->orderBy('id', 'desc')->get();
+        $clientService = ClientService::query()->orderBy('id', 'desc')->paginate(50);
         return ClientServiceResource::collection($clientService);
     
     }

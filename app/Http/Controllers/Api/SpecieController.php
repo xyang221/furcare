@@ -15,7 +15,7 @@ class SpecieController extends Controller
      */
     public function index()
     {
-        $specie = Specie::query()->orderBy('id', 'desc')->paginate(10);
+        $specie = Specie::query()->orderBy('id', 'desc')->paginate(50);
 
         return SpecieResource::collection($specie);
     }

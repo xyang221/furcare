@@ -23,7 +23,7 @@ class StaffController extends Controller
     {
 
         return StaffResource::collection( 
-            Staff::query()->orderBy('id','desc')->get()
+            Staff::query()->orderBy('id','desc')->paginate(50)
         );
 
     }

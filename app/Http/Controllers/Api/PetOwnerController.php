@@ -33,7 +33,7 @@ class PetOwnerController extends Controller
             PetOwner::query()
                 ->whereNotNull('user_id')
                 ->orderBy('id', 'desc')
-                ->get(),
+                ->paginate(50)
         );
     }
 

@@ -88,11 +88,13 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/services', ServiceController::class);
 
     Route::get('/appointments/pending', [AppointmentController::class, 'getPending']);
-    Route::put('/appointments/{id}/schedule', [AppointmentController::class, 'schedule']);
+    Route::put('/appointments/{id}/confirm', [AppointmentController::class, 'confirm']);
+    Route::get('/appointments/confirmed', [AppointmentController::class, 'getConfirmed']);
     Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancel']);
-    Route::get('/appointments/scheduled', [AppointmentController::class, 'getScheduled']);
-    Route::put('/appointments/{id}/done', [AppointmentController::class, 'done']);
-    Route::get('/appointments/done', [AppointmentController::class, 'getDone']);
+    Route::get('/appointments/cancelled', [AppointmentController::class, 'getCancelled']);
+    Route::put('/appointments/{id}/completed', [AppointmentController::class, 'completed']);
+    Route::get('/appointments/completed', [AppointmentController::class, 'getCompleted']);
+    Route::put('/appointments/{id}/noshow', [AppointmentController::class, 'noshow']);
     Route::get('/appointments/bydate', [AppointmentController::class, 'getbyDate']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);

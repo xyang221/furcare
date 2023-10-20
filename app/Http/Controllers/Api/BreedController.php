@@ -17,7 +17,7 @@ class BreedController extends Controller
     {
 
         return BreedResource::collection( 
-            Breed::query()->orderBy('id','desc')->get()
+            Breed::query()->orderBy('id','desc')->paginate(50)
         );
 
     }

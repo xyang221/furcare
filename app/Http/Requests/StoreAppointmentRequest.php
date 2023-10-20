@@ -24,10 +24,10 @@ class StoreAppointmentRequest extends FormRequest
         return [
             'date' => 'required|date',
             'purpose' => 'required|string',
-            'status' => 'in:pending,cancelled,scheduled,done', // Use 'in' rule for specific values
+            'status' => 'in:Completed,No Show,Rescheduled,Pending,Cancelled,Confirmed', // Use 'in' rule for specific values
             'remarks' => 'string',
             'petowner_id' => 'exists:petowners,id',
-            'client_service_id' => 'exists:client_service,id',
+            'service_id' => 'exists:services,id',
         ];
     }
 }
