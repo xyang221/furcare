@@ -5,9 +5,9 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SpecieResource extends JsonResource
+class VaccinationAgainstResource extends JsonResource
 {
-    // public static $wrap = false;
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -17,9 +17,8 @@ class SpecieResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'specie' => $this->specie,
+            'acronym' => $this->acronym,
             'description' => $this->description,
-       
         ];
     }
 }

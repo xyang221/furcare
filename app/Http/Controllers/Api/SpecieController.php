@@ -26,7 +26,7 @@ class SpecieController extends Controller
     public function store(StoreSpecieRequest $request)
     {
         $data = $request->validated(); //get the data
-        $specie = Specie::create($data); //create user
+        $specie = Specie::create($data); //create
         return new SpecieResource($specie, 201);
     }
 

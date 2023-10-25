@@ -15,6 +15,10 @@ use App\Http\Controllers\Api\BreedController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\ClientServiceController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\ServicesAvailedController;
+use App\Http\Controllers\Api\DewormingLogController;
+use App\Http\Controllers\Api\VaccinationLogController;
+use App\Http\Controllers\Api\VaccinationAgainstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +77,7 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
 
+    Route::apiResource('/species', SpecieController::class);
     Route::apiResource('/breeds', BreedController::class);
 
     Route::get('/staffs', [StaffController::class, 'index']);
@@ -102,7 +107,21 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
 
+    Route::apiResource('/servicesavailed', ServicesAvailedController::class);
+    Route::post('/servicesavailed/{id}/add',[ ServicesAvailedController::class, 'storeByPetowner']);
+    Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
+    
     Route::apiResource('/clientservices', ClientServiceController::class);
+
+    Route::apiResource('/deworminglogs', DewormingLogController::class);
+    Route::post('/deworminglogs/pet/{id}', [DewormingLogController::class,'store']);
+    Route::get('/deworminglogs/pet/{id}', [DewormingLogController::class,'getbyPet']);
+
+    Route::apiResource('/vaccinationlogs', VaccinationLogController::class);
+    Route::post('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'store']);
+    Route::get('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'getbyPet']);
+
+    Route::apiResource('/againsts', VaccinationAgainstController::class);
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -114,5 +133,4 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-Route::apiResource('/species', SpecieController::class);
 

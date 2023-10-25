@@ -5,9 +5,9 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SpecieResource extends JsonResource
+class DewormingLogResource extends JsonResource
 {
-    // public static $wrap = false;
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -17,9 +17,15 @@ class SpecieResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'specie' => $this->specie,
+            'date' => $this->date,
+            'weight' => $this->weight,
             'description' => $this->description,
-       
+            'administered' => $this->administered,
+            'status' => $this->status,
+            'pet_id' => $this->pet_id,
+
+            'pet' => new PetResource($this->whenLoaded('pet')),
+
         ];
     }
 }

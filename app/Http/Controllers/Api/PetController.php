@@ -18,11 +18,7 @@ class PetController extends Controller
     public function index()
     {
 
-        // $pet = Pet::get();
-
-        $pet = Pet::with(['petowner', 'breed'])->orderBy('id', 'desc')->paginate(50);
-       
-        // return new PetResource($pet);
+        $pet = Pet::query()->orderBy('id', 'desc')->get();
         return PetResource::collection($pet);
 
     }
@@ -32,7 +28,7 @@ class PetController extends Controller
      */
     public function store(StorePetRequest $request, $id)
     {
-        $petOwner = PetOwner::find($id);
+        $petOwner = PetOwner::findOrFail($id);
 
         $data = $request->validated(); //get the data
 

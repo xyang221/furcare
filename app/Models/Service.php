@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\ServiceCetegory;
+use App\Models\ServiceCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

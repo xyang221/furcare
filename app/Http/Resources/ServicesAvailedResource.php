@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ServicesAvailedResource extends JsonResource
 {
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -14,6 +15,17 @@ class ServicesAvailedResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'quantity' => $this->quantity,
+            'unit' => $this->unit,
+            'unit_price' => $this->unit_price,
+            'date_availed_for' => $this->date_availed_for,
+            'service_id' => $this->service_id,
+            'petowner_id' => $this->petowner_id,
+
+            'service' => new ServiceResource($this->whenLoaded('service')),
+            'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+        ];
     }
 }

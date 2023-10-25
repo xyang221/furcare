@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\ServicesAvailed;
+use App\Models\PetOwner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
@@ -32,12 +33,32 @@ class ServicesAvailedController extends Controller
         return new ServicesAvailedResource($servicesAvailed, 201);
     }
 
+    public function storeByPetowner(StoreServicesAvailedRequest $request, $id)
+    {
+        $petowner = PetOwner::findOrFail($id);
+        $data = $request->validated();
+        $data['petowner_id'] = $petowner;
+        $servicesAvailed = ServicesAvailed::create($data); 
+        return new ServicesAvailedResource($servicesAvailed, 201);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(ServicesAvailed $servicesAvailed)
     {
         return new ServicesAvailedResource($servicesAvailed);
+    }
+
+    public function showByPetowner($id)
+    {
+        $servicesAvaileds = ServicesAvailed::where('petowner_id', $id)->get();
+
+        if ($servicesAvaileds->isEmpty()) {
+            return response()->json(['message' => 'No charge slips of this client found'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvaileds);
     }
 
     /**
