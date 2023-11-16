@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVaccinationLogRequest;
 use App\Http\Requests\UpdateVaccinationLogRequest;
 use App\Http\Resources\VaccinationLogResource;
+use Carbon\Carbon;
 
 
 class VaccinationLogController extends Controller
@@ -18,6 +19,9 @@ class VaccinationLogController extends Controller
     public function index()
     {
         $vaccinationLog = VaccinationLog::query()->orderBy('id', 'desc')->get();
+        if ($vaccinationLog->isEmpty()) {
+            return response()->json(['message' => 'No vaccination logs found.'], 404);
+        }
         return VaccinationLogResource::collection($vaccinationLog);
     }
 
@@ -29,6 +33,7 @@ class VaccinationLogController extends Controller
         $pet = Pet::findOrFail($id);
         $data = $request->validated();
         $data['pet_id'] = $id;
+        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
         $vaccinationLog = VaccinationLog::create($data); 
         return new VaccinationLogResource($vaccinationLog, 201);
     }
@@ -50,7 +55,7 @@ class VaccinationLogController extends Controller
             return response()->json(['message' => 'No vaccination logs found.'], 404);
         }
 
-        return VaccinationLogResource::collection($dewormingLogs);
+        return VaccinationLogResource::collection($vaccinationLogs);
     }
 
     /**

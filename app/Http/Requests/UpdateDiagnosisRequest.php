@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVaccinationAgainstRequest extends FormRequest
+class UpdateDiagnosisRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class UpdateVaccinationAgainstRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vaccinationlog_id' => 'exists:vaccination_logs,id',
-            'against_id' => 'exists:againsts,id',
+            // 'date'=>'required|date',
+            'remarks' => 'required|string|max:55',
+            'pet_id' => 'exists:pets,id',
+            'service_id' => 'exists:services,id',
 
         ];
     }

@@ -18,7 +18,10 @@ use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ServicesAvailedController;
 use App\Http\Controllers\Api\DewormingLogController;
 use App\Http\Controllers\Api\VaccinationLogController;
+use App\Http\Controllers\Api\AgainstController;
 use App\Http\Controllers\Api\VaccinationAgainstController;
+use App\Http\Controllers\Api\DiagnosisController;
+use App\Http\Controllers\Api\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +80,13 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
 
+    Route::post('/upload-image',[ImageController::class, 'store']);
+    Route::get('/images',[ImageController::class, 'index']);
+    
+
     Route::apiResource('/species', SpecieController::class);
+    Route::get('/species/{id}', [SpecieController::class, 'show']);
+    Route::put('/species/{id}', [SpecieController::class, 'update']);
     Route::apiResource('/breeds', BreedController::class);
 
     Route::get('/staffs', [StaffController::class, 'index']);
@@ -106,7 +115,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
-
+    Route::apiResource('/diagnosis', DiagnosisController::class);
+    Route::get('/diagnosis/pet/{id}', [DiagnosisController::class,'getbyPet']);
+    Route::post('/diagnosis/pet/{id}/service/{serviceid}', [DiagnosisController::class,'store']);
+    // Route::post('/diagnosis/pet/{id}', [DiagnosisController::class,'store']);
+    
     Route::apiResource('/servicesavailed', ServicesAvailedController::class);
     Route::post('/servicesavailed/{id}/add',[ ServicesAvailedController::class, 'storeByPetowner']);
     Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
@@ -116,12 +129,19 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/deworminglogs', DewormingLogController::class);
     Route::post('/deworminglogs/pet/{id}', [DewormingLogController::class,'store']);
     Route::get('/deworminglogs/pet/{id}', [DewormingLogController::class,'getbyPet']);
+    Route::get('/deworminglogs/{id}', [DewormingLogController::class,'show']);
+    Route::put('/deworminglogs/{id}', [DewormingLogController::class,'update']);
 
     Route::apiResource('/vaccinationlogs', VaccinationLogController::class);
     Route::post('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'store']);
     Route::get('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'getbyPet']);
 
-    Route::apiResource('/againsts', VaccinationAgainstController::class);
+    Route::apiResource('/againsts', AgainstController::class);
+    Route::apiResource('/vaccinationagainsts', VaccinationAgainstController::class);
+
+    
+
+
 
 
     Route::post('/logout', [AuthController::class, 'logout']);

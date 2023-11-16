@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('vaccination_againsts', function (Blueprint $table) {
             $table->id();
-            $table->string('service');
-            $table->double('price');
-            $table->string('isAvailable');
-            $table->unsignedBigInteger('cat_id');
+            $table->unsignedBigInteger('vaccinationlog_id');
+            $table->foreign('vaccinationlog_id')->references('id')->on('vaccination_logs');
+            $table->unsignedBigInteger('against_id');
+            $table->foreign('against_id')->references('id')->on('againsts');
             $table->timestamps();
-
-            $table->foreign('cat_id')->references('id')->on('service_category');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('vaccination_againsts');
     }
 };

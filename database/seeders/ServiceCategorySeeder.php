@@ -47,20 +47,25 @@ class ServiceCategorySeeder extends Seeder
               ),
             7 => 
                 array (
-                    'category' => 'Test',
+                    'category' => 'Deworming',
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ),
             8 => 
             array (
-                'category' => 'Medicine',
+                'category' => 'Tests',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
             9 => 
             array (
-                'category' => 'Tick/Flea Treatment',
+                'category' => 'Medicines',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
             10 => 
+            array (
+                'category' => 'Tick/Flea Treatment',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+              ),
+            11 => 
             array (
                 'category' => 'Others',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

@@ -15,9 +15,9 @@ class SpecieController extends Controller
      */
     public function index()
     {
-        $specie = Specie::query()->orderBy('id', 'desc')->paginate(50);
+        $species = Specie::orderBy('id', 'desc')->paginate(50);
 
-        return SpecieResource::collection($specie);
+        return SpecieResource::collection($species);
     }
 
     /**
@@ -33,16 +33,18 @@ class SpecieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Specie $specie)
+    public function show(Specie $specie, $id)
     {
+        $specie = Specie::findOrFail($id);
         return new SpecieResource($specie);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSpecieRequest $request, Specie $specie)
+    public function update(UpdateSpecieRequest $request, Specie $specie, $id)
     {
+        $specie = Specie::findOrFail($id);
         $data = $request->validated();
         $specie->update($data);
 

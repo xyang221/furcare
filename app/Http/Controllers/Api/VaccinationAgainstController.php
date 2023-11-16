@@ -15,7 +15,7 @@ class VaccinationAgainstController extends Controller
      */
     public function index()
     {
-        $vaccinationAgainst = VacciantionAgainst::query()->orderBy('id', 'desc')->paginate(50);
+        $vaccinationAgainst = VaccinationAgainst::query()->orderBy('id', 'desc')->paginate(50);
 
         return VaccinationAgainstResource::collection($vaccinationAgainst);
     }
@@ -26,7 +26,9 @@ class VaccinationAgainstController extends Controller
     public function store(StoreVaccinationAgainstRequest $request)
     {
         $data = $request->validated(); //get the data
-        $vaccinationAgainst = VacciantionAgainst::create($data); //create user
+        $vaccinationAgainst = VacciantionAgainst::create($data); 
+        // $data['vaccinationlog_id'] = $id;
+
         return new VaccinationAgainstResource($vaccinationAgainst, 201);
     }
 

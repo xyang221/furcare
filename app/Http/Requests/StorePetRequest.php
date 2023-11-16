@@ -22,8 +22,9 @@ class StorePetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
-            'photo' => 'required',
+            // 'photo' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            // 'photo' => 'required',
             'name'=>'required|string|max:55',
             'birthdate'=>'required|date',
             'gender' => 'required|string|max:55',

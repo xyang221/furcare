@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\VaccinationLog;
+use App\Models\Against;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,14 +11,18 @@ class VaccinationAgainst extends Model
 {
     use HasFactory;
 
-    protected $table = 'againsts';
+    protected $table = 'vaccination_againsts';
 
-    protected $fillable = ['acronym', 'description'];
+    protected $fillable = ['vaccinationlog_id', 'against_id'];
 
-    protected $with = ['vaccinationlogs'];
+    protected $with = ['vaccinationlog','against' ];
 
-    public function vaccinationlogs()
+    public function vaccinationlog()
     {
-        return $this->hasMany(VaccinationLog::class);
+        return $this->belongsTo(VaccinationLog::class);
+    }
+    public function against()
+    {
+        return $this->belongsTo(Against::class);
     }
 }

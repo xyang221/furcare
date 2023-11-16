@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Breed;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Specie extends Model
 
     protected $fillable = ['specie', 'description'];
 
-    // protected $with = ['specie'];
+    // protected $with = ['breed'];
 
     public function breed()
     {

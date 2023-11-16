@@ -19,7 +19,7 @@ class ServiceSeeder extends Seeder
             array (
               'service' => 'Consultation',
               'price' => 100,
-              'status' => 'isAvailable',
+              'isAvailable' => 'true',
               'cat_id' => 1,
               'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ),
@@ -27,7 +27,7 @@ class ServiceSeeder extends Seeder
             array (
                 'service' => 'Home Service',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
@@ -35,7 +35,7 @@ class ServiceSeeder extends Seeder
             array (
                 'service' => 'Boarding Fee',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 3,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ),
@@ -43,7 +43,7 @@ class ServiceSeeder extends Seeder
             array (
                 'service' => 'Grooming',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
@@ -51,7 +51,7 @@ class ServiceSeeder extends Seeder
             array (
                 'service' => 'Surgery',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 5,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
@@ -59,7 +59,7 @@ class ServiceSeeder extends Seeder
             array (
                 'service' => 'DHLPPI',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 6,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
@@ -67,7 +67,7 @@ class ServiceSeeder extends Seeder
               array (
                   'service' => 'BRONCHICINE',
                   'price' => 100,
-                  'status' => 'isAvailable',
+                  'isAvailable' => 'true',
                   'cat_id' => 6,
                   'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ),
@@ -75,7 +75,7 @@ class ServiceSeeder extends Seeder
                 array (
                     'service' => 'HEARTWORM',
                     'price' => 100,
-                    'status' => 'isAvailable',
+                    'isAvailable' => 'true',
                     'cat_id' => 6,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                   ),
@@ -83,7 +83,7 @@ class ServiceSeeder extends Seeder
                   array (
                       'service' => 'RABIES',
                       'price' => 100,
-                      'status' => 'isAvailable',
+                      'isAvailable' => 'true',
                       'cat_id' => 6,
                       'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     ),
@@ -91,87 +91,95 @@ class ServiceSeeder extends Seeder
                 array (
                     'service' => 'TRICAT',
                     'price' => 100,
-                    'status' => 'isAvailable',
+                    'isAvailable' => 'true',
                     'cat_id' => 6,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ),
-            11 => 
+                11 => 
+                array (
+                    'service' => 'Deworming',
+                    'price' => 100,
+                    'isAvailable' => 'true',
+                    'cat_id' => 7,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ),
+            12 => 
             array (
                 'service' => 'CBC',
                 'price' => 100,
-                'status' => 'isAvailable',
-                'cat_id' => 7,
+                'isAvailable' => 'true',
+                'cat_id' => 8,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
-              12 => 
+              13 => 
               array (
                   'service' => 'BLOOD CHEM',
                   'price' => 100,
-                  'status' => 'isAvailable',
-                  'cat_id' => 7,
+                  'isAvailable' => 'true',
+                  'cat_id' => 8,
                   'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ),
-                13 => 
+                14 => 
                 array (
                     'service' => 'PARVO TEST',
                     'price' => 100,
-                    'status' => 'isAvailable',
-                    'cat_id' => 7,
+                    'isAvailable' => 'true',
+                    'cat_id' => 8,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                   ),
-                  14 => 
+                  15 => 
                   array (
                       'service' => 'DISTEMPER',
                       'price' => 100,
-                      'status' => 'isAvailable',
-                      'cat_id' => 7,
+                      'isAvailable' => 'true',
+                      'cat_id' => 8,
                       'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     ),
-                    15 => 
+                    16 => 
                     array (
                         'service' => 'EHRLICHIA',
                         'price' => 100,
-                        'status' => 'isAvailable',
-                        'cat_id' => 7,
+                        'isAvailable' => 'true',
+                        'cat_id' => 8,
                         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                       ),
-                      16 => 
+                      17 => 
                       array (
                           'service' => 'HEARTWORM',
                           'price' => 100,
-                          'status' => 'isAvailable',
-                          'cat_id' => 7,
+                          'isAvailable' => 'true',
+                          'cat_id' => 8,
                           'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                         ),
-                        17 => 
+                        18 => 
                         array (
                             'service' => '4DX',
                             'price' => 100,
-                            'status' => 'isAvailable',
-                            'cat_id' => 7,
+                            'isAvailable' => 'true',
+                            'cat_id' => 8,
                             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                           ),     
-                          18 => 
+                          19 => 
                           array (
                               'service' => 'Medicine',
                               'price' => 100,
-                              'status' => 'isAvailable',
+                              'isAvailable' => 'true',
                               'cat_id' => 8,
                               'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                             ),
-            19 => 
+            20 => 
             array (
                 'service' => 'Tick/Flea Treatment',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 9,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
-            20 => 
+            21 => 
             array (
                 'service' => 'Others',
                 'price' => 100,
-                'status' => 'isAvailable',
+                'isAvailable' => 'true',
                 'cat_id' => 10,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('deworming_logs', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date');
-            $table->integer('weight');
+            $table->float('weight');
             $table->string('administered');
             $table->string('status');
             $table->unsignedBigInteger('pet_id');

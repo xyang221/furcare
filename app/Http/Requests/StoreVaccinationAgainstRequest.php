@@ -22,8 +22,9 @@ class StoreVaccinationAgainstRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'acronym' => 'required|string|max:55',
-            'description' => 'required|string|max:55',
+            'vaccinationlog_id' => 'exists:vaccination_logs,id',
+            'against_id' => 'exists:againsts,id',
+
         ];
     }
 }

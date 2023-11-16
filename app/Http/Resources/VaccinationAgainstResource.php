@@ -17,8 +17,11 @@ class VaccinationAgainstResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'acronym' => $this->acronym,
-            'description' => $this->description,
+            'vaccinationlog_id' => $this->vaccinationlog_id,
+            'against_id' => $this->against_id,
+
+            'vaccinationlog' => new VaccinationLogResource($this->whenLoaded('vaccinationlog')),
+            'against' => new AgainstResource($this->whenLoaded('against')),
         ];
     }
 }

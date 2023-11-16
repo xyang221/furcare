@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVaccinationAgainstRequest extends FormRequest
+class StoreImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,17 @@ class UpdateVaccinationAgainstRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vaccinationlog_id' => 'exists:vaccination_logs,id',
-            'against_id' => 'exists:againsts,id',
+            'name' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ];
+    }
 
+    public function messages()
+    {
+        return [
+            'image.required' => 'The image field is required.',
+            'image.image' => 'The image field must be an image.',
+            'image.mimes' => 'The image field must be a file of type: :mimes.',
+            'image.max' => 'The image size must not exceed :max kilobytes.',
         ];
     }
 }
