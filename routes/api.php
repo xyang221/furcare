@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\DiagnosisController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TestResultController;
 use App\Http\Controllers\Api\MedicineController;
+use App\Http\Controllers\Api\PetConditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +142,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/testresults', [TestResultController::class,'index']);
     Route::post('/testresults/pet/{id}', [TestResultController::class,'store']);
     Route::get('/testresults/{id}', [TestResultController::class,'show']);
-    Route::get('/testresults/{id}', [TestResultController::class,'getbyPet']);
+    Route::get('/testresults/pet/{id}', [TestResultController::class,'getbyPet']);
     Route::put('/testresults/{id}', [TestResultController::class,'update']);
     Route::delete('/testresults/{id}', [TestResultController::class,'destory']);
     Route::get('/archives/testresults', [TestResultController::class,'archivelist']);
@@ -151,8 +152,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/medicines', MedicineController::class);
     Route::get('/archives/medicines', [MedicineController::class, 'archivelist']);
-    Route::put('/medicines/{id}/restore', [MedicineController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [MedicineController::class, 'forcedelete']);
+    Route::put('/archives/medicines/{id}', [MedicineController::class, 'restore']);
+    Route::delete('/archives/medicines/{id}', [MedicineController::class, 'forcedelete']);
     
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -168,4 +169,9 @@ Route::apiResource('/servicesavailed', ServicesAvailedController::class);
 Route::post('/servicesavailed/petowner/{id}/pet/{petid}/add',[ ServicesAvailedController::class, 'store']);
 Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
 
+Route::apiResource('/petconditions', ServicesAvailedController::class);
+Route::get('/petconditions/treatment/{id}',[ ServicesAvailedController::class, 'getwithTreatment']);
+Route::get('/archives/petconditions',[ ServicesAvailedController::class, 'archivelist']);
+Route::put('/archives/petconditions/{id}',[ ServicesAvailedController::class, 'restore']);
+Route::delete('/archives/petconditions/{id}',[ ServicesAvailedController::class, 'forcedelete']);
 
