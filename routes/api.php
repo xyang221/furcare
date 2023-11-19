@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\VaccinationAgainstController;
 use App\Http\Controllers\Api\DiagnosisController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TestResultController;
+use App\Http\Controllers\Api\MedicineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -137,10 +138,22 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/againsts', AgainstController::class);
     Route::apiResource('/vaccinationagainsts', VaccinationAgainstController::class);
 
+    Route::get('/testresults', [TestResultController::class,'index']);
+    Route::post('/testresults/pet/{id}', [TestResultController::class,'store']);
+    Route::get('/testresults/{id}', [TestResultController::class,'show']);
+    Route::get('/testresults/{id}', [TestResultController::class,'getbyPet']);
+    Route::put('/testresults/{id}', [TestResultController::class,'update']);
+    Route::delete('/testresults/{id}', [TestResultController::class,'destory']);
+    Route::get('/archives/testresults', [TestResultController::class,'archivelist']);
+    Route::put('/archives/testresults/{id}', [TestResultController::class,'restore']);
+    Route::delete('/archives/testresults/{id}', [TestResultController::class,'forcedelete']);
+
+
+    Route::apiResource('/medicines', MedicineController::class);
+    Route::get('/archives/medicines', [MedicineController::class, 'archivelist']);
+    Route::put('/medicines/{id}/restore', [MedicineController::class, 'restore']);
+    Route::delete('/archives/{id}/forcedelete', [MedicineController::class, 'forcedelete']);
     
-
-
-
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -151,14 +164,8 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-
 Route::apiResource('/servicesavailed', ServicesAvailedController::class);
 Route::post('/servicesavailed/petowner/{id}/pet/{petid}/add',[ ServicesAvailedController::class, 'store']);
 Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
-
-Route::get('/testresults', [TestResultController::class,'index']);
-Route::post('/testresults/pet/{id}', [TestResultController::class,'store']);
-Route::put('/testresults/{id}', [TestResultController::class,'update']);
-Route::delete('/testresults/{id}', [TestResultController::class,'destroy']);
 
 

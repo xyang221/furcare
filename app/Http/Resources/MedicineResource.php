@@ -5,9 +5,10 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TestResultResource extends JsonResource
+class MedicineResource extends JsonResource
 {
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -17,17 +18,11 @@ class TestResultResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'attachment' => $this->attachment,
-            'description' => $this->description,
-
+            'name' => $this->name,
+            'price' => $this->price,
+            
             'deleted_at' => $this->deleted_at,
 
-
-            'diagnosis_id' => $this->diagnosis_id,
-            'pet_id' => $this->pet_id,
-
-            'diagnosis' => new DiagnosisResource($this->whenLoaded('diagnosis')),
-            'pet' => new PetResource($this->whenLoaded('pet')),
        
         ];
     }

@@ -86,9 +86,9 @@ class TestResultController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTestResultRequest $request, TestResult $testResult, $id)
+    public function update(UpdateTestResultRequest $request, TestResult $testResult)
     {
-        $testResult = TestResult::findOrFail($id);
+        // $testResult = TestResult::findOrFail($id);
         $data = $request->validated();
     
         if (!$request->hasFile('attachment')) {
@@ -115,5 +115,30 @@ class TestResultController extends Controller
         $testResult = TestResult::findOrFail($id);
         $testResult->delete();
         return response()->json(['message' => "Test Result Permanently Deleted"], 204);
+    }
+
+    public function archivelist()
+    {
+        $testresults = TestResult::onlyTrashed()->orderBy('id','desc')->get();
+
+        if ($testresults->isEmpty()) {
+            return response()->json(['message' => 'No test results were archived.'], 404);
+        }
+        
+        return TestResultResource::collection($testresults);
+    }
+
+    public function restore($id)
+    {
+        $testResult = TestResult::withTrashed()->findOrFail($id);
+        $testResult->restore();
+        return response("Test Result restored successfully");
+    }
+
+    public function forcedelete(TestResult $testResult, $id)
+    {
+        $testResult = TestResult::withTrashed()->findOrFail($id);
+        $testResult->forceDelete();
+        return response()->json(['message' => 'This test result was permanently deleted.'], 404);
     }
 }
