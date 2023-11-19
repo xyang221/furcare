@@ -25,6 +25,8 @@ class PetConditionResource extends JsonResource
             'vomit' => $this->vomit,
             'defecated' => $this->defecated,
             'is_AM_or_PM' => $this->is_AM_or_PM,
+            
+            'deleted_at' => $this->deleted_at,
 
             'treatment_id' => $this->treatment_id,
 

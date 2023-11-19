@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('drinking');
             $table->string('urinated');
             $table->string('vomit');
-            $table->string('deficated');
+            $table->string('defecated');
             $table->string('is_AM_or_PM');
-            $table->string('remarks');
 
             $table->unsignedBigInteger('treatment_id');
             $table->foreign('treatment_id')->references('id')->on('treatment');

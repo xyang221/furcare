@@ -14,11 +14,11 @@ class PetCondition extends Model
 
     protected $table = 'pet_condition';
 
-    protected $fillable = ['date', 'eating','drinking', 'urinated', 'vomit', 'defecated', 'isAM_or_PM', 'treatment_id'];
+    protected $fillable = ['date', 'eating','drinking', 'urinated', 'vomit', 'defecated', 'is_AM_or_PM', 'treatment_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['treatment'];
+    // protected $with = ['treatment'];
 
     public function treatment()
     {

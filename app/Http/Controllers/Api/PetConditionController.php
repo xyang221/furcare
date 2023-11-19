@@ -9,6 +9,8 @@ use App\Http\Requests\StorePetConditionRequest;
 use App\Http\Requests\UpdatePetConditionRequest;
 use App\Http\Resources\PetConditionResource;
 
+use Carbon\Carbon;
+
 class PetConditionController extends Controller
 {
     /**
@@ -33,6 +35,9 @@ class PetConditionController extends Controller
     {
         $treatment = Treatment::findOrFail($id);
         $data = $request->validated(); //get the data
+
+        $today = Carbon::now()->toDateString();
+        $data['date'] = $today;
         $data['treatment_id'] = $id;
 
         $petCondition = PetCondition::create($data); //create
@@ -46,17 +51,6 @@ class PetConditionController extends Controller
     {
         // $petCondition = PetCondition::findOrFail($id);
         return new PetConditionResource($petCondition);
-    }
-
-    public function getwithTreatment($id)
-    {
-        
-        $petConditions = PetCondition::where('treatment_id', $id)->get();
-
-        if ($petConditions->isEmpty()) {
-            return response()->json(['message' => 'No pet condition records found within this treatment.'], 404);
-        }
-        return PetConditionResource::collection($petConditions);
     }
 
     /**
