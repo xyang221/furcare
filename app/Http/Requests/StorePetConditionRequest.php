@@ -22,7 +22,7 @@ class StorePetConditionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'date',
+            // 'date'=>'date',
             'eating' => 'required|string|max:255',
             'drinking' => 'required|string|max:255',
             'urinated' => 'required|string|max:255',

@@ -22,7 +22,6 @@ class UpdateVaccinationLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'required|date',
             'weight' => 'required|numeric',
             'description' => 'required|string|max:55',
             'administered' => 'required|string|max:55',

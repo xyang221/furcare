@@ -33,7 +33,7 @@ class VaccinationLogController extends Controller
         $pet = Pet::findOrFail($id);
         $data = $request->validated();
         $data['pet_id'] = $id;
-        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
+        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
         $vaccinationLog = VaccinationLog::create($data); 
         return new VaccinationLogResource($vaccinationLog, 201);
     }

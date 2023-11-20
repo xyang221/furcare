@@ -46,7 +46,7 @@ class TestResultController extends Controller
         $name_path = $file->move('attachments/', $name);
 
         $diagnosis = Diagnosis::create([
-            'date' => $drequest->input('date'),
+            // 'date' => $drequest->input('date'),
             'remarks' => $drequest->input('remarks'),
             'service_id' => $drequest->input('service_id'),
             'pet_id' => $pet->id,

@@ -28,8 +28,8 @@ class ClientServiceController extends Controller
     public function store(StoreClientServiceRequest $request)
     {
         $data = $request->validated(); //get the data
-        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
-        $data['date'] = (string)$data['date'];
+        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
+        // $data['date'] = (string)$data['date'];
         $clientService = ClientService::create($data); //create user
         return new ClientServiceResource($clientService, Response::HTTP_CREATED);
     }

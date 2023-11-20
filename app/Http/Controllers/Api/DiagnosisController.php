@@ -35,7 +35,7 @@ class DiagnosisController extends Controller
         $data = $request->validated(); //get the data
         $data['pet_id'] = $id;
         $data['service_id'] = $serviceid;
-        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
+        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
 
 
         $diagnosis = Diagnosis::create($data); //create

@@ -22,7 +22,7 @@ class StoreDewormingLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'date',
+            // 'date'=>'date',
             'weight' => 'required|numeric',
             'description' => 'required|string|max:55',
             'administered' => 'required|string|max:55',

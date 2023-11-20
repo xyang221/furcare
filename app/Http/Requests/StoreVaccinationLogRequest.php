@@ -22,7 +22,7 @@ class StoreVaccinationLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'required|date',
+            // 'date'=>'required|date',
             'weight' => 'required|numeric',
             'description' => 'required|string|max:55',
             'administered' => 'required|string|max:55',

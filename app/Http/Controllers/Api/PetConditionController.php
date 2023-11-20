@@ -36,8 +36,8 @@ class PetConditionController extends Controller
         $treatment = Treatment::findOrFail($id);
         $data = $request->validated(); //get the data
 
-        $today = Carbon::now()->toDateString();
-        $data['date'] = $today;
+        // $today = Carbon::now()->toDateString();
+        // $data['date'] = $today;
         $data['treatment_id'] = $id;
 
         $petCondition = PetCondition::create($data); //create

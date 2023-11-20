@@ -41,8 +41,8 @@ class TreatmentController extends Controller
         $pet = Pet::findOrFail($id);
         $data = $request->validated(); //get the data
 
-        $today = Carbon::now()->toDateString();
-        $data['date'] = $today;
+        // $today = Carbon::now()->toDateString();
+        // $data['date'] = $today;
         $data['pet_id'] = $id;
         $treatment = Treatment::create($data); //create
         return new TreatmentResource($treatment, 201);

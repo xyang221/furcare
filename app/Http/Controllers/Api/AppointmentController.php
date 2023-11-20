@@ -27,7 +27,7 @@ class AppointmentController extends Controller
     public function store(StoreAppointmentRequest $request)
     {
         $data = $request->validated();
-        $data['date'] = \Carbon\Carbon::parse($data['date'])->format('Y-m-d');
+        // $data['date'] = \Carbon\Carbon::parse($data['date'])->format('Y-m-d');
         $data['status'] = "Pending";
         $appointment = Appointment::create($data);
         return new AppointmentResource($appointment, Response::HTTP_CREATED);

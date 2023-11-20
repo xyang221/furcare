@@ -22,7 +22,7 @@ class StoreTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'date',
+            // 'date'=>'date',
             'diagnosis' => 'required|string|max:255',
             'body_weight'=>'required|numeric|max:55',
             'heart_rate'=>'required|numeric|max:55',

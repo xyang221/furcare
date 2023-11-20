@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePetConditionRequest extends FormRequest
+class UpdateMedicationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class UpdatePetConditionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'eating' => 'required|string|max:255',
-            'drinking' => 'required|string|max:255',
-            'urinated' => 'required|string|max:255',
-            'vomit' => 'required|string|max:255',
-            'defecated' => 'required|string|max:255',
-            'is_AM_or_PM' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'quantity' => 'required|numeric|max:255',
+            'dosage' => 'required|string|max:255',
         ];
     }
 }

@@ -22,7 +22,6 @@ class UpdateClientServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'required|date',
             'deposit'=>'required|numeric',
             'balance'=>'required|numeric',
             'rendered_by' => 'string',
