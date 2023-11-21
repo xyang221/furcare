@@ -17,6 +17,7 @@ return new class extends Migration
             $table->double('price');
             $table->string('isAvailable');
             $table->unsignedBigInteger('cat_id');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('cat_id')->references('id')->on('service_category');

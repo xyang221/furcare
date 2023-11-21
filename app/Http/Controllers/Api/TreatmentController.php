@@ -36,14 +36,12 @@ class TreatmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreatmentRequest $request, $id)
+    public function store(StoreTreatmentRequest $request)
     {
         $pet = Pet::findOrFail($id);
         $data = $request->validated(); //get the data
 
-        // $today = Carbon::now()->toDateString();
-        // $data['date'] = $today;
-        $data['pet_id'] = $id;
+        // $data['pet_id'] = $id;
         $treatment = Treatment::create($data); //create
         return new TreatmentResource($treatment, 201);
     }

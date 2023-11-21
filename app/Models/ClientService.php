@@ -26,9 +26,4 @@ class ClientService extends Model
     {
         return $this->belongsTo(Service::class, 'services_id','id');
     }
-
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
 }

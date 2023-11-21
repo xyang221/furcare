@@ -13,7 +13,7 @@ class DewormingLog extends Model
 
     protected $table = 'deworming_logs';
 
-    protected $fillable = ['date', 'weight', 'description','administered','status', 'pet_id'];
+    protected $fillable = ['date', 'weight', 'description','administered','status', 'pet_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
 

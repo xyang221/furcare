@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('description');
             $table->string('administered');
             $table->string('status');
-            $table->unsignedBigInteger('against_id');
-            $table->foreign('against_id')->references('id')->on('againsts');
+
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
+            $table->unsignedBigInteger('services_availed_id');
+            $table->foreign('services_availed_id')->references('id')->on('services_availed');
+            
             $table->softDeletes();
             $table->timestamps();
         });

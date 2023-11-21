@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\ClientService;
+use App\Models\PetOwner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientServiceRequest;
 use App\Http\Requests\UpdateClientServiceRequest;
@@ -25,11 +26,12 @@ class ClientServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreClientServiceRequest $request)
+    public function store(StoreClientServiceRequest $request, $id)
     {
+        $petowner = PetOwner::find($id);
         $data = $request->validated(); //get the data
-        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
-        // $data['date'] = (string)$data['date'];
+        
+        $data['petowner_id'] = $id;
         $clientService = ClientService::create($data); //create user
         return new ClientServiceResource($clientService, Response::HTTP_CREATED);
     }

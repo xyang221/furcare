@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\DewormingLog;
 use App\Models\Pet;
+use App\Models\ServicesAvailed;
+use App\Models\Service;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDewormingLogRequest;
+use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateDewormingLogRequest;
 use App\Http\Resources\DewormingLogResource;
 use Carbon\Carbon;
@@ -30,16 +33,26 @@ class DewormingLogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDewormingLogRequest $request, $id)
+    public function store(StoreDewormingLogRequest $drequest, StoreServicesAvailedRequest $sarequest, $id)
     {
         $pet = Pet::findOrFail($id);
-        $data = $request->validated();
-        // $today = Carbon::now()->toDateString();
-        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s')->save();
-        // $data['date'] = (string)$data['date'];
-        // $data['date'] = $today;
-        $data['pet_id'] = $id;
-        $dewormingLog = DewormingLog::create($data); 
+
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => $sarequest->input('service_id'),
+            'unit_price' => Service::findOrFail($sarequest['service_id'])->price,
+            'petowner_id' => $pet->petowner_id,
+            'pet_id' => $pet->id,
+        ]);
+
+        $dewormingLog = DewormingLog::create([
+            'pet_id' => $pet->id,
+            'weight' =>$drequest->input('weight'),
+            'description' => $drequest->input('description'),
+            'administered' => $drequest->input('administered'),
+            'status' => $drequest->input('status'),
+            'services_availed_id' => $servicesAvailed->id,
+        ]);
+
         return new DewormingLogResource($dewormingLog, 201);
         
     }

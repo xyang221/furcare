@@ -13,16 +13,11 @@ class VaccinationLog extends Model
 
     protected $table = 'vaccination_logs';
 
-    protected $fillable = ['date', 'weight', 'description','administered','status', 'against_id', 'pet_id'];
+    protected $fillable = ['date', 'weight', 'description','administered','status', 'services_availed_id', 'pet_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet', 'against'];
-
-    public function against()
-    {
-        return $this->belongsTo(VaccinationAgainst::class, 'against_id','id');
-    }
+    protected $with = ['pet'];
 
     public function pet()
     {

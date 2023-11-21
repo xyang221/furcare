@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('service_category', function (Blueprint $table) {
             $table->id();
             $table->string('category');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

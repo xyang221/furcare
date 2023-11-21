@@ -15,10 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
-            $table->unsignedBigInteger('diagnosis_id');
-            $table->foreign('diagnosis_id')->references('id')->on('diagnosis');
             $table->string('attachment');
             $table->string('description');
+
+            $table->unsignedBigInteger('diagnosis_id');
+            $table->foreign('diagnosis_id')->references('id')->on('diagnosis');
+            $table->unsignedBigInteger('services_availed_id');
+            $table->foreign('services_availed_id')->references('id')->on('services_availed');
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

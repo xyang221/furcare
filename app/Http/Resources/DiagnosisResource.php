@@ -22,10 +22,9 @@ class DiagnosisResource extends JsonResource
             'date' => $this->date,
             'remarks' => $this->remarks,
 
-            'service_id' => $this->service_id,
             'pet_id' => $this->pet_id,
+            'services_availed_id' => $this->services_availed_id,
 
-            'service' => new ServiceResource($this->whenLoaded('service')),
             'pet' => new PetResource($this->whenLoaded('pet')),
 
         ];

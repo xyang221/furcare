@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Models\TestResult;
 use App\Models\Pet;
 use App\Models\Diagnosis;
+use App\Models\Service;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestResultRequest;
 use App\Http\Requests\StoreDiagnosisRequest;
+use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateTestResultRequest;
 use App\Http\Resources\TestResultResource;
 
@@ -32,10 +34,17 @@ class TestResultController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTestResultRequest $trrequest, StoreDiagnosisRequest $drequest, $id )
+    public function store(StoreTestResultRequest $trrequest, StoreServicesAvailedRequest $sarequest, $id )
     {
 
         $pet = Pet::findOrFail($id);
+
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => $sarequest->input('service_id'),
+            'unit_price' => Service::findOrFail($sarequest['service_id'])->price,
+            'petowner_id' => $pet->petowner_id,
+            'pet_id' => $pet->id,
+        ]);
 
         if (!$trrequest->hasFile('attachment')) {
             return response()->json(["message" => "Please select an image"], 400);
@@ -45,18 +54,11 @@ class TestResultController extends Controller
         $name = time() . '.' . $file->getClientOriginalExtension();
         $name_path = $file->move('attachments/', $name);
 
-        $diagnosis = Diagnosis::create([
-            // 'date' => $drequest->input('date'),
-            'remarks' => $drequest->input('remarks'),
-            'service_id' => $drequest->input('service_id'),
-            'pet_id' => $pet->id,
-        ]);
-    
         $testResult = TestResult::create([
-            'diagnosis_id' => $diagnosis->id,
             'pet_id' => $pet->id,
             'attachment' => $name_path,
             'description' => $trrequest->input('description'),
+            'services_availed_id' => $servicesAvailed->id,
         ]);
 
         return new TestResultResource($testResult, 201);

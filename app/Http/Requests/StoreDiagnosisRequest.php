@@ -22,10 +22,9 @@ class StoreDiagnosisRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'date'=>'date',
             'remarks' => 'required|string|max:55',
             'pet_id' => 'exists:pets,id',
-            'service_id' => 'exists:services,id',
+            'services_availed_id' => 'exists:services_availed,id',
 
         ];
     }

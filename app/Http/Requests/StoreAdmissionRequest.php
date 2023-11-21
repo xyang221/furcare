@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreVaccinationLogRequest extends FormRequest
+class StoreAdmissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,14 @@ class StoreVaccinationLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'weight' => 'required|numeric',
-            'description' => 'required|string|max:55',
-            'administered' => 'required|string|max:55',
-            'status' => 'required|string|max:55',
+            'date_admission' => 'required|date',
+            'date_released' => 'required|date',
+            'treatment_cost' => 'required|numeric|max:55',
+            'purpose' => 'required|string|max:255',
+
             'pet_id' => 'exists:pets,id',
-            'services_availed_id' => 'exists:services_availed,id',
+            'treatment_id' => 'exists:treatment,id',
+
         ];
     }
 }

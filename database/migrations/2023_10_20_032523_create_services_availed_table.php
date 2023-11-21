@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('services_availed', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity');
-            $table->integer('unit');
+            $table->integer('quantity')->default(1);
+            $table->integer('unit')->default(1);
             $table->integer('unit_price');
             $table->timestamp('date_availed_for');
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services');
+            
+            $table->softDeletes();
             $table->timestamps();
 
         });

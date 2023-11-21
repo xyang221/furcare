@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('vaccinationlog_id')->references('id')->on('vaccination_logs');
             $table->unsignedBigInteger('against_id');
             $table->foreign('against_id')->references('id')->on('againsts');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

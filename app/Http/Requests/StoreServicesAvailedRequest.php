@@ -22,11 +22,11 @@ class StoreServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ref_id' => 'string',
-            'quantity' => 'required|numeric',
-            'unit' => 'required|numeric',
-            'unit_price' => 'required|numeric',
-            'date_availed_for' => 'date',
+            // 'ref_id' => 'string',
+            // 'quantity' => 'required|numeric',
+            // 'unit' => 'required|numeric',
+            // 'unit_price' => 'required|numeric',
+            // 'date_availed_for' => 'date',
             'service_id' => 'exists:services,id',
             'petowner_id' => 'exists:petowners,id',
             'pet_id' => 'exists:pets,id'

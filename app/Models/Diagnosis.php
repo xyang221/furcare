@@ -15,19 +15,15 @@ class Diagnosis extends Model
 
     protected $table = 'diagnosis';
 
-    protected $fillable = ['date', 'remarks', 'pet_id', 'service_id'];
+    protected $fillable = ['date', 'remarks', 'pet_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet','service'];
+    protected $with = ['pet'];
 
     public function pet()
     {
         return $this->belongsTo(Pet::class, 'pet_id','id');
     }
 
-    public function service()
-    {
-        return $this->belongsTo(Service::class, 'service_id','id');
-    }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('down_payment');
             $table->double('remaining_bal');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

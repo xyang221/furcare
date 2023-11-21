@@ -19,10 +19,12 @@ return new class extends Migration
             $table->string('remarks');
             $table->unsignedBigInteger('petowner_id');
             $table->unsignedBigInteger('service_id');
-            $table->timestamps();
 
             $table->foreign('petowner_id')->references('id')->on('petowners');
             $table->foreign('service_id')->references('id')->on('services');
+        
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

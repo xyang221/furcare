@@ -43,41 +43,10 @@ class ServicesAvailedController extends Controller
         $petowner = PetOwner::findOrFail($id);
         $pet = Pet::findOrFail($petid);
         $requestData = $request->validated();
-    
-        $maxAttempts = 5; // Maximum attempts to generate a unique ref_id
-    
-        // Attempt to generate a unique ref_id
-        for ($i = 0; $i < $maxAttempts; $i++) {
-            $refId = Carbon::now()->timestamp . '-' . Str::random(6); // Change the length of the random string as needed
-    
-            $existingService = ServicesAvailed::where('ref_id', $refId)->first();
-    
-            if (!$existingService) {
-                $refIdExists = false;
-    
-                // Loop through each service in the request data
-                foreach ($requestData['services'] as $service) {
-                    $service['ref_id'] = $refId;
-                    $service['date_availed_for'] = Carbon::now();
-                    $service['petowner_id'] = $petowner->id;
-                    $service['pet_id'] = $pet->id;
-    
-                    // Create service with the same ref_id
-                    ServicesAvailed::create($service);
-                }
-    
-                $refIdExists = true;
-                break;
-            }
-        }
-    
-        // If maximum attempts reached without a unique ref_id, handle accordingly
-        if (!isset($refIdExists) || !$refIdExists) {
-            // Handle the situation where a unique ref_id couldn't be generated
-            return response()->json(['error' => 'Unable to generate a unique ref_id'], 500);
-        }
-    
-        return response()->json(['message' => 'Services added successfully'], 201);
+        
+        $requestData['petowner_id'] = $petowner->id;
+        $servicesAvailed = ServicesAvailed::create($data); 
+        return new ServicesAvailedResource($servicesAvailed, 201);
     }
 
     /**

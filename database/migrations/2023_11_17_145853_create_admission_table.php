@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('admission', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date_admission');
-            $table->date('date_released');
+            $table->date('date_admission');
+            $table->timestamp('date_released');
             $table->double('treatment_cost');
 
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
-
-            $table->unsignedBigInteger('pet_condition_id');
-            $table->foreign('pet_condition_id')->references('id')->on('pet_condition');
+            $table->unsignedBigInteger('treatment_id');
+            $table->foreign('treatment_id')->references('id')->on('treatment');
+            $table->unsignedBigInteger('client_service_id');
+            $table->foreign('client_service_id')->references('id')->on('client_service');
 
             $table->softDeletes();
             $table->timestamps();

@@ -25,6 +25,10 @@ return new class extends Migration
             $table->double('body_condition_score');
             $table->double('fluid_rate');
             $table->string('comments');
+
+            $table->unsignedBigInteger('services_availed_id');
+            $table->foreign('services_availed_id')->references('id')->on('services_availed');
+            
             $table->softDeletes();
             $table->timestamps();
         });

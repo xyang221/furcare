@@ -9,7 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDiagnosisRequest;
 use App\Http\Requests\UpdateDiagnosisRequest;
 use App\Http\Resources\DiagnosisResource;
-use Carbon\Carbon;
+
+use App\Http\Requests\StoreServicesAvailedRequest;
 
 
 class DiagnosisController extends Controller
@@ -27,33 +28,26 @@ class DiagnosisController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDiagnosisRequest $request, $id, $serviceid)
+    public function store(StoreDiagnosisRequest $request, StoreServicesAvailedRequest $sarequest, $id)
     {
         $pet = Pet::findOrFail($id);
-        $service = Service::findOrFail($serviceid);
 
-        $data = $request->validated(); //get the data
-        $data['pet_id'] = $id;
-        $data['service_id'] = $serviceid;
-        // $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => $sarequest->input('service_id'),
+            'unit_price' => Service::findOrFail($sarequest['service_id'])->price,
+            'petowner_id' => $pet->petowner_id,
+            'pet_id' => $pet->id,
+        ]);
 
+        $diagnosis = Diagnosis::create([
+            'pet_id' => $pet->id,
+            'remarks' =>$drequest->input('remarks'),
+            'services_availed_id' => $servicesAvailed->id,
+        ]);
 
-        $diagnosis = Diagnosis::create($data); //create
+        // $dewormingLog = DewormingLog::create($data); 
         return new DiagnosisResource($diagnosis, 201);
     }
-
-    // public function store(StoreDiagnosisRequest $request, $id)
-    // {
-    //     $pet = Pet::findOrFail($id);
-
-    //     $data = $request->validated(); //get the data
-    //     $data['pet_id'] = $id;
-    //     $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
-
-
-    //     $diagnosis = Diagnosis::create($data); //create
-    //     return new DiagnosisResource($diagnosis, 201);
-    // }
 
     /**
      * Display the specified resource.

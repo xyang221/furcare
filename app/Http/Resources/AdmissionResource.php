@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DewormingLogResource extends JsonResource
+class AdmissionResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -17,16 +17,15 @@ class DewormingLogResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
-            'weight' => $this->weight,
-            'description' => $this->description,
-            'administered' => $this->administered,
-            'status' => $this->status,
+            'date_admission' => $this->date_admission,
+            'date_released' => $this->date_released,
+            'treatment_cost' => $this->treatment_cost,
 
             'pet_id' => $this->pet_id,
-            'services_availed_id' => $this->services_availed_id,
+            'treatment_id' => $this->treatment_id,
 
-            'pet' => new PetResource($this->whenLoaded('pet')),
+            // 'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+            // 'service' => new ServiceResource($this->whenLoaded('service')),
 
         ];
     }

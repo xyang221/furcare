@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('zipcode');
             $table->string('area');
             $table->string('province');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

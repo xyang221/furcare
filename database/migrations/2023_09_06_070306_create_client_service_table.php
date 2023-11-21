@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date');
             $table->double('deposit');
-            $table->double('balance');
+            $table->double('balance')->default(0);
             $table->string('rendered_by');
             $table->unsignedBigInteger('petowner_id');
-            $table->unsignedBigInteger('services_id');
+            $table->foreign('petowner_id')->references('id')->on('petowners');
+
+            $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('petowner_id')->references('id')->on('petowners');
-            $table->foreign('services_id')->references('id')->on('services');
         });
     }
 
