@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Appointment;
+use App\Models\PetOwner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
@@ -24,11 +25,12 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAppointmentRequest $request)
+    public function store(StoreAppointmentRequest $request, $id)
     {
+        $petowner = PetOwner::find($id);
         $data = $request->validated();
-        // $data['date'] = \Carbon\Carbon::parse($data['date'])->format('Y-m-d');
         $data['status'] = "Pending";
+        $data['petowner_id']=$petowner->id;
         $appointment = Appointment::create($data);
         return new AppointmentResource($appointment, Response::HTTP_CREATED);
     }

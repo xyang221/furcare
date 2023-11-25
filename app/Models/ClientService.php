@@ -13,17 +13,17 @@ class ClientService extends Model
 
     protected $table = 'client_service';
 
-    protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id', 'services_id'];
+    protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id'];
 
-    protected $with = ['petowner','service'];
+    protected $with = ['petowner'];
 
     public function petowner()
     {
         return $this->belongsTo(PetOwner::class, 'petowner_id','id');
     }
 
-    public function service()
-    {
-        return $this->belongsTo(Service::class, 'services_id','id');
-    }
+    // public function service()
+    // {
+    //     return $this->belongsTo(Service::class, 'services_id','id');
+    // }
 }

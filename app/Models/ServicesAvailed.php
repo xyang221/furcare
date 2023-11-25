@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Service;
+use App\Models\ClientService;
+use App\Models\Diagnosis;
 use App\Models\Pet;
-use App\Models\PetOwner;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,23 +15,28 @@ class ServicesAvailed extends Model
 
     protected $table = 'services_availed';
 
-    protected $fillable = ['ref_id', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'petowner_id', 'pet_id'];
+    protected $fillable = ['status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_service_id', 'pet_id'];
 
-    protected $with = ['service', 'petowner', 'pet'];
+    protected $with = ['service','clientservice', 'pet'];
 
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id','id');
     }
 
-    public function petowner()
+    public function clientservice()
     {
-        return $this->belongsTo(PetOwner::class, 'petowner_id', 'id');
+        return $this->belongsTo(ClientService::class, 'client_service_id', 'id');
     }
 
     public function pet()
     {
         return $this->belongsTo(Pet::class, 'pet_id', 'id');
+    }
+
+    public function diagnosis()
+    {
+        return $this->hasMany(Diagnosis::class);
     }
 
     

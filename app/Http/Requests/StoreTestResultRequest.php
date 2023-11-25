@@ -24,7 +24,7 @@ class StoreTestResultRequest extends FormRequest
         return [
             'attachment' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'description'=>'string',
-            'diagnosis_id' => 'exists:diagnosis,id',
+            // 'diagnosis_id' => 'exists:diagnosis,id',
             'pet_id' => 'exists:pets,id',
         ];
     }

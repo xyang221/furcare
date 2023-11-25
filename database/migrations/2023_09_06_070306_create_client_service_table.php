@@ -17,8 +17,10 @@ return new class extends Migration
             $table->double('deposit');
             $table->double('balance')->default(0);
             $table->string('rendered_by');
+            $table->string('status');
             $table->unsignedBigInteger('petowner_id');
             $table->foreign('petowner_id')->references('id')->on('petowners');
+           
 
             $table->softDeletes();
             $table->timestamps();

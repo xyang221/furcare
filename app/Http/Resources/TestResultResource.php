@@ -23,10 +23,10 @@ class TestResultResource extends JsonResource
             'deleted_at' => $this->deleted_at,
 
 
-            'diagnosis_id' => $this->diagnosis_id,
+            // 'diagnosis_id' => $this->diagnosis_id,
             'pet_id' => $this->pet_id,
 
-            'diagnosis' => new DiagnosisResource($this->whenLoaded('diagnosis')),
+            // 'diagnosis' => new DiagnosisResource($this->whenLoaded('diagnosis')),
             'pet' => new PetResource($this->whenLoaded('pet')),
        
         ];

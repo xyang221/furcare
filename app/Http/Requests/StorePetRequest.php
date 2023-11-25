@@ -29,7 +29,6 @@ class StorePetRequest extends FormRequest
             'birthdate'=>'required|date',
             'gender' => 'required|string|max:55',
             'color' => 'required|string|max:55',
-            'qr_code' => 'required|string|max:55',
             'breed_id' => 'exists:breeds,id',
             'petowner_id' => 'exists:petowners,id',
         ];

@@ -17,17 +17,19 @@ class ServicesAvailedResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ref_id' => $this->ref_id,
             'quantity' => $this->quantity,
             'unit' => $this->unit,
             'unit_price' => $this->unit_price,
             'date_availed_for' => $this->date_availed_for,
+            'status' => $this->status,
+
             'service_id' => $this->service_id,
-            'petowner_id' => $this->petowner_id,
+            'client_service_id' => $this->client_service_id,
             'pet_id' => $this->pet_id,
 
             'service' => new ServiceResource($this->whenLoaded('service')),
-            'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+            'pet' => new PetResource($this->whenLoaded('pet')),
+            'clientservice' => new ClientServiceResource($this->whenLoaded('clientservice')),
         ];
     }
 }

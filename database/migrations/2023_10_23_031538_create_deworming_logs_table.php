@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date');
             $table->float('weight');
+            $table->string('description');
             $table->string('administered');
-            $table->string('status');
+            $table->date('return');
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
             $table->unsignedBigInteger('services_availed_id');
             $table->foreign('services_availed_id')->references('id')->on('services_availed');
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

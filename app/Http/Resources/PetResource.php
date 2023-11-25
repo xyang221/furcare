@@ -21,7 +21,6 @@ class PetResource extends JsonResource
             'birthdate' => $this->birthdate,
             'gender' => $this->gender,
             'color' => $this->color,
-            'qr_code' => $this->qr_code,
             'photo' => $this->photo,
             
             'created_at' => $this->created_at,

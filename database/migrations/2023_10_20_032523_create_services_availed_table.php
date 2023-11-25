@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->integer('quantity')->default(1);
             $table->integer('unit')->default(1);
-            $table->integer('unit_price');
+            $table->float('unit_price')->nullable();
             $table->timestamp('date_availed_for');
+            $table->string('status');
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services');
+            $table->unsignedBigInteger('client_service_id');
+            $table->foreign('client_service_id')->references('id')->on('client_service');
             
             $table->softDeletes();
             $table->timestamps();

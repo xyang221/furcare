@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('service');
-            $table->double('price');
-            $table->string('isAvailable');
+            $table->boolean('isAvailable');
             $table->unsignedBigInteger('cat_id');
             $table->softDeletes();
             $table->timestamps();

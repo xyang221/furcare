@@ -6,6 +6,7 @@ use App\Models\DewormingLog;
 use App\Models\Pet;
 use App\Models\ServicesAvailed;
 use App\Models\Service;
+use App\Models\ClientService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDewormingLogRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
@@ -33,23 +34,26 @@ class DewormingLogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDewormingLogRequest $drequest, StoreServicesAvailedRequest $sarequest, $id)
+    public function store(StoreDewormingLogRequest $drequest, StoreServicesAvailedRequest $sarequest, $id, $sid)
     {
-        $pet = Pet::findOrFail($id);
+        $service = Service::findOrFail($sid);
+        $clientService = ClientService::where('petowner_id', $id)->first();
 
         $servicesAvailed = ServicesAvailed::create([
-            'service_id' => $sarequest->input('service_id'),
-            'unit_price' => Service::findOrFail($sarequest['service_id'])->price,
-            'petowner_id' => $pet->petowner_id,
-            'pet_id' => $pet->id,
+            'service_id' => $service->id,
+            'unit_price' => $sarequest->input('unit_price'),
+            'client_service_id'=> $clientService->id,
+            'pet_id' => $sarequest->input('pet_id'),
+            'status' => "To Pay",
         ]);
 
         $dewormingLog = DewormingLog::create([
-            'pet_id' => $pet->id,
+            'pet_id' => $servicesAvailed->pet_id,
             'weight' =>$drequest->input('weight'),
             'description' => $drequest->input('description'),
             'administered' => $drequest->input('administered'),
-            'status' => $drequest->input('status'),
+            //??? ang status/return kay sched date kanus a mubalik?
+            'return' => $drequest->input('return'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
 
@@ -76,6 +80,27 @@ class DewormingLogController extends Controller
         }
 
         return DewormingLogResource::collection($dewormingLogs);
+    }
+
+    public function getDiagnosisByServiceandPetowner($id, $sid)
+    {
+        $servicesAvailedIds = Service::findOrFail($sid);
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+        
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
+            ->where('service_id',$servicesAvailedIds->id)
+            ->pluck('id');
+        
+        $dewormingLog = DewormingLog::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
+            ->orderBy('id', 'desc')
+            ->get();
+                    
+        if ($dewormingLog->isEmpty()) {
+            return response()->json(['message' => 'No list of pet deworming found.'], 404);
+        }
+        
+        return DewormingLogResource::collection($dewormingLog);
+        
     }
 
     /**

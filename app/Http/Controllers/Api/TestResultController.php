@@ -6,6 +6,8 @@ use App\Models\TestResult;
 use App\Models\Pet;
 use App\Models\Diagnosis;
 use App\Models\Service;
+use App\Models\ServicesAvailed;
+use App\Models\ClientService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestResultRequest;
 use App\Http\Requests\StoreDiagnosisRequest;
@@ -34,16 +36,17 @@ class TestResultController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTestResultRequest $trrequest, StoreServicesAvailedRequest $sarequest, $id )
+    public function store(StoreTestResultRequest $trrequest, StoreServicesAvailedRequest $sarequest, $id, $sid )
     {
-
-        $pet = Pet::findOrFail($id);
+        $service = Service::findOrFail($sid);
+        $clientService = ClientService::where('petowner_id', $id)->first();
 
         $servicesAvailed = ServicesAvailed::create([
-            'service_id' => $sarequest->input('service_id'),
-            'unit_price' => Service::findOrFail($sarequest['service_id'])->price,
-            'petowner_id' => $pet->petowner_id,
-            'pet_id' => $pet->id,
+            'service_id' => $service->id,
+            'unit_price' => $sarequest->input('unit_price'),
+            'client_service_id'=> $clientService->id,
+            'pet_id' => $sarequest->input('pet_id'),
+            'status' => "To Pay",
         ]);
 
         if (!$trrequest->hasFile('attachment')) {
@@ -55,7 +58,7 @@ class TestResultController extends Controller
         $name_path = $file->move('attachments/', $name);
 
         $testResult = TestResult::create([
-            'pet_id' => $pet->id,
+            'pet_id' => $servicesAvailed->pet_id,
             'attachment' => $name_path,
             'description' => $trrequest->input('description'),
             'services_availed_id' => $servicesAvailed->id,
@@ -83,6 +86,27 @@ class TestResultController extends Controller
         }
 
         return TestResultResource::collection($testResult);
+    }
+
+    public function getDiagnosisByServiceandPetowner($id, $sid)
+    {
+        $servicesAvailedIds = Service::findOrFail($sid);
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+        
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
+            ->where('service_id',$servicesAvailedIds->id)
+            ->pluck('id');
+        
+        $testResult = TestResult::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
+            ->orderBy('id', 'desc')
+            ->get();
+                    
+        if ($testResult->isEmpty()) {
+            return response()->json(['message' => 'No list of pet test results found.'], 404);
+        }
+        
+        return TestResultResource::collection($testResult);
+        
     }
 
     /**

@@ -22,12 +22,7 @@ class UpdateServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => 'required|numeric',
-            'unit' => 'required|numeric',
-            'unit_price' => 'required|numeric',
-            'date_availed_for' => 'required|date',
-            'service_id' => 'exists:services,id',
-            'petowner_id' => 'exists:petowners,id'
+            'unit_price' => 'numeric',
         ];
     }
 }

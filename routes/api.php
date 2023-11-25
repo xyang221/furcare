@@ -62,7 +62,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/addresses', AddressController::class);
 
-
+    Route::get('/petowners', [PetOwnerController::class, 'index']);
+    Route::post('/petowners', [PetOwnerController::class, 'store']);
+    Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
+    Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
 
     Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
     Route::delete('/petowners/{id}/archive', [PetOwnerController::class, 'archive']);
@@ -70,7 +73,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/petowners/{id}/restore', [PetOwnerController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [PetOwnerController::class, 'destroy']);
 
-    // Route::post('/petowners/{id}/addpet',[PetController::class, 'store']);
+    Route::post('/petowners/{id}/addpet',[PetController::class, 'store']);
     Route::get('/petowners/{ownerId}/pets',[PetController::class, 'getPetOwnersPet']);
     
     Route::delete('/pets/{id}/archive', [PetController::class, 'archive']);
@@ -81,10 +84,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/pets', PetController::class);
     
     Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
-
-    Route::post('/upload-image',[ImageController::class, 'store']);
-    Route::get('/images',[ImageController::class, 'index']);
-    
 
     Route::apiResource('/species', SpecieController::class);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
@@ -114,21 +113,29 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/appointments/bydate', [AppointmentController::class, 'getbyDate']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
-    Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
-    Route::apiResource('/diagnosis', DiagnosisController::class);
+    // Route::apiResource('/diagnosis', DiagnosisController::class);
+    Route::post('/diagnosis/petowner/{id}/avail/{sid}', [DiagnosisController::class,'store']);
     Route::get('/diagnosis/pet/{id}', [DiagnosisController::class,'getbyPet']);
-    // Route::post('/diagnosis/pet/{id}/service/{serviceid}', [DiagnosisController::class,'store']);
-    Route::post('/diagnosis/pet/{id}', [DiagnosisController::class,'store']);
-    
+    Route::get('/diagnosis/petowner/{id}/service/{sid}', [DiagnosisController::class,'getDiagnosisByServiceandPetowner']);
+
+
+    Route::apiResource('/servicesavailed', ServicesAvailedController::class);
+    Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
+    Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
+    Route::get('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'showByPetownerServiceAvail']);
+    Route::get('/servicesavailed/petowner/{id}', [ServicesAvailedController::class, 'showByPetownerBilling']);
+    Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
 
     Route::apiResource('/clientservices', ClientServiceController::class);
     Route::post('/clientservices/petowner/{id}', [ClientServiceController::class, 'store']);
 
-
-    // Route::post('/deworminglogs/pet/{id}', [DewormingLogController::class,'store']);
+    Route::apiResource('/deworminglogs', DewormingLogController::class);
+    Route::post('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class,'store']);
     Route::get('/deworminglogs/pet/{id}', [DewormingLogController::class,'getbyPet']);
+    Route::get('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'getDiagnosisByServiceandPetowner']);
     Route::get('/deworminglogs/{id}', [DewormingLogController::class,'show']);
     Route::put('/deworminglogs/{id}', [DewormingLogController::class,'update']);
 
@@ -140,9 +147,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/vaccinationagainsts', VaccinationAgainstController::class);
 
     Route::get('/testresults', [TestResultController::class,'index']);
-    Route::post('/testresults/pet/{id}', [TestResultController::class,'store']);
+    Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class,'store']);
     Route::get('/testresults/{id}', [TestResultController::class,'show']);
     Route::get('/testresults/pet/{id}', [TestResultController::class,'getbyPet']);
+    Route::get('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'getDiagnosisByServiceandPetowner']);
     Route::put('/testresults/{id}', [TestResultController::class,'update']);
     Route::delete('/testresults/{id}', [TestResultController::class,'destory']);
     Route::get('/archives/testresults', [TestResultController::class,'archivelist']);
@@ -175,7 +183,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/archives/medications/{id}', [MedicationController::class, 'restore']);
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
 
-
+    Route::apiResource('/servicesavailed', ServicesAvailedController::class);
+    Route::post('/servicesavailed/petowner/{id}/pet/{petid}/add',[ ServicesAvailedController::class, 'store']);
+    Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
+    
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });
@@ -185,16 +196,8 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-Route::apiResource('/servicesavailed', ServicesAvailedController::class);
-Route::post('/servicesavailed/petowner/{id}/pet/{petid}/add',[ ServicesAvailedController::class, 'store']);
-Route::get('/servicesavailed/{id}/list',[ ServicesAvailedController::class, 'showByPetowner']);
 
-Route::get('/petowners', [PetOwnerController::class, 'index']);
-Route::post('/petowners', [PetOwnerController::class, 'store']);
-Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
-Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
 
-Route::apiResource('/deworminglogs', DewormingLogController::class);
-Route::post('/petowners/{id}/addpet',[PetController::class, 'store']);
 
-Route::post('/deworminglogs/pet/{id}', [DewormingLogController::class,'store']);
+
+

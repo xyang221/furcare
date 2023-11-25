@@ -15,7 +15,7 @@ class Pet extends Model
 
     protected $table = 'pets';
 
-    protected $fillable = ['name', 'birthdate', 'gender','color','qr_code', 'photo', 'breed_id', 'petowner_id'];
+    protected $fillable = ['name', 'birthdate', 'gender','color', 'photo', 'breed_id', 'petowner_id'];
 
     protected $dates = ['deleted_at'];
 

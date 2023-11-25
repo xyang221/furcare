@@ -29,12 +29,13 @@ class PetOwnerController extends Controller
     public function index()
     {
 
-        return PetOwnerResource::collection(
-            PetOwner::query()
-                ->whereNotNull('user_id')
-                ->orderBy('id', 'desc')
-                ->get()
-        );
+        $petOwners = PetOwner::orderBy('id', 'desc')->get();
+
+        if ($petOwners->isEmpty()) {
+            return response()->json(['message' => 'No pet owner records found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        return PetOwnerResource::collection($petOwners);
     }
 
     /**
@@ -65,6 +66,7 @@ class PetOwnerController extends Controller
         'address_id' => $address->id,
         
     ]);
+    // send verification code
     return new PetOwnerResource($petOwner, 201);
 }
 
@@ -83,7 +85,7 @@ class PetOwnerController extends Controller
         $appointments = Appointment::where('petowner_id', $id)->orderBy('date', 'desc')->get();
 
         if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'This pet owner have no appointments'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'This pet owner have no appointments.'], Response::HTTP_NOT_FOUND);
         }
 
         return AppointmentResource::collection($appointments);

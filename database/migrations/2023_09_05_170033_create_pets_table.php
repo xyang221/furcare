@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('gender');
             $table->string('color');
             $table->string('photo');            
-            $table->string('qr_code');
             $table->unsignedBigInteger('breed_id');
             $table->unsignedBigInteger('petowner_id');
             $table->timestamps();

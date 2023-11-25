@@ -26,7 +26,7 @@ class StoreClientServiceRequest extends FormRequest
             'balance'=>'required|numeric',
             'rendered_by' => 'string',
             'petowner_id' => 'exists:petowners,id',
-            'services_id' => 'exists:services,id',
+            // 'services_id' => 'exists:services,id',
         ];
     }
 }

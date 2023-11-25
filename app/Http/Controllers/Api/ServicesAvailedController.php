@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\ServicesAvailed;
 use App\Models\PetOwner;
 use App\Models\Pet;
+use App\Models\Service;
+use App\Models\ClientService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
@@ -30,22 +32,16 @@ class ServicesAvailedController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(StoreServicesAvailedRequest $request)
-    // {
-    //     $data = $request->validated(); //get the data
-    //     $servicesAvailed = ServicesAvailed::create($data); 
-    //     return new ServicesAvailedResource($servicesAvailed, 201);
-    // }
-
-
-    public function store(StoreServicesAvailedRequest $request, $id, $petid)
+    public function store(StoreServicesAvailedRequest $request, $id, $sid)
     {
-        $petowner = PetOwner::findOrFail($id);
-        $pet = Pet::findOrFail($petid);
+        $service = Service::findOrFail($sid);
+        $clientService = ClientService::where('petowner_id', $id)->first();
         $requestData = $request->validated();
         
-        $requestData['petowner_id'] = $petowner->id;
-        $servicesAvailed = ServicesAvailed::create($data); 
+        $requestData['client_service_id'] = $clientService->id;
+        $requestData['service_id'] = $service->id;
+        $requestData['status'] = "To Pay";
+        $servicesAvailed = ServicesAvailed::create($requestData); 
         return new ServicesAvailedResource($servicesAvailed, 201);
     }
 
@@ -57,23 +53,59 @@ class ServicesAvailedController extends Controller
         return new ServicesAvailedResource($servicesAvailed);
     }
 
-    public function showByPetowner($id)
+    public function showByPetownerServiceAvail($id, $sid)
     {
-        $servicesAvaileds = ServicesAvailed::where('petowner_id', $id)->get();
+        $service = Service::findOrFail($sid);
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        ->where('service_id', $service->id)
+        ->orderBy('id', 'desc')->get();
 
-        if ($servicesAvaileds->isEmpty()) {
-            return response()->json(['message' => 'No charge slips of this client found'], 404);
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
         }
 
-        return ServicesAvailedResource::collection($servicesAvaileds);
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
+
+    public function showByPetownerBilling($id)
+    {
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $status = 'To Pay';
+        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        ->where('status', $status)
+        ->orderBy('id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
+
+    public function showByPetownerChargeSlip($id)
+    {
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $status = 'Completed';
+        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        ->where('status', $status)
+        ->orderBy('id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed completed of this client found at the moment.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateServicesAvailedRequest $request, ServicesAvailed $servicesAvailed)
+    public function update(UpdateServicesAvailedRequest $request, ServicesAvailed $servicesAvailed, $id)
     {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
         $data = $request->validated();
+        $data['status'] = "Completed";
         $servicesAvailed->update($data);
         return new ServicesAvailedResource($servicesAvailed);
     }

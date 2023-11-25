@@ -14,16 +14,16 @@ class TestResult extends Model
 
     protected $table = 'test_results';
 
-    protected $fillable = ['attachment','description', 'diagnosis_id','pet_id'];
+    protected $fillable = ['attachment','description','pet_id'];
 
     protected $dates = ['deleted_at'];
     
-    protected $with = ['diagnosis', 'pet'];
+    protected $with = ['pet'];
 
-    public function diagnosis()
-    {
-        return $this->belongsTo(Diagnosis::class, 'diagnosis_id','id');
-    }
+    // public function diagnosis()
+    // {
+    //     return $this->belongsTo(Diagnosis::class, 'diagnosis_id','id');
+    // }
     
     public function pet()
     {
