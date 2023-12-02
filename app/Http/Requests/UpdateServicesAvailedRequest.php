@@ -22,7 +22,7 @@ class UpdateServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'unit_price' => 'numeric',
+            'unit_price' => 'required|numeric',
         ];
     }
 }

@@ -26,6 +26,7 @@ class StoreTestResultRequest extends FormRequest
             'description'=>'string',
             // 'diagnosis_id' => 'exists:diagnosis,id',
             'pet_id' => 'exists:pets,id',
+            'services_availed_id' => 'exists:services_availed,id'
         ];
     }
 }

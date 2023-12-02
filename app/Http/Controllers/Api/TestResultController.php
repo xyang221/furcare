@@ -102,7 +102,7 @@ class TestResultController extends Controller
             ->get();
                     
         if ($testResult->isEmpty()) {
-            return response()->json(['message' => 'No list of pet test results found.'], 404);
+            return response()->json(['message' => 'No list of pet ' . strtolower($servicesAvailedIds->service) . ' test results found.'], 404);
         }
         
         return TestResultResource::collection($testResult);
@@ -112,22 +112,24 @@ class TestResultController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTestResultRequest $request, TestResult $testResult)
+    public function update(UpdateTestResultRequest $request, TestResult $testResult, $id)
     {
-        // $testResult = TestResult::findOrFail($id);
+        $testResult = TestResult::findOrFail($id);
         $data = $request->validated();
     
-        if (!$request->hasFile('attachment')) {
-            return response()->json(["message" => "Please select an image"], 400);
-        }
+        // if (!$request->hasFile('attachment')) {
+        //     return response()->json(["message" => "Please select an image"], 400);
+        // }
         
-        $file = $request->file('attachment');
-        $name = time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('attachments', $name); // Store the file in the 'attachments' directory
+        // $file = $request->file('attachment');
+        // $name = time() . '.' . $file->getClientOriginalExtension();
+        // $path = $file->storeAs('attachments', $name); // Store the file in the 'attachments' directory
     
-        // Update the attachment field in the TestResult model with the new path
-        $testResult->attachment = $path;
-        $testResult->save();
+        // // Update the attachment field in the TestResult model with the new path
+        // $testResult->attachment = $path;
+        // $testResult->save();
+
+        $testResult->update($data);
     
         return new TestResultResource($testResult);
     }

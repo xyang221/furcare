@@ -17,7 +17,8 @@ return new class extends Migration
             $table->integer('weight');
             $table->string('description');
             $table->string('administered');
-            $table->string('status');
+            $table->date('return');
+            $table->json('vaccination_againsts');
 
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');

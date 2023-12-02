@@ -23,7 +23,6 @@ class StoreClientServiceRequest extends FormRequest
     {
         return [
             'deposit'=>'required|numeric',
-            'balance'=>'required|numeric',
             'rendered_by' => 'string',
             'petowner_id' => 'exists:petowners,id',
             // 'services_id' => 'exists:services,id',

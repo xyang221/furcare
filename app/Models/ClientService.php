@@ -13,7 +13,7 @@ class ClientService extends Model
 
     protected $table = 'client_service';
 
-    protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id'];
+    protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id', 'status'];
 
     protected $with = ['petowner'];
 

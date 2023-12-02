@@ -38,6 +38,32 @@ class PetOwnerController extends Controller
         return PetOwnerResource::collection($petOwners);
     }
 
+    public function searchPetowner($name)
+{
+    try {
+        // Sanitize the input
+        $sanitized_name = trim($name); // Trim whitespace from the input
+
+        // Perform search
+        $petOwners = PetOwner::where(function ($query) use ($sanitized_name) {
+            $query->where('firstname', 'like', "%{$sanitized_name}%")
+                ->orWhere('lastname', 'like', "%{$sanitized_name}%");
+        })->get();
+
+        // Check if any results are found
+        if ($petOwners->isEmpty()) {
+            return response()->json(['message' => 'No pet owners found for the given name.'], 404);
+        }
+
+        // Return the resource collection
+        return PetOwnerResource::collection($petOwners);
+    } catch (\Exception $e) {
+        // Handle exceptions or errors that may occur during the query
+        return response()->json(['message' => 'An error occurred while searching for pet owners.'], 500);
+    }
+}
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -68,7 +94,9 @@ class PetOwnerController extends Controller
     ]);
     // send verification code
     return new PetOwnerResource($petOwner, 201);
-}
+    }
+
+   
 
     /**
      * Display the specified resource.

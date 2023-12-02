@@ -18,7 +18,7 @@ class ClientServiceController extends Controller
      */
     public function index()
     {
-        $clientService = ClientService::query()->orderBy('id', 'desc')->paginate(50);
+        $clientService = ClientService::query()->orderBy('id', 'desc')->get();
         return ClientServiceResource::collection($clientService);
     
     }
@@ -32,6 +32,7 @@ class ClientServiceController extends Controller
         $data = $request->validated(); //get the data
         
         $data['petowner_id'] = $id;
+        $data['status'] = "To Pay";
         $clientService = ClientService::create($data); //create user
         return new ClientServiceResource($clientService, Response::HTTP_CREATED);
     }
@@ -41,8 +42,14 @@ class ClientServiceController extends Controller
      */
     public function show(ClientService $clientService, $id)
     {
-        $clientService = ClientService::find($id);
+        $clientService = ClientService::where('petowner_id', $id)->first();
         return new ClientServiceResource($clientService);
+    }
+
+    public function showall(ClientService $clientService, $id)
+    {
+        $clientService = ClientService::where('petowner_id', $id)->get();
+        return ClientServiceResource::collection($clientService);
     }
 
     /**

@@ -25,9 +25,7 @@ class UpdateVaccinationLogRequest extends FormRequest
             'weight' => 'required|numeric',
             'description' => 'required|string|max:55',
             'administered' => 'required|string|max:55',
-            'status' => 'required|string|max:55',
-            'against_id' => 'exists:againsts,id',
-            'pet_id' => 'exists:pets,id',
+            'return' => 'required|date',
         ];
     }
 }

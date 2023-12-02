@@ -20,13 +20,12 @@ class ClientServiceResource extends JsonResource
             'date' => $this->date,
             'deposit' => $this->deposit,
             'balance' => $this->balance,
+            'status' => $this->status,
             'rendered_by' => $this->rendered_by,
 
             'petowner_id' => $this->petowner_id,
-            // 'services_id' => $this->services_id,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
-            // 'service' => new ServiceResource($this->whenLoaded('service')),
             
         ];
     }

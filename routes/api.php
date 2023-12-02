@@ -46,6 +46,14 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
+    // Route::prefix('/admin')->group(function(){
+
+    // });
+
+    // Route::prefix('/user')->group(function(){
+
+    // });
+
     Route::apiResource('/roles', RoleController::class);
 
     Route::get('/users', [UserController::class, 'index']);
@@ -65,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/petowners', [PetOwnerController::class, 'index']);
     Route::post('/petowners', [PetOwnerController::class, 'store']);
     Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
+    Route::get('/petowners-search/{name}', [PetOwnerController::class, 'searchPetowner']);
     Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
 
     Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
@@ -83,12 +92,13 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/pets', PetController::class);
     
-    Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
+    // Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
 
     Route::apiResource('/species', SpecieController::class);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
     Route::put('/species/{id}', [SpecieController::class, 'update']);
-    Route::apiResource('/breeds', BreedController::class);
+    
+    // Route::apiResource('/breeds', BreedController::class);
 
     Route::get('/staffs', [StaffController::class, 'index']);
     Route::post('/staffs', [StaffController::class, 'store']);
@@ -130,6 +140,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
 
     Route::apiResource('/clientservices', ClientServiceController::class);
+    Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);
+    Route::get('/clientservices/petowner/{id}/all', [ClientServiceController::class, 'showall']);
     Route::post('/clientservices/petowner/{id}', [ClientServiceController::class, 'store']);
 
     Route::apiResource('/deworminglogs', DewormingLogController::class);
@@ -140,7 +152,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/deworminglogs/{id}', [DewormingLogController::class,'update']);
 
     Route::apiResource('/vaccinationlogs', VaccinationLogController::class);
-    Route::post('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'store']);
+    // Route::post('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'store']);
     Route::get('/vaccinationlogs/pet/{id}', [VaccinationLogController::class,'getbyPet']);
 
     Route::apiResource('/againsts', AgainstController::class);
@@ -195,8 +207,9 @@ Route::middleware('auth:sanctum')->group(function() {
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('/breeds', BreedController::class);
 
-
+Route::post('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class,'store']);
 
 
 

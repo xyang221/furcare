@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreign('service_id')->references('id')->on('services');
             $table->unsignedBigInteger('client_service_id');
             $table->foreign('client_service_id')->references('id')->on('client_service');
+            $table->unsignedBigInteger('pet_id');
+            $table->foreign('pet_id')->references('id')->on('pets');
             
             $table->softDeletes();
             $table->timestamps();

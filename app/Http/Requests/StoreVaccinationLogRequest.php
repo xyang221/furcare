@@ -23,11 +23,12 @@ class StoreVaccinationLogRequest extends FormRequest
     {
         return [
             'weight' => 'required|numeric',
-            'description' => 'required|string|max:55',
+            'description' => 'required|string|max:255',
             'administered' => 'required|string|max:55',
-            'status' => 'required|string|max:55',
+            'return' => 'required|date',
             'pet_id' => 'exists:pets,id',
             'services_availed_id' => 'exists:services_availed,id',
+            'vaccination_againsts' => 'required|array'
         ];
     }
 }

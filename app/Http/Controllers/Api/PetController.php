@@ -45,7 +45,6 @@ class PetController extends Controller
         $name = time() . '.' . $file->getClientOriginalExtension();
         $name_path = $file->move('images/', $name);
 
-        // return response()->json(['success' => 'Image uploaded successfully']);
         $data['photo'] = $name_path;
         $data['petowner_id'] = $id;
 

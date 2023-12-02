@@ -23,7 +23,7 @@ class BreedsSeeder extends Seeder
               'specie_id' => 1,
               'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ),
-            0 => 
+            1 => 
             array (
               'breed' => 'Persian Cat',
               'description' => 'atleast one sentence nga magdescribe',

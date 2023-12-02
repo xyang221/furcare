@@ -21,13 +21,15 @@ class VaccinationLogResource extends JsonResource
             'weight' => $this->weight,
             'description' => $this->description,
             'administered' => $this->administered,
-            'status' => $this->status,
+            'return' => $this->return,
+            'vaccination_againsts' => $this->vaccination_againsts,
             
             'pet_id' => $this->pet_id,
             'services_availed_id' => $this->services_availed_id,
 
-            'against' => new VaccinationAgainstResource($this->whenLoaded('against')),
             'pet' => new PetResource($this->whenLoaded('pet')),
+            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
+            'againsts' => AgainstResource::collection($this->whenLoaded('againsts')),
 
         ];
     }
