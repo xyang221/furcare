@@ -67,6 +67,11 @@ class ServiceCategorySeeder extends Seeder
               ),
             11 => 
             array (
+                'category' => 'Admission',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+              ),
+            12 => 
+            array (
                 'category' => 'Others',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),

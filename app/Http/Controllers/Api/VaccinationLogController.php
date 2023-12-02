@@ -90,6 +90,27 @@ class VaccinationLogController extends Controller
         return VaccinationLogResource::collection($vaccinationLogs);
     }
 
+    public function getDiagnosisByServiceandPetowner($id, $sid)
+    {
+        $servicesAvailedIds = Service::findOrFail($sid);
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+        
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
+            ->where('service_id',$servicesAvailedIds->id)
+            ->pluck('id');
+        
+        $vaccinationLogs = VaccinationLog::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
+            ->orderBy('id', 'desc')
+            ->get();
+                    
+        if ($vaccinationLogs->isEmpty()) {
+            return response()->json(['message' => 'No list of pet diagnosis found.'], 404);
+        }
+        
+        return VaccinationLogResource::collection($vaccinationLogs);
+        
+    }
+
     /**
      * Update the specified resource in storage.
      */

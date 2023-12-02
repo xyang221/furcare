@@ -141,6 +141,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/clientservices', ClientServiceController::class);
     Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);
+    Route::put('/clientservices/{id}', [ClientServiceController::class, 'update']);
     Route::get('/clientservices/petowner/{id}/all', [ClientServiceController::class, 'showall']);
     Route::post('/clientservices/petowner/{id}', [ClientServiceController::class, 'store']);
 
@@ -157,6 +158,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('/againsts', AgainstController::class);
     Route::apiResource('/vaccinationagainsts', VaccinationAgainstController::class);
+    Route::post('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class,'store']);
+    Route::get('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class, 'getDiagnosisByServiceandPetowner']);
 
     Route::get('/testresults', [TestResultController::class,'index']);
     Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class,'store']);
@@ -209,7 +212,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::apiResource('/breeds', BreedController::class);
 
-Route::post('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class,'store']);
 
 
 

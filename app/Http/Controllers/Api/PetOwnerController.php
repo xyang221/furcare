@@ -29,7 +29,7 @@ class PetOwnerController extends Controller
     public function index()
     {
 
-        $petOwners = PetOwner::orderBy('id', 'desc')->get();
+        $petOwners = PetOwner::orderBy('id', 'desc')->paginate(50);
 
         if ($petOwners->isEmpty()) {
             return response()->json(['message' => 'No pet owner records found.'], Response::HTTP_NOT_FOUND);
@@ -52,7 +52,7 @@ class PetOwnerController extends Controller
 
         // Check if any results are found
         if ($petOwners->isEmpty()) {
-            return response()->json(['message' => 'No pet owners found for the given name.'], 404);
+            return response()->json(['message' => 'No pet owners found.'], 404);
         }
 
         // Return the resource collection

@@ -176,12 +176,20 @@ class ServiceSeeder extends Seeder
               ),
             21 => 
             array (
-                'service' => 'Others',
+                'service' => 'Admission',
 
                 'isAvailable' => 1,
                 'cat_id' => 11,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
+              22 => 
+              array (
+                  'service' => 'Others',
+  
+                  'isAvailable' => 1,
+                  'cat_id' => 12,
+                  'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ),
         ]);
     }
 }

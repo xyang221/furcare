@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -27,9 +28,17 @@ class AppointmentController extends Controller
      */
     public function store(StoreAppointmentRequest $request, $id)
     {
+        $user = Auth::user();
         $petowner = PetOwner::find($id);
+
         $data = $request->validated();
-        $data['status'] = "Pending";
+
+        if($user->role_id === 1 && 2){
+            $data['status'] = "Confirmed";
+        } else {
+            $data['status'] = "Pending";
+        }
+        
         $data['petowner_id']=$petowner->id;
         $appointment = Appointment::create($data);
         return new AppointmentResource($appointment, Response::HTTP_CREATED);

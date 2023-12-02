@@ -89,7 +89,7 @@ class ServicesAvailedController extends Controller
         $status = 'Completed';
         $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
         ->where('status', $status)
-        ->orderBy('id', 'desc')->get();
+        ->orderBy('pet_id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed completed of this client found at the moment.'], 404);

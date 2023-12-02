@@ -58,6 +58,13 @@ class ClientServiceController extends Controller
     public function update(UpdateClientServiceRequest $request, ClientService $clientService)
     {
         $data = $request->validated();
+
+        if($data['balance'] === 0){
+            $data['status'] = "Completed";
+        } else {
+            return response()->json(['message' => 'This client have balance left.']);
+        }
+       
         $clientService->update($data);
 
         return new ClientServiceResource($clientService);
