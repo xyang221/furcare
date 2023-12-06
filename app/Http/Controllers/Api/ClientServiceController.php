@@ -42,13 +42,18 @@ class ClientServiceController extends Controller
      */
     public function show(ClientService $clientService, $id)
     {
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
         return new ClientServiceResource($clientService);
     }
 
     public function showall(ClientService $clientService, $id)
     {
         $clientService = ClientService::where('petowner_id', $id)->get();
+
+        if ($clientService->isEmpty()) {
+            return response()->json(['message' => 'No payments found in this client.'], Response::HTTP_NOT_FOUND);
+        }
+
         return ClientServiceResource::collection($clientService);
     }
 
@@ -66,7 +71,6 @@ class ClientServiceController extends Controller
         }
        
         $clientService->update($data);
-
         return new ClientServiceResource($clientService);
     }
 
@@ -76,7 +80,6 @@ class ClientServiceController extends Controller
     public function destroy(ClientService $clientService)
     {
         $clientService->delete();
-        // return response()->json(null, 204);
         return response()->json("client service Deleted");
     }
 }

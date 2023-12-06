@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unSignedBigInteger('role_id')->after('remember_token');
-            $table->foreign('role_id')->references('id')->on('roles');
+        Schema::table('appointment', function (Blueprint $table) {
+            //
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('appointment', function (Blueprint $table) {
             //
         });
     }

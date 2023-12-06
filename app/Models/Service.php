@@ -12,9 +12,7 @@ class Service extends Model
 
     protected $table = 'services';
 
-    protected $fillable = ['service', 'price','status', 'cat_id'];
-
-    // protected $with = ['breed'];
+    protected $fillable = ['service', 'cat_id'];
 
     public function category()
     {

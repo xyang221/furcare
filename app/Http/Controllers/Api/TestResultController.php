@@ -138,7 +138,7 @@ class TestResultController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TestResult $testResult, $id)
+    public function archive(TestResult $testResult, $id)
     {
         $testResult = TestResult::findOrFail($id);
         $testResult->delete();
@@ -163,7 +163,7 @@ class TestResultController extends Controller
         return response("Test Result restored successfully");
     }
 
-    public function forcedelete(TestResult $testResult, $id)
+    public function destroy(TestResult $testResult, $id)
     {
         $testResult = TestResult::withTrashed()->findOrFail($id);
         $testResult->forceDelete();

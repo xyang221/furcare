@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\PetOwnerResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PetResource;

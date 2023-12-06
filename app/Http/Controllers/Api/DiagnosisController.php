@@ -56,8 +56,9 @@ class DiagnosisController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Diagnosis $diagnosis)
+    public function show(Diagnosis $diagnosis, $id)
     {
+        $diagnosis = Diagnosis::findOrFail($id);
         return new DiagnosisResource($diagnosis);
     }
 
@@ -109,12 +110,33 @@ class DiagnosisController extends Controller
         return new DiagnosisResource($diagnosis);
     }
 
+    public function archive($id)
+    {
+        $diagnosis = Diagnosis::findOrFail($id);
+        $diagnosis->delete();
+        return new DiagnosisResource($diagnosis);
+    }
+
+    public function archivelist()
+    {
+        return DiagnosisResource::collection(
+            Diagnosis::onlyTrashed()->orderBy('id', 'desc')->get()
+        );
+    }
+
+    public function restore($id)
+    {
+        $diagnosis = Diagnosis::withTrashed()->findOrFail($id);
+        $diagnosis->restore();
+        return response("Pet Owner was restored successfully");
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Diagnosis $diagnosis)
     {
-        $diagnosis->delete();
+        $diagnosis->forceDelete();
         return response()->json("Diagnosis was archived", 204);
     }
 }

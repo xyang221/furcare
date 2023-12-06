@@ -29,6 +29,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->validated(); //get the data
+        $data['role_id'] = 1; 
         $data['password'] = bcrypt($data['password']); //encypt the password
         $user = User::create($data); //create user
         return new UserResource($user, 201);

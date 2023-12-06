@@ -12,9 +12,6 @@ use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\ServicesAvailedResource;
 
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-
 class ServicesAvailedController extends Controller
 {
     /**
@@ -35,13 +32,13 @@ class ServicesAvailedController extends Controller
     public function store(StoreServicesAvailedRequest $request, $id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
         $requestData = $request->validated();
-        
+
         $requestData['client_service_id'] = $clientService->id;
         $requestData['service_id'] = $service->id;
         $requestData['status'] = "To Pay";
-        $servicesAvailed = ServicesAvailed::create($requestData); 
+        $servicesAvailed = ServicesAvailed::create($requestData);
         return new ServicesAvailedResource($servicesAvailed, 201);
     }
 
@@ -58,8 +55,8 @@ class ServicesAvailedController extends Controller
         $service = Service::findOrFail($sid);
         $petowner = ClientService::where('petowner_id', $id)->pluck('id');
         $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
-        ->where('service_id', $service->id)
-        ->orderBy('id', 'desc')->get();
+            ->where('service_id', $service->id)
+            ->orderBy('id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
@@ -70,11 +67,11 @@ class ServicesAvailedController extends Controller
 
     public function showByPetownerBilling($id)
     {
-        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
         $status = 'To Pay';
+        $petowner = ClientService::where('petowner_id', $id)->where('status', $status)->pluck('id');
         $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
-        ->where('status', $status)
-        ->orderBy('id', 'desc')->get();
+            ->where('status', $status)
+            ->orderBy('id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
@@ -85,11 +82,11 @@ class ServicesAvailedController extends Controller
 
     public function showByPetownerChargeSlip($id)
     {
-        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $petowner = ClientService::where('petowner_id', $id)->where('status', "To Pay")->pluck('id');
         $status = 'Completed';
         $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
-        ->where('status', $status)
-        ->orderBy('pet_id', 'desc')->get();
+            ->where('status', $status)
+            ->orderBy('pet_id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed completed of this client found at the moment.'], 404);

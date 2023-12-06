@@ -52,7 +52,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
         
         if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
 
         return new AppointmentResource($appointment);
@@ -64,7 +64,7 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('status', 'Pending')->orderBy('date', 'desc')->get();
         
         if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'No pending appointments found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'No pending appointments found.'], Response::HTTP_NOT_FOUND);
         }
         
         return AppointmentResource::collection($appointments);
@@ -76,11 +76,11 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
 
         if ($appointment->status !== "Pending") {
-            return response()->json(['message' => 'Appointment is not pending'], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'Appointment is not pending.'], Response::HTTP_BAD_REQUEST);
         }
 
         $appointment->update(['status' => 'Confirmed']);
@@ -94,7 +94,7 @@ class AppointmentController extends Controller
          $appointments = Appointment::where('status', 'Confirmed')->get();
          
          if ($appointments->isEmpty()) {
-             return response()->json(['message' => 'No scheduled appointments found'], Response::HTTP_NOT_FOUND);
+             return response()->json(['message' => 'No scheduled appointments found.'], Response::HTTP_NOT_FOUND);
          }
          
          return AppointmentResource::collection($appointments);
@@ -106,11 +106,11 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
 
         if ($appointment->status !== "Pending") {
-            return response()->json(['message' => 'Appointment is not pending'], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'Appointment is not pending.'], Response::HTTP_BAD_REQUEST);
         }
 
         $appointment->update(['status' => 'Cancelled']);
@@ -123,7 +123,7 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('status', 'Cancelled')->where('status','No Show')->orderBy('date', 'desc')->get();
         
         if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'No cancelled appointments found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'No cancelled appointments found.'], Response::HTTP_NOT_FOUND);
         }
         
         return AppointmentResource::collection($appointments);
@@ -137,11 +137,11 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
 
         if ($appointment->status !== "Confirmed") {
-            return response()->json(['message' => 'Appointment is not scheduled'], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'Appointment is not scheduled.'], Response::HTTP_BAD_REQUEST);
         }
 
         $appointment->update(['status' => 'Completed']);
@@ -155,7 +155,7 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('status', 'Completed')->orderBy('date', 'desc')->get();
         
         if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'No completed appointments found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'No completed appointments found.'], Response::HTTP_NOT_FOUND);
         }
         
         return AppointmentResource::collection($appointments);
@@ -166,11 +166,11 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
 
         if ($appointment->status !== "Confirmed") {
-            return response()->json(['message' => 'Appointment is not scheduled'], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'Appointment is not scheduled.'], Response::HTTP_BAD_REQUEST);
         }
 
         $appointment->update(['status' => 'No Show']);

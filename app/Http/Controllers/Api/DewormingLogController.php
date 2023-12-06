@@ -12,7 +12,6 @@ use App\Http\Requests\StoreDewormingLogRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateDewormingLogRequest;
 use App\Http\Resources\DewormingLogResource;
-use Carbon\Carbon;
 
 
 class DewormingLogController extends Controller
@@ -82,7 +81,7 @@ class DewormingLogController extends Controller
         return DewormingLogResource::collection($dewormingLogs);
     }
 
-    public function getDiagnosisByServiceandPetowner($id, $sid)
+    public function getDewormingByServiceandPetowner($id, $sid)
     {
         $servicesAvailedIds = Service::findOrFail($sid);
         $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
@@ -114,13 +113,34 @@ class DewormingLogController extends Controller
         return new DewormingLogResource($dewormingLog);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DewormingLog $dewormingLog)
+    public function archive($id)
     {
         $dewormingLog = DewormingLog::findOrFail($id);
         $dewormingLog->delete();
+        return new DewormingLogResource($dewormingLog);
+    }
+
+    public function archivelist()
+    {
+        return DewormingLogResource::collection(
+            DewormingLog::onlyTrashed()->orderBy('id', 'desc')->get()
+        );
+    }
+
+    public function restore($id)
+    {
+        $dewormingLog = DewormingLog::withTrashed()->findOrFail($id);
+        $dewormingLog->restore();
+        return response("Deworming was restored successfully");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(DewormingLog $dewormingLog, $id)
+    {
+        $dewormingLog = DewormingLog::findOrFail($id);
+        $dewormingLog->forceDelete();
         return response("Permanently Deleted", 201);
     }
 }

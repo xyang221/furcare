@@ -35,7 +35,7 @@ class StaffController extends Controller
 {
     // Create a new user.
     $user = User::create([
-        'role_id' =>$ureq->input('role_id'),
+        'role_id' =>2,
         'username' => $ureq->input('username'),
         'email' => $ureq->input('email'),
         'password' => Hash::make($ureq->input('password')),

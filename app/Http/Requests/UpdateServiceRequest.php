@@ -23,8 +23,7 @@ class UpdateServiceRequest extends FormRequest
     {
         return [
             'service'=>'required|string|max:55',
-            'price'=>'required|double|max:55',
-            'status' => 'string',
+            'isAvailable'=>'required|boolean',
             'cat_id' => 'exists:service_category,id',
        
         ];

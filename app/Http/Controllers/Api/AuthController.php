@@ -20,7 +20,7 @@ class AuthController extends Controller
             'role_id' => 3,
             'username' => $data['username'],
             'email' => $data['email'],
-             'password' => bcrypt($data['password'])
+            'password' => bcrypt($data['password'])
         ]);
 
 
@@ -38,28 +38,26 @@ class AuthController extends Controller
                 'message' => 'Incorrect Email or Password!'
             ], 422);
         }
-        
+
         /** @var User $user */
-         $user = Auth::user();
-        
+        $user = Auth::user();
+
         if ($user->trashed()) {
-            Auth::logout(); 
+            Auth::logout();
             return response([
                 'message' => 'Your account has been deactivated.'
             ], 422);
         }
 
-         $token = $user->createToken('main')->plainTextToken;
-         return response(compact('user', 'token'));
+        $token = $user->createToken('main')->plainTextToken;
+        return response(compact('user', 'token'));
     }
-    
+
     public function logout(Request $request)
     {
         /** @var User $user */
         $user = $request->user();
         $user->currentAccessToken()->delete();
-        return response('',204);
-
+        return response('', 204);
     }
 }
- 

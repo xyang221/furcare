@@ -19,7 +19,6 @@ class ServiceController extends Controller
         $service = Service::with('category')->orderBy('id', 'asc')->paginate(50);
 
         return ServiceResource::collection($service);
-
     }
 
     /**
@@ -38,7 +37,6 @@ class ServiceController extends Controller
     public function show(Service $service)
     {
         return new ServiceResource($service);
-        
     }
 
     /**
@@ -49,7 +47,15 @@ class ServiceController extends Controller
         $data = $request->validated();
         $service->update($data);
         return new ServiceResource($service);
+    }
 
+    public function serviceAvailable($id)
+    {
+        $service = Service::findOrFail($id);
+
+        $service->isAvailable = !$service->isAvailable;
+        $service->save();
+        return new ServiceResource($service);
     }
 
     /**
@@ -59,6 +65,5 @@ class ServiceController extends Controller
     {
         $service->delete();
         return response()->json("Service Deleted");
-
     }
 }

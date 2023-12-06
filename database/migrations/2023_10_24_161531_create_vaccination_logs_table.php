@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('vaccination_logs', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date');
-            $table->integer('weight');
+            $table->float('weight');
             $table->string('description');
             $table->string('administered');
             $table->date('return');
