@@ -31,34 +31,42 @@ class PetConditionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePetConditionRequest $request, $id)
+    public function store(StorePetConditionRequest $request, $tid)
     {
-        $treatment = Treatment::findOrFail($id);
-        $data = $request->validated(); //get the data
-
-        // $today = Carbon::now()->toDateString();
-        // $data['date'] = $today;
-        $data['treatment_id'] = $id;
-
-        $petCondition = PetCondition::create($data); //create
+        $treatment = Treatment::findOrFail($tid);
+        $data = $request->validated(); // get the validated data
+    
+        $currentTime = Carbon::now();
+        $amStartTime = Carbon::createFromTime(6, 0, 0); // Set your AM start time
+        $pmStartTime = Carbon::createFromTime(12, 0, 0); // Set your PM start time
+    
+        if ($currentTime->between($amStartTime, $pmStartTime)) {
+            $data['is_AM_or_PM'] = "AM";
+        } else {
+            $data['is_AM_or_PM'] = "PM";
+        }
+    
+        $data['treatment_id'] = $treatment->id; // Assign treatment ID
+    
+        $petCondition = PetCondition::create($data); // create PetCondition
         return new PetConditionResource($petCondition, 201);
     }
-
+    
     /**
      * Display the specified resource.
      */
-    public function show(PetCondition $petCondition)
+    public function show(PetCondition $petCondition, $id)
     {
-        // $petCondition = PetCondition::findOrFail($id);
+        $petCondition = PetCondition::findOrFail($id);
         return new PetConditionResource($petCondition);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePetConditionRequest $request, PetCondition $petCondition)
+    public function update(UpdatePetConditionRequest $request, PetCondition $petCondition, $id)
     {
-        // $petCondition = PetCondition::findOrFail($id);
+        $petCondition = PetCondition::findOrFail($id);
         $data = $request->validated();
         $petCondition->update($data);
 

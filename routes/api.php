@@ -187,8 +187,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/testresults/{id}/restore', [TestResultController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [TestResultController::class, 'destroy']);
 
-    Route::apiResource('/treatments', TreatmentController::class);
-    // Route::post('/treatments/pet/{id}',[ TreatmentController::class, 'store']);
+    Route::get('/treatments', [TreatmentController::class, 'index']);
+    Route::post('/treatments/petowner/{poid}/service/{sid}', [TreatmentController::class, 'store']);
+    Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'getCurrentTreatment']);
     Route::get('/treatments/pet/{id}', [TreatmentController::class, 'getPetTreatments']);
     Route::get('/treatments/{id}/petconditions', [TreatmentController::class, 'getTreatmentPetConditions']);
     Route::get('/treatments/{id}/medications', [TreatmentController::class, 'getTreatmentMedications']);
@@ -198,6 +199,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/petconditions', PetConditionController::class);
     Route::post('/petconditions/treatment/{id}', [PetConditionController::class, 'store']);
+    Route::get('/petconditions/{id}', [PetConditionController::class, 'show']);
+    Route::put('/petconditions/{id}', [PetConditionController::class, 'update']);
     Route::get('/archives/petconditions', [PetConditionController::class, 'archivelist']);
     Route::put('/archives/petconditions/{id}', [PetConditionController::class, 'restore']);
     Route::delete('/archives/petconditions/{id}', [PetConditionController::class, 'forcedelete']);
@@ -223,3 +226,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+

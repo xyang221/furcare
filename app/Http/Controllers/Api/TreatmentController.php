@@ -7,12 +7,15 @@ use App\Models\PetCondition;
 use App\Models\Medication;
 use App\Models\Pet;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\StoreTreatmentRequest;
 use App\Http\Requests\UpdateTreatmentRequest;
 use App\Http\Resources\TreatmentResource;
 use App\Http\Resources\PetConditionResource;
 use App\Http\Resources\MedicationResource;
-
+use App\Models\ClientService;
+use App\Models\Service;
+use App\Models\ServicesAvailed;
 use Carbon\Carbon;
 
 
@@ -29,20 +32,49 @@ class TreatmentController extends Controller
         if ($treatments->isEmpty()) {
             return response()->json(['message' => 'No pet treatment records found.'], 404);
         }
-        
+
         return TreatmentResource::collection($treatments);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreatmentRequest $request)
+    public function store(StoreTreatmentRequest $request, StoreServicesAvailedRequest $sarequest, $poid, $sid)
     {
-        $pet = Pet::findOrFail($id);
-        $data = $request->validated(); //get the data
+        $service = Service::findOrFail($sid);
+        $clientService = ClientService::where('petowner_id', $poid)->first();
 
-        // $data['pet_id'] = $id;
-        $treatment = Treatment::create($data); //create
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => $service->id,
+            'unit_price' => $sarequest->input('unit_price'),
+            'client_service_id' => $clientService->id,
+            'pet_id' => $sarequest->input('pet_id'),
+            'status' => "To Pay",
+        ]);
+
+        // Check if the instance was created successfully
+        if ($servicesAvailed) {
+            return response()->json(['message' => 'ServicesAvailed created successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Failed to create ServicesAvailed'], 500);
+        }
+
+        $treatment = Treatment::create([
+            'pet_id' => $servicesAvailed->pet_id,
+            'diagnosis' => $request->input('diagnosis'),
+            'body_weight' => $request->input('body_weight'),
+            'heart_rate' => $request->input('heart_rate'),
+            'mucous_membranes' => $request->input('mucous_membranes'),
+            'pr_prealbumin' => $request->input('pr_prealbumin'),
+            'temperature' => $request->input('temperature'),
+            'respiration_rate' => $request->input('respiration_rate'),
+            'caspillar_refill_time' => $request->input('caspillar_refill_time'),
+            'body_condition_score' => $request->input('body_condition_score'),
+            'fluid_rate' => $request->input('fluid_rate'),
+            'comments' => $request->input('comments'),
+            'services_availed_id' => $servicesAvailed->id,
+        ]);
+
         return new TreatmentResource($treatment, 201);
     }
 
@@ -54,10 +86,29 @@ class TreatmentController extends Controller
         return new TreatmentResource($treatment);
     }
 
+    public function getCurrentTreatment($id, $sid)
+    {
+        $servicesAvailedIds = Service::findOrFail($sid);
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
+            ->where('service_id', $servicesAvailedIds->id)
+            ->pluck('id');
+
+        $treatment = Treatment::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
+            ->first();
+
+        if (!$treatment) {
+            return response()->json(['message' => 'No treatment records found for the provided services availed.'], 404);
+        }
+
+        return new TreatmentResource($treatment);
+    }
+
     public function getPetTreatments($id)
     {
-        
-        $petTreatments = Treatment::where('pet_id', $id)->get();
+
+        $petTreatments = Treatment::where('pet_id', $id)->orderBy('id', 'desc')->get();
 
         if ($petTreatments->isEmpty()) {
             return response()->json(['message' => 'No treatment records found in this pet.'], 404);
@@ -67,7 +118,7 @@ class TreatmentController extends Controller
 
     public function getTreatmentPetConditions($id)
     {
-        
+
         $petTreatmentPetConditions = PetCondition::where('treatment_id', $id)->get();
 
         if ($petTreatmentPetConditions->isEmpty()) {
@@ -78,7 +129,7 @@ class TreatmentController extends Controller
 
     public function getTreatmentMedications($id)
     {
-        
+
         $petTreatmentMedications = Medication::where('treatment_id', $id)->get();
 
         if ($petTreatmentMedications->isEmpty()) {
@@ -109,12 +160,12 @@ class TreatmentController extends Controller
 
     public function archivelist()
     {
-        $treatments = Treatment::onlyTrashed()->orderBy('id','desc')->get();
+        $treatments = Treatment::onlyTrashed()->orderBy('id', 'desc')->get();
 
         if ($treatments->isEmpty()) {
             return response()->json(['message' => 'No pet treatment records was archived.'], 404);
         }
-        
+
         return TreatmentResource::collection($treatments);
     }
 
@@ -130,6 +181,5 @@ class TreatmentController extends Controller
         $treatment = Treatment::withTrashed()->findOrFail($id);
         $treatment->forceDelete();
         return response("This pet treatment record was Permanently Deleted", 204);
-
     }
 }

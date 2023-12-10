@@ -23,12 +23,12 @@ class StorePetConditionRequest extends FormRequest
     {
         return [
             // 'date'=>'date',
-            'eating' => 'required|string|max:255',
-            'drinking' => 'required|string|max:255',
-            'urinated' => 'required|string|max:255',
-            'vomit' => 'required|string|max:255',
-            'defecated' => 'required|string|max:255',
-            'is_AM_or_PM' => 'required|string|max:255',
+            'eating' => 'required|string|max:55',
+            'drinking' => 'required|string|max:55',
+            'urinated' => 'required|string|max:55',
+            'vomit' => 'required|string|max:55',
+            'defecated' => 'required|string|max:55',
+            // 'is_AM_or_PM' => 'required|string|max:55',
             
             'treatment_id' => 'exists:treatment,id',
         ];
