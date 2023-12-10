@@ -18,7 +18,7 @@ class PetController extends Controller
     public function index()
     {
 
-        $pets = Pet::query()->orderBy('id', 'desc')->get();
+        $pets = Pet::query()->orderBy('id', 'desc')->paginate(50);
 
         if ($pets->isEmpty()) {
             return response()->json(['message' => 'No pet records found.'], 404);
@@ -26,6 +26,28 @@ class PetController extends Controller
         
         return PetResource::collection($pets);
 
+    }
+
+    public function searchPet($name)
+    {
+        try {
+            $sanitized_name = trim($name); // Trim whitespace from the input
+
+            // Perform search
+            $pets = Pet::where('name', 'like', "%{$sanitized_name}%")
+            ->get();
+
+            // Check if any results are found
+            if ($pets->isEmpty()) {
+                return response()->json(['message' => 'No pets found.'], 404);
+            }
+
+            // Return the resource collection
+            return PetResource::collection($pets);
+        } catch (\Exception $e) {
+            // Handle exceptions or errors that may occur during the query
+            return response()->json(['message' => 'An error occurred while searching for pets.'], 500);
+        }
     }
 
     /**
@@ -139,7 +161,7 @@ class PetController extends Controller
     {
         $pet = Pet::withTrashed()->findOrFail($id);
         $pet->forceDelete();
-        return response("Permanently Deleted", Response::HTTP_OK);
+        return response("Permanently Deleted", 200);
 
     }
 }

@@ -75,7 +75,7 @@ class DewormingLogController extends Controller
         $dewormingLogs = DewormingLog::where('pet_id', $id)->get();
 
         if ($dewormingLogs->isEmpty()) {
-            return response()->json(['message' => 'No deworming logs found.'], 404);
+            return response()->json(['message' => 'No deworming logs found in this pet.'], 404);
         }
 
         return DewormingLogResource::collection($dewormingLogs);
@@ -105,8 +105,9 @@ class DewormingLogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDewormingLogRequest $request, DewormingLog $dewormingLog)
+    public function update(UpdateDewormingLogRequest $request, DewormingLog $dewormingLog, $id)
     {
+        $dewormingLog = DewormingLog::findOrFail($id);
         $data = $request->validated();
         $dewormingLog->update($data);
 
