@@ -28,7 +28,9 @@ class StoreVaccinationLogRequest extends FormRequest
             'return' => 'required|date',
             'pet_id' => 'exists:pets,id',
             'services_availed_id' => 'exists:services_availed,id',
-            'vaccination_againsts' => 'required|array'
+            // 'vaccination_againsts' => 'required|array'
+            'vaccination_againsts' => 'required|string'
+
         ];
     }
 }

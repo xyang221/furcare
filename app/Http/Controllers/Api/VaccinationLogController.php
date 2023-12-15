@@ -52,8 +52,8 @@ class VaccinationLogController extends Controller
             'weight' => $request->input('weight'),
             'description' => $request->input('description'),
             'administered' => $request->input('administered'),
-            'return' => $request->input('return'),
             'vaccination_againsts' => $request->input('vaccination_againsts'),
+            'return' => $request->input('return'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
 
