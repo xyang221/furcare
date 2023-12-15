@@ -27,9 +27,9 @@ class AdmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAdmissionRequest $request)
+    public function store(StoreAdmissionRequest $request, $id)
     {
-        $pet = Pet::findOrFail($id);
+        $pet = Admission::findOrFail($id);
         $data = $request->validated(); //get the data
 
         $data['pet_id'] = $id;
@@ -63,9 +63,9 @@ class AdmissionController extends Controller
     public function update(UpdateAdmissionRequest $request, Admission $admission)
     {
         $data = $request->validated();
-        $treatment->update($data);
+        $admission->update($data);
 
-        return new TreatmentResource($treatment);
+        return new AdmissionResource($admission);
     }
 
     /**
@@ -73,7 +73,7 @@ class AdmissionController extends Controller
      */
     public function destroy(Admission $admission)
     {
-        $treatment->delete();
+        $admission->delete();
         return response()->json(['message' => 'This pet treatment record was archived.'], 204);
     }
 }

@@ -29,12 +29,12 @@ class MedicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicationRequest $request, $id)
+    public function store(StoreMedicationRequest $request, $tid)
     {
-        $treatment = Treatment::findOrFail($id);
+        $treatment = Treatment::findOrFail($tid);
         $data = $request->validated(); //get the data
 
-        $data['treatment_id'] = $id;
+        $data['treatment_id'] = $treatment->id; // Assign treatment ID
 
         $medication = Medication::create($data); //create
         return new MedicationResource($medication, 201);
@@ -43,16 +43,18 @@ class MedicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Medication $medication)
+    public function show(Medication $medication, $id)
     {
+        $medication = Medication::findOrFail($id);
         return new MedicationResource($medication);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicationRequest $request, Medication $medication)
+    public function update(UpdateMedicationRequest $request, Medication $medication, $id)
     {
+        $medication = Medication::findOrFail($id);
         $data = $request->validated();
         $medication->update($data);
 
