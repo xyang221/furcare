@@ -24,15 +24,23 @@ class SignupRequest extends FormRequest
     {
         return [
           
-            'username' => 'required|string|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => [
                 'required', 
                 'confirmed',
                 Password::min(8)
                     ->letters()
-                    // ->mixedCase() // Add this for mixed case letters
-            ]
+                    ->mixedCase() 
+            ],
+            'firstname'=>'required|string|max:55',
+            'lastname'=>'required|string|max:55',
+            'contact_num' => 'required|string|min:10|max:12',
+            'zipcode_id' => 'exists:zipcodes,id',
+            'barangay' => 'required|string|max:55',
+            'zone' => 'required|string|max:55',
+            'user_id' => 'exists:users,id',
+            'address_id' => 'exists:addresses,id',
+
         ];
     }
 }

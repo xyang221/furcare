@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
+use App\Models\Address;
+use App\Models\PetOwner;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,18 +17,32 @@ class AuthController extends Controller
     public function signup(SignupRequest $request)
     {
         $data = $request->validated();
-        /** @var \App\Models\User $user  */
+
         $user = User::create([
             'role_id' => 3,
-            'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password'])
+        ]);
+
+        $address = Address::create([
+            'zipcode_id' => $data['zipcode_id'],
+            'barangay' => $data['barangay'],
+            'zone' => $data['zone'],
+        ]);
+
+        $petOwner = PetOwner::create([
+            'user_id' => $user->id,
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'contact_num' => $data['contact_num'],
+            'address_id' => $address->id,
+
         ]);
 
 
         $token = $user->createToken('main')->plainTextToken;
 
-        return response(compact('user', 'token'));
+        return response(compact('petowner', 'user', 'token'));
     }
 
     public function login(LoginRequest $request)
@@ -42,6 +58,7 @@ class AuthController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
+
         if ($user->trashed()) {
             Auth::logout();
             return response([
@@ -50,14 +67,23 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('main')->plainTextToken;
-        return response(compact('user', 'token'));
+
+        if ($user->role_id === 3) {
+            $petowner = $user->petOwner;
+            return response(compact('petowner', 'user', 'token'));
+        } else if ($user->role_id === 2) {
+            $staff = $user->staff;
+            return response(compact('staff', 'user', 'token'));
+        } else {
+            return response(compact('user', 'token'));
+        }
     }
 
     public function logout(Request $request)
     {
         /** @var User $user */
         $user = $request->user();
-        $user->currentAccessToken()->delete();
+        $user->currentAccessToken()->delete;
         return response('', 204);
     }
 }
