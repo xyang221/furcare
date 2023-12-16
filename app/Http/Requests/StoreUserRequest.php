@@ -24,14 +24,13 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'role_id' => 'exists:roles,id',
-            'username'=>'required|string|unique:users,username',
             'email'=>'required|email|unique:users,email',
             'password' => [
                 'required',
                 'confirmed',
                 Password::min(8)
                 ->letters()
-                // ->mixedCase() // Add this for mixed case letters
+                ->mixedCase() 
             ]
         ];
     }

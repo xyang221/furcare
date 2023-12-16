@@ -24,13 +24,12 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'email'=>'required|email|unique:users,email,'.$this->id,
-            'username'=>'required|string|unique:users,username',
             'password' => [
                 'required',
                 'confirmed',
                 Password::min(8)
                 ->letters()
-                // ->mixedCase() // Add this for mixed case letters
+                ->mixedCase() 
             ]
             
         ];
