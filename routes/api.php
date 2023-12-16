@@ -241,6 +241,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/mobile')->group(function () {
         Route::post('/signup', [MobileAuthController::class, 'signup']);
         Route::post('/login', [MobileAuthController::class, 'login']);
+
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+
+    Route::apiResource('/addresses', AddressController::class);
+    Route::apiResource('/zipcodes', ZipcodeController::class);
+
+    Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
+    Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
+
+    Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);
+
+    Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
+
+    Route::apiResource('/services', ServiceController::class);
+
+    Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
+    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+
     });
 });
 
