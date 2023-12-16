@@ -15,7 +15,7 @@ return new class extends Migration
             
         $table->id();
         $table->string('breed');
-        $table->string('description');
+        $table->string('description')->nullable();
         $table->unsignedBigInteger('specie_id');
         $table->softDeletes();
         $table->timestamps();

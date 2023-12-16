@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date');
             $table->float('weight');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('administered');
             $table->date('return');
             $table->unsignedBigInteger('pet_id');

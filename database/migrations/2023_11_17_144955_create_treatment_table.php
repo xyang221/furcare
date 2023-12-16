@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('caspillar_refill_time')->nullable();
             $table->double('body_condition_score')->nullable();
             $table->double('fluid_rate')->nullable();
-            $table->string('comments');
+            $table->string('comments')->nullable();
 
             $table->unsignedBigInteger('services_availed_id');
             $table->foreign('services_availed_id')->references('id')->on('services_availed');

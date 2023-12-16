@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamp('date');
             $table->string('purpose');
             $table->string('status');
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->unsignedBigInteger('petowner_id');
             $table->unsignedBigInteger('service_id');
 

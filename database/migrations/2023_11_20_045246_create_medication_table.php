@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('medicine_id')->references('id')->on('medicines');
 
             $table->timestamp('date');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->integer('quantity');
             $table->string('dosage');
 
