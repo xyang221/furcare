@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\VaccinationLogController;
 use App\Http\Controllers\Api\AgainstController;
 use App\Http\Controllers\Api\VaccinationAgainstController;
 use App\Http\Controllers\Api\DiagnosisController;
+use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TestResultController;
 use App\Http\Controllers\Api\MedicineController;
@@ -130,6 +131,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
+    Route::apiResource('/doctors', DoctorController::class);
+
     Route::get('/diagnosis', [DiagnosisController::class, 'index']);
     Route::post('/diagnosis/petowner/{id}/avail/{sid}', [DiagnosisController::class, 'store']);
     Route::get('/diagnosis/{id}', [DiagnosisController::class, 'show']);
@@ -228,7 +231,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/archives/admissions/{id}', [AdmissionController::class, 'restore']);
     Route::delete('/archives/admissions/{id}', [AdmissionController::class, 'forcedelete']);
 
- 
+
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
@@ -242,24 +245,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/signup', [MobileAuthController::class, 'signup']);
         Route::post('/login', [MobileAuthController::class, 'login']);
 
-    Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::get('/users/{id}', [UserController::class, 'show']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
 
-    Route::apiResource('/addresses', AddressController::class);
-    Route::apiResource('/zipcodes', ZipcodeController::class);
+        Route::get('/addresses', [AddressController::class, 'index']);
+        Route::get('/zipcodes', [ZipcodeController::class, 'index']);
 
-    Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
-    Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
+        Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
+        Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
 
-    Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);
+        Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);
 
-    Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
+        Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
 
-    Route::apiResource('/services', ServiceController::class);
+        Route::get('/services', [ServiceController::class, 'index']);
 
-    Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
-    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
-
+        Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
+        Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     });
 });
 
