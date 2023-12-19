@@ -13,9 +13,9 @@ class Appointment extends Model
 
     protected $table = 'appointment';
 
-    protected $fillable = ['date', 'purpose', 'status','remarks', 'petowner_id', 'service_id'];
+    protected $fillable = ['date', 'purpose', 'status','remarks', 'petowner_id', 'service_id','vet_id'];
 
-    protected $with = ['petowner', 'service'];
+    protected $with = ['petowner', 'service', 'doctor'];
 
     public function petowner()
     {
@@ -25,5 +25,10 @@ class Appointment extends Model
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id','id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'vet_id','id');
     }
 }

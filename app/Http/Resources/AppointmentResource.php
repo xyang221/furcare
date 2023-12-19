@@ -27,9 +27,11 @@ class AppointmentResource extends JsonResource
 
             'petowner_id' => $this->petowner_id,
             'service_id' => $this->service_id,
+            'vet_id' => $this->vet_id,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
             'service' => new ServiceResource($this->whenLoaded('service')),
+            'doctor' => new DoctorResource($this->whenLoaded('doctor')),
 
         ];
     }

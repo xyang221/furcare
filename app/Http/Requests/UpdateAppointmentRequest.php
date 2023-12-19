@@ -25,8 +25,9 @@ class UpdateAppointmentRequest extends FormRequest
             'date' => 'required|date',
             'purpose' => 'required|string',
             'status' => 'in:Completed,No Show,Rescheduled,Pending,Cancelled,Confirmed', // Use 'in' rule for specific values
-            'remarks' => 'sometimes|string',
+            'remarks' => 'nullable|string',
             'service_id' => 'exists:services,id',
+            'vet_id' => 'exists:doctors,id',
         ];
     }
 }
