@@ -22,10 +22,6 @@ class StoreServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'status' => 'string',
-            // 'quantity' => 'required|numeric',
-            // 'unit' => 'required|numeric',
-            // 'date_availed_for' => 'date',
             'status' => 'in:To Pay,Completed',
             'service_id' => 'exists:services,id',
             'unit_price' => 'numeric',

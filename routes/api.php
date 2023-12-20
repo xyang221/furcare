@@ -145,13 +145,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/diagnosis/{id}/restore', [DiagnosisController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [DiagnosisController::class, 'destroy']);
 
-
-    Route::apiResource('/servicesavailed', ServicesAvailedController::class);
-    Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
+    Route::get('/servicesavailed', [DiagnosisController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
     Route::get('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'showByPetownerServiceAvail']);
     Route::get('/servicesavailed/petowner/{id}', [ServicesAvailedController::class, 'showByPetownerBilling']);
     Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
+    Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
+    Route::delete('/servicesavailed/{id}/archive', [ServicesAvailedController::class, 'archive']);
+    Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
+    Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);
+    Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
 
     Route::apiResource('/clientservices', ClientServiceController::class);
     Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);

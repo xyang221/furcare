@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\ServicesAvailedResource;
+use Illuminate\Support\Facades\Auth;
 
 class ServicesAvailedController extends Controller
 {
@@ -22,7 +23,7 @@ class ServicesAvailedController extends Controller
         return ServicesAvailedResource::collection(
             ServicesAvailed::query()
                 ->orderBy('id', 'desc')
-                ->paginate(50)
+                ->get()
         );
     }
 
@@ -33,6 +34,24 @@ class ServicesAvailedController extends Controller
     {
         $service = Service::findOrFail($sid);
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
+                'rendered_by' => "ADMIN",
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
+
         $requestData = $request->validated();
 
         $requestData['client_service_id'] = $clientService->id;
@@ -107,12 +126,33 @@ class ServicesAvailedController extends Controller
         return new ServicesAvailedResource($servicesAvailed);
     }
 
+    public function archive($id)
+    {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
+        $servicesAvailed->delete();
+        return new ServicesAvailedResource($servicesAvailed);
+    }
+
+    public function archivelist()
+    {
+        return ServicesAvailedResource::collection(
+            ServicesAvailed::onlyTrashed()->orderBy('id', 'desc')->get()
+        );
+    }
+
+    public function restore($id)
+    {
+        $servicesAvailed = ServicesAvailed::withTrashed()->findOrFail($id);
+        $servicesAvailed->restore();
+        return response("This service availed was restored successfully");
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(ServicesAvailed $servicesAvailed)
     {
-        $servicesAvailed->delete();
-        return response()->json("Services Availed Receipt Deleted", 204);
+        $servicesAvailed->forceDelete();
+        return response()->json("Service Availed Deleted", 204);
     }
 }

@@ -8,16 +8,19 @@ use App\Models\Diagnosis;
 use App\Models\Pet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServicesAvailed extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'services_availed';
 
     protected $fillable = ['status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_service_id', 'pet_id'];
 
     protected $with = ['service','clientservice', 'pet'];
+
+    protected $dates = ['deleted_at'];
 
     public function service()
     {
