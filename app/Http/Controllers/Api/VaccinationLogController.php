@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\VaccinationLog;
-use App\Models\Pet;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
 use App\Models\ClientService;
-use App\Models\VaccinationAgainst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVaccinationLogRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\StoreVaccinationAgainstRequest;
 use App\Http\Requests\UpdateVaccinationLogRequest;
 use App\Http\Resources\VaccinationLogResource;
+use App\Models\PetOwner;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class VaccinationLogController extends Controller
 {
@@ -34,10 +33,27 @@ class VaccinationLogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreVaccinationLogRequest $request, StoreServicesAvailedRequest $sarequest, StoreVaccinationAgainstRequest $varequest, $id, $sid)
+    public function store(StoreVaccinationLogRequest $request, StoreServicesAvailedRequest $sarequest, $id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
+                'rendered_by' => "ADMIN",
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
 
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => $service->id,
@@ -51,8 +67,8 @@ class VaccinationLogController extends Controller
             'pet_id' => $servicesAvailed->pet_id,
             'weight' => $request->input('weight'),
             'description' => $request->input('description'),
-            'administered' => $request->input('administered'),
-            'vaccination_againsts' => $request->input('vaccination_againsts'),
+            'vet_id' => $request->input('vet_id'),
+            'va_againsts' => $request->input('va_againsts'),
             'return' => $request->input('return'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
@@ -131,7 +147,7 @@ class VaccinationLogController extends Controller
     {
         $vaccinationLog = VaccinationLog::withTrashed()->findOrFail($id);
         $vaccinationLog->restore();
-        return response("Deworming was restored successfully");
+        return response("Vaccination was restored successfully");
     }
 
     /**

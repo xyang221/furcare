@@ -13,19 +13,19 @@ class VaccinationLog extends Model
 
     protected $table = 'vaccination_logs';
 
-    protected $casts = [
-        'vaccination_againsts' => 'array'
-    ];
-
-    protected $fillable = ['date', 'weight', 'description','administered','return', 'services_availed_id', 'pet_id', 'vaccination_againsts'];
+    protected $fillable = ['date', 'weight', 'description','return', 'services_availed_id', 'pet_id','vet_id', 'va_againsts'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet','servicesavailed'];
+    protected $with = ['pet','servicesavailed', 'vet'];
 
     public function pet()
     {
         return $this->belongsTo(Pet::class, 'pet_id','id');
+    }
+    public function vet()
+    {
+        return $this->belongsTo(Doctor::class, 'vet_id','id');
     }
 
     public function servicesavailed()
