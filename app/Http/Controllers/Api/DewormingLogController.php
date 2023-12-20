@@ -12,7 +12,8 @@ use App\Http\Requests\StoreDewormingLogRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateDewormingLogRequest;
 use App\Http\Resources\DewormingLogResource;
-
+use App\Models\PetOwner;
+use Illuminate\Support\Facades\Auth;
 
 class DewormingLogController extends Controller
 {
@@ -36,7 +37,24 @@ class DewormingLogController extends Controller
     public function store(StoreDewormingLogRequest $drequest, StoreServicesAvailedRequest $sarequest, $id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
+                'rendered_by' => "ADMIN",
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
 
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => $service->id,
@@ -50,8 +68,7 @@ class DewormingLogController extends Controller
             'pet_id' => $servicesAvailed->pet_id,
             'weight' =>$drequest->input('weight'),
             'description' => $drequest->input('description'),
-            'administered' => $drequest->input('administered'),
-            //??? ang status/return kay sched date kanus a mubalik?
+            'vet_id' => $drequest->input('vet_id'),
             'return' => $drequest->input('return'),
             'services_availed_id' => $servicesAvailed->id,
         ]);

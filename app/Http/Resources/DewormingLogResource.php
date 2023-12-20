@@ -20,13 +20,14 @@ class DewormingLogResource extends JsonResource
             'date' => $this->date,
             'weight' => $this->weight,
             'description' => $this->description,
-            'administered' => $this->administered,
             'return' => $this->return,
 
             'pet_id' => $this->pet_id,
+            'vet_id' => $this->vet_id,
             'services_availed_id' => $this->services_availed_id,
 
             'pet' => new PetResource($this->whenLoaded('pet')),
+            'vet' => new DoctorResource($this->whenLoaded('vet')),
             'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];

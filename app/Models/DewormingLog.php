@@ -14,19 +14,23 @@ class DewormingLog extends Model
 
     protected $table = 'deworming_logs';
 
-    protected $fillable = ['date', 'weight', 'description','administered','return', 'pet_id', 'services_availed_id'];
+    protected $fillable = ['date', 'weight', 'description', 'return', 'pet_id', 'vet_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet', 'servicesavailed'];
+    protected $with = ['pet', 'servicesavailed', 'vet'];
 
     public function pet()
     {
-        return $this->belongsTo(Pet::class, 'pet_id','id');
+        return $this->belongsTo(Pet::class, 'pet_id', 'id');
+    }
+    public function vet()
+    {
+        return $this->belongsTo(Doctor::class, 'vet_id', 'id');
     }
 
     public function servicesavailed()
     {
-        return $this->belongsTo(ServicesAvailed::class, 'services_availed_id','id');
+        return $this->belongsTo(ServicesAvailed::class, 'services_availed_id', 'id');
     }
 }

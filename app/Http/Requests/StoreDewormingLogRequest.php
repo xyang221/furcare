@@ -23,10 +23,10 @@ class StoreDewormingLogRequest extends FormRequest
     {
         return [
             'weight' => 'required|numeric',
-            'description' => 'required|string|max:255',
-            'administered' => 'required|string|max:55',
+            'description' => 'nullable|string|max:255',
             'return' => 'required|date',
             'pet_id' => 'exists:pets,id',
+            'vet_id' => 'exists:doctors,id',
             'services_availed_id' => 'exists:services_availed,id',
         ];
     }

@@ -23,9 +23,9 @@ class UpdateDewormingLogRequest extends FormRequest
     {
         return [
             'weight' => 'required|numeric',
-            'description' => 'required|string|max:55',
-            'administered' => 'required|string|max:55',
+            'description' => 'nullable|string|max:55',
             'return' => 'required|date',
+            'vet_id' => 'exists:doctors,id',
         ];
     }
 }
