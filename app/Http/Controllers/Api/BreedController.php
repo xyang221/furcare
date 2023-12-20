@@ -32,6 +32,28 @@ class BreedController extends Controller
         return new BreedResource($breed, 201);
     }
 
+    public function getBreeds($id)
+    {
+        try {
+            $sanitized_name = trim($id); // Trim whitespace from the input
+
+            // Perform search
+            $breeds = Breed::where('specie_id', 'like', "%{$sanitized_name}%")
+            ->get();
+
+            // Check if any results are found
+            if ($breeds->isEmpty()) {
+                return response()->json(['message' => 'No breeds found.'], 404);
+            }
+
+            // Return the resource collection
+            return BreedResource::collection($breeds);
+        } catch (\Exception $e) {
+            // Handle exceptions or errors that may occur during the query
+            return response()->json(['message' => 'An error occurred while searching for pets.'], 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      */

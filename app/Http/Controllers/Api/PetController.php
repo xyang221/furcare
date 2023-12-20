@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
 use App\Http\Resources\PetResource;
+use Illuminate\Support\Facades\Validator;
 
 class PetController extends Controller
 {
@@ -23,9 +24,8 @@ class PetController extends Controller
         if ($pets->isEmpty()) {
             return response()->json(['message' => 'No pet records found.'], 404);
         }
-        
-        return PetResource::collection($pets);
 
+        return PetResource::collection($pets);
     }
 
     public function searchPet($name)
@@ -35,7 +35,7 @@ class PetController extends Controller
 
             // Perform search
             $pets = Pet::where('name', 'like', "%{$sanitized_name}%")
-            ->get();
+                ->get();
 
             // Check if any results are found
             if ($pets->isEmpty()) {
@@ -59,54 +59,58 @@ class PetController extends Controller
 
         $data = $request->validated(); //get the data
 
-        if (!$request->hasFile('photo')) {
-            return response()->json(["message" => "Please select an image"], 400);
-        }
-    
-        $file = $request->file('photo');
-        $name = time() . '.' . $file->getClientOriginalExtension();
-        $name_path = $file->move('images/', $name);
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $name = time() . '.' . $file->getClientOriginalExtension();
+            $name_path = $file->move('images/', $name);
 
-        $data['photo'] = $name_path;
-        $data['petowner_id'] = $id;
+            $data['photo'] = $name_path;
+        }
+        $data['petowner_id'] = $petOwner->id;
 
         $pet = Pet::create($data); //create pet
         return new PetResource($pet, 201);
     }
 
-   public function uploadImage(StorePetRequest $request)
-{
-    if (!$request->hasFile('photo')) {
-        return response()->json(["message" => "Please select an image"], 400);
+    public function uploadImage(StorePetRequest $request)
+    {
+        if (!$request->hasFile('photo')) {
+            return response()->json(["message" => "Please select an image"], 400);
+        }
+
+        // Validate only the 'photo' field
+        $validator = Validator::make($request->only('photo'), [
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(["message" => $validator->errors()->first()], 400);
+        }
+
+        $file = $request->file('photo');
+        $name = time() . '.' . $file->getClientOriginalExtension();
+        $name_path = $file->move('images/', $name);
+
+        $data = $request->validated(); //get the validated data
+        $data['photo'] = $name_path;
+        
+        $pet = new Pet($data);
+        $pet->save();
+
+        return response()->json(['success' => 'Image uploaded successfully']);
     }
-
-    if (!$request->file('photo')->isValid()) {
-        return response()->json(["message" => "Invalid image file"], 400);
-    }
-
-    $file = $request->file('photo');
-    $name = time() . '.' . $file->getClientOriginalExtension();
-    $name_path = $file->move('images/', $name);
-
-    $data = $request->validated(); //get the validated data
-    $data['photo'] = $name_path;
-
-    $pet = Pet::create($data); //create pet
-
-    return response()->json(['success' => 'Image uploaded successfully']);
-}
 
     /**
      * Display the specified resource.
      */
-    public function show(Pet $pet )
+    public function show(Pet $pet)
     {
         return new PetResource($pet);
     }
 
     public function getPetOwnersPet($ownerId)
     {
-        
+
         $pets = Pet::where('petowner_id', $ownerId)->get();
 
         if ($pets->isEmpty()) {
@@ -120,19 +124,18 @@ class PetController extends Controller
         $pet = Pet::findOrFail($id);
         $pet->delete();
         return new PetResource($pet);
-     
     }
 
-    
+
     public function archivelist()
     {
 
-        $pets = Pet::onlyTrashed()->orderBy('id','desc')->get();
+        $pets = Pet::onlyTrashed()->orderBy('id', 'desc')->get();
 
         if ($pets->isEmpty()) {
             return response()->json(['message' => 'No pet records found.'], 404);
         }
-        
+
         return PetResource::collection($pets);
     }
 
@@ -162,6 +165,5 @@ class PetController extends Controller
         $pet = Pet::withTrashed()->findOrFail($id);
         $pet->forceDelete();
         return response("Permanently Deleted", 200);
-
     }
 }

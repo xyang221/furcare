@@ -103,6 +103,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/species/{id}', [SpecieController::class, 'update']);
 
     Route::apiResource('/breeds', BreedController::class);
+    Route::get('/breeds-specie/{id}', [BreedController::class, 'getBreeds']);
 
     Route::get('/staffs', [StaffController::class, 'index']);
     Route::post('/staffs', [StaffController::class, 'store']);
