@@ -14,7 +14,7 @@ use App\Http\Requests\UpdateDiagnosisRequest;
 use App\Http\Resources\DiagnosisResource;
 
 use App\Http\Requests\StoreServicesAvailedRequest;
-
+use Illuminate\Support\Facades\Auth;
 
 class DiagnosisController extends Controller
 {
@@ -34,19 +34,36 @@ class DiagnosisController extends Controller
     public function store(StoreDiagnosisRequest $request, StoreServicesAvailedRequest $sarequest, $id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
+                'rendered_by' => "ADMIN",
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
 
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
-            'client_service_id'=> $clientService->id,
+            'client_service_id' => $clientService->id,
             'pet_id' => $sarequest->input('pet_id'),
             'status' => "To Pay",
         ]);
 
         $diagnosis = Diagnosis::create([
             'pet_id' => $servicesAvailed->pet_id,
-            'remarks' =>$request->input('remarks'),
+            'remarks' => $request->input('remarks'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
 
@@ -64,7 +81,7 @@ class DiagnosisController extends Controller
 
     public function getbyPet($id)
     {
-        
+
         $diagnosis = Pet::where('pet_id', $id)->get();
 
         if ($diagnosis->isEmpty()) {
@@ -79,31 +96,32 @@ class DiagnosisController extends Controller
     {
         $servicesAvailedIds = Service::findOrFail($sid);
         $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
-        
+
         $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
-            ->where('service_id',$servicesAvailedIds->id)
+            ->where('service_id', $servicesAvailedIds->id)
             ->pluck('id');
-        
+
         $diagnosis = Diagnosis::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
             ->orderBy('id', 'desc')
             ->get();
-                    
+
         if ($diagnosis->isEmpty()) {
             return response()->json(['message' => 'No list of pet diagnosis found.'], 404);
         }
-        
+
         return DiagnosisResource::collection($diagnosis);
-        
     }
 
-    
+
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDiagnosisRequest $request, Diagnosis $diagnosis)
+    public function update(UpdateDiagnosisRequest $request, Diagnosis $diagnosis, $id)
     {
+        $diagnosis = Diagnosis::findOrFail($id);
+
         $data = $request->validated();
         $diagnosis->update($data);
 
@@ -112,6 +130,14 @@ class DiagnosisController extends Controller
 
     public function archive($id)
     {
+        // $diagnosis = Diagnosis::with('relatedModels')->findOrFail($id);
+    
+        // // Archive related models first
+        // foreach ($diagnosis->relatedModels as $relatedModel) {
+        //     $relatedModel->delete();
+        //     // Or if you have an archive method in the related model, call it: $relatedModel->archive();
+        // }
+
         $diagnosis = Diagnosis::findOrFail($id);
         $diagnosis->delete();
         return new DiagnosisResource($diagnosis);
