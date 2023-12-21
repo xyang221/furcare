@@ -31,7 +31,7 @@ class AppointmentResource extends JsonResource
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
             'service' => new ServiceResource($this->whenLoaded('service')),
-            'doctor' => new DoctorResource($this->whenLoaded('doctor')),
+            'vet' => new DoctorResource($this->whenLoaded('vet')),
 
         ];
     }

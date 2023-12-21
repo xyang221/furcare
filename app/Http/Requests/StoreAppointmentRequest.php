@@ -28,7 +28,7 @@ class StoreAppointmentRequest extends FormRequest
             'remarks' => 'string',
             'petowner_id' => 'exists:petowners,id',
             'service_id' => 'exists:services,id',
-            'vet_id' => 'exists:doctors,id',
+            'vet_id' => 'exists:veterinarians,id',
         ];
     }
 }
