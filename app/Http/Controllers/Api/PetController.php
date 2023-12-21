@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
 use App\Http\Resources\PetResource;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class PetController extends Controller
@@ -62,7 +63,7 @@ class PetController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $name = time() . '.' . $file->getClientOriginalExtension();
-            $name_path = $file->move('images/', $name);
+            $name_path = $file->move('storage/pet-photos/', $name);
 
             $data['photo'] = $name_path;
         }
@@ -72,31 +73,44 @@ class PetController extends Controller
         return new PetResource($pet, 201);
     }
 
-    public function uploadImage(StorePetRequest $request)
+    public function uploadImage(StorePetRequest $request, $id)
     {
+        // Validate request data
+        $request->validate([
+            'photo' => 'required|file|mimes:jpeg,png,gif,svg|max:2048', // Adjust the max file size as needed
+        ]);
+
         if (!$request->hasFile('photo')) {
             return response()->json(["message" => "Please select an image"], 400);
         }
-
-        // Validate only the 'photo' field
-        $validator = Validator::make($request->only('photo'), [
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(["message" => $validator->errors()->first()], 400);
-        }
-
+    
         $file = $request->file('photo');
+    
+        // Ensure the file is valid
+        if (!$file->isValid()) {
+            return response()->json(["message" => "Invalid file"], 400);
+        }
+    
         $name = time() . '.' . $file->getClientOriginalExtension();
-        $name_path = $file->move('images/', $name);
-
-        $data = $request->validated(); //get the validated data
-        $data['photo'] = $name_path;
+        $filePath = $file->move('storage/pet-photos/', $name);
+    
+        $pet = Pet::findOrFail($id); // Adjust this according to your model and input data
+    
+        // Delete the previous image if it exists
+        if ($pet->photo) {
+            $previousImagePath = public_path($pet->photo);
+    
+            if (File::exists($previousImagePath)) {
+                File::delete($previousImagePath);
+            }
+        }
+    
+        // Update the pet's photo field with the new image path
+        $pet->photo = $filePath;
         
-        $pet = new Pet($data);
+        // Save the updated pet details
         $pet->save();
-
+    
         return response()->json(['success' => 'Image uploaded successfully']);
     }
 

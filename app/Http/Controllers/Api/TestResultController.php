@@ -15,8 +15,6 @@ use App\Http\Resources\TestResultResource;
 use App\Models\PetOwner;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TestResultController extends Controller
 {
@@ -74,7 +72,7 @@ class TestResultController extends Controller
 
         $file = $trrequest->file('attachment');
         $name = time() . '.' . $file->getClientOriginalExtension();
-        $name_path = $file->move('attachments/', $name);
+        $name_path = $file->move('storage/testresult-attachments/', $name);
 
         $testResult = TestResult::create([
             'pet_id' => $servicesAvailed->pet_id,
@@ -158,7 +156,7 @@ class TestResultController extends Controller
         }
 
         $name = time() . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->move('attachments/', $name);
+        $filePath = $file->move('storage/testresult-attachments/', $name);
 
         // Fetch the test result by ID or however you identify it
         $testResult = TestResult::findOrFail($id); // Adjust this according to your model and input data
