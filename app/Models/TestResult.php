@@ -20,11 +20,6 @@ class TestResult extends Model
     protected $dates = ['deleted_at'];
     
     protected $with = ['pet','servicesavailed'];
-
-    // public function diagnosis()
-    // {
-    //     return $this->belongsTo(Diagnosis::class, 'diagnosis_id','id');
-    // }
     
     public function pet()
     {

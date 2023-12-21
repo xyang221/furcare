@@ -22,8 +22,7 @@ class UpdateTestResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'attachment' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'description'=>'string',
+            'description'=>'nullable|string',
         ];
     }
 }

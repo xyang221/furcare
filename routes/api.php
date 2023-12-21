@@ -190,6 +190,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/testresults/pet/{id}', [TestResultController::class, 'getbyPet']);
     Route::get('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'getDiagnosisByServiceandPetowner']);
     Route::put('/testresults/{id}', [TestResultController::class, 'update']);
+    Route::post('/testresults/{id}/upload-attachment', [TestResultController::class, 'uploadAttachment']);
     Route::delete('/testresults/{id}/archive', [TestResultController::class, 'archive']);
     Route::get('/archives/testresults', [TestResultController::class, 'archivelist']);
     Route::put('/testresults/{id}/restore', [TestResultController::class, 'restore']);
