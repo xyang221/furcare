@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('promissory', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('date')->useCurrent();
 
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');

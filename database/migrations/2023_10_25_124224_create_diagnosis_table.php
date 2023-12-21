@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('diagnosis', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('date')->useCurrent();
             $table->string('remarks');
             
             $table->unsignedBigInteger('pet_id');

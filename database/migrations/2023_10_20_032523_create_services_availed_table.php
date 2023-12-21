@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             $table->integer('unit')->default(1);
             $table->float('unit_price')->nullable();
-            $table->timestamp('date_availed_for');
+            $table->timestamp('date_availed_for')->useCurrent();
             $table->string('status');
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services');

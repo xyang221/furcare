@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('admission', function (Blueprint $table) {
             $table->id();
-            $table->date('date_admission');
-            $table->timestamp('date_released');
+            $table->timestamp('date_admission')->useCurrent();
+            $table->timestamp('date_released')->useCurrent();
             $table->double('treatment_cost');
 
             $table->unsignedBigInteger('pet_id');

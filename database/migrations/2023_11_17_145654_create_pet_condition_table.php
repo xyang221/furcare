@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pet_condition', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('date')->useCurrent();
             $table->string('eating')->nullable();
             $table->string('drinking')->nullable();
             $table->string('urinated')->nullable();

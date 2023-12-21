@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vaccination_logs', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('date')->useCurrent();
             $table->float('weight');
             $table->string('description')->nullable();
             $table->string('administered');

@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctors', function (Blueprint $table) {
-            $table->id();
-            $table->string('fullname');
-            $table->timestamps();
+        Schema::table('vaccination_logs', function (Blueprint $table) {
+            $table->timestamp('date')->useCurrent()->after('id');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctors');
+        Schema::table('vaccination_logs', function (Blueprint $table) {
+            //
+        });
     }
 };

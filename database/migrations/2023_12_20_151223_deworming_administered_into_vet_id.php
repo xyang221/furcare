@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('deworming_logs', function (Blueprint $table) {
             $table->dropColumn('administered');
             $table->unsignedBigInteger('vet_id')->after('pet_id');
-            $table->foreign('vet_id')->references('id')->on('doctors');
+            $table->foreign('vet_id')->references('id')->on('veterinarians');
         });
     }
 

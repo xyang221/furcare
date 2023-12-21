@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('appointment', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->dateTime('date');
             $table->string('purpose');
             $table->string('status');
             $table->string('remarks')->nullable();

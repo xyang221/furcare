@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointment', function (Blueprint $table) {
-            $table->unsignedBigInteger('vet_id')->after('service_id');
-            $table->foreign('vet_id')->references('id')->on('veterinarians');
+        Schema::table('vaccination_logs', function (Blueprint $table) {
+            $table->dropColumn('date');
+            
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('appointment', function (Blueprint $table) {
-            //
+        Schema::table('vaccination_logs', function (Blueprint $table) {
+            
         });
     }
 };
