@@ -26,9 +26,9 @@ class StoreVaccinationLogRequest extends FormRequest
             'description' => 'nullable|string|max:255',
             'return' => 'required|date',
             'pet_id' => 'exists:pets,id',
-            'vet_id' => 'exists:doctors,id',
+            'vet_id' => 'exists:veterinarians,id',
             'services_availed_id' => 'exists:services_availed,id',
-            'va_againsts' => 'required|string'
+            'va_againsts' => 'nullable|string'
 
         ];
     }

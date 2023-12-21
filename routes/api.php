@@ -132,7 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
-    Route::apiResource('/doctors', DoctorController::class);
+    Route::apiResource('/vets', DoctorController::class);
 
     Route::get('/diagnosis', [DiagnosisController::class, 'index']);
     Route::post('/diagnosis/petowner/{id}/avail/{sid}', [DiagnosisController::class, 'store']);

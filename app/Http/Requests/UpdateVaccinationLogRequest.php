@@ -23,10 +23,10 @@ class UpdateVaccinationLogRequest extends FormRequest
     {
         return [
             'weight' => 'required|numeric',
-            'description' => 'required|string|max:55',
+            'description' => 'nullable|string|max:55',
             'return' => 'required|date',
-            'vet_id' => 'exists:doctors,id',
-            'va_againsts' => 'required|string'
+            'vet_id' => 'exists:veterinarians,id',
+            'va_againsts' => 'nullable|string'
         ];
     }
 }
