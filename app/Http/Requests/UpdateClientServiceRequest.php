@@ -24,9 +24,6 @@ class UpdateClientServiceRequest extends FormRequest
         return [
             'deposit'=>'required|numeric',
             'balance'=>'required|numeric',
-            // 'rendered_by' => 'string',
-            // 'petowner_id' => 'exists:petowners,id',
-            // 'service_id' => 'exists:services,id',
         ];
     }
 }
