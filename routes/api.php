@@ -30,6 +30,8 @@ use App\Http\Controllers\Api\PetConditionController;
 use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\Api\MedicationController;
 use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\Api\PDFController;
+use App\Http\Controllers\PDFController as ControllersPDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,6 +157,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
     Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
+
+    Route::get('/clientservice/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
 
     Route::apiResource('/clientservices', ClientServiceController::class);
     Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);
