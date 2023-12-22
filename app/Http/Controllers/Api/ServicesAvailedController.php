@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\ServicesAvailed;
 use App\Models\PetOwner;
-use App\Models\Pet;
 use App\Models\Service;
 use App\Models\ClientService;
 use App\Http\Controllers\Controller;
@@ -37,19 +36,29 @@ class ServicesAvailedController extends Controller
 
         if (!$clientService) {
 
-            $petowner = PetOwner::findOrFail($id);
-            $user = Auth::user();
-            $staff = $user->staff;
+            $clientServicePending = ClientService::where('petowner_id', $id)->where('status', "Pending")->first();
+            if ($clientServicePending) {
+                return response()->json(['message' => 'This client cannot avail services due to pending balance.'], 403);
+            } else {
+                $petowner = PetOwner::findOrFail($id);
+                $user = Auth::user();
+                $staff = $user->staff;
 
-            $newclientService = ClientService::create([
-                'petowner_id' => $petowner->id,
-                'deposit' => 0,
-                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
-                'rendered_by' => "ADMIN",
-                'status' => "To Pay",
-            ]);
+                if ($staff) {
+                    $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+                } else {
+                    $renderedby = "Admin";
+                }
 
-            $clientService = $newclientService;
+                $newclientService = ClientService::create([
+                    'petowner_id' => $petowner->id,
+                    'deposit' => 0,
+                    'rendered_by' => $renderedby,
+                    'status' => "To Pay",
+                ]);
+
+                $clientService = $newclientService;
+            }
         }
 
         $requestData = $request->validated();
@@ -57,8 +66,9 @@ class ServicesAvailedController extends Controller
         $requestData['client_service_id'] = $clientService->id;
         $requestData['service_id'] = $service->id;
         $requestData['status'] = "To Pay";
-        $servicesAvailed = ServicesAvailed::create($requestData);
-        return new ServicesAvailedResource($servicesAvailed, 201);
+        ServicesAvailed::create($requestData);
+        return response()->json(['message' => 'Service availed was successfully saved.'], 201);
+
     }
 
     /**
@@ -101,7 +111,7 @@ class ServicesAvailedController extends Controller
 
     public function showByPetownerChargeSlip($id)
     {
-        $petowner = ClientService::where('petowner_id', $id)->where('status', "To Pay")->pluck('id');
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
         $status = 'Completed';
         $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
             ->where('status', $status)
