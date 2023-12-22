@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdmissionRequest;
 use App\Http\Requests\UpdateAdmissionRequest;
 use App\Http\Resources\AdmissionResource;
+use App\Models\ClientService;
 
 class AdmissionController extends Controller
 {
@@ -29,10 +30,11 @@ class AdmissionController extends Controller
      */
     public function store(StoreAdmissionRequest $request, $id)
     {
-        $pet = Admission::findOrFail($id);
+        $clientService = ClientService::where('petowner_id', $id)->first();
+
         $data = $request->validated(); //get the data
 
-        $data['pet_id'] = $id;
+        $data['client_service_id'] = $clientService->id;
         $admission = Admission::create($data); //create
         return new AdmissionResource($admission, 201);
     }
@@ -44,6 +46,17 @@ class AdmissionController extends Controller
     {
         return new AdmissionResource($admission);
         
+    }
+
+    public function getClientAdmissions($id)
+    {
+        $clientService = ClientService::where('petowner_id', $id)->first();
+        $admissions = Admission::where('client_service_id', $clientService->id)->get();
+
+        if ($admissions->isEmpty()) {
+            return response()->json(['message' => 'No admission records found in this pet.'], 404);
+        }
+        return AdmissionResource::collection($admissions);
     }
 
     public function getPetAdmissions($id)
