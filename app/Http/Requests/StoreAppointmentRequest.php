@@ -27,7 +27,8 @@ class StoreAppointmentRequest extends FormRequest
             'status' => 'in:Completed,No Show,Rescheduled,Pending,Cancelled,Confirmed', // Use 'in' rule for specific values
             'remarks' => 'string',
             'petowner_id' => 'exists:petowners,id',
-            'service_id' => 'exists:services,id',
+            'services' => 'required|array',
+            'services.*' => 'exists:services,id',
             'vet_id' => 'exists:veterinarians,id',
         ];
     }
