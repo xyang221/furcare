@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientServiceRequest;
 use App\Http\Requests\UpdateClientServiceRequest;
 use App\Http\Resources\ClientServiceResource;
+use App\Http\Resources\ServicesAvailedResource;
+use App\Models\ServicesAvailed;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,6 +67,21 @@ class ClientServiceController extends Controller
         }
 
         return ClientServiceResource::collection($clientService);
+    }
+
+    public function showallServicesCompleted($id)
+    {
+        $clientService = ClientService::findOrFail($id);
+        $servicesAvailed = ServicesAvailed::where('client_service_id', $id)->orderBy('pet_id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed yet.'], Response::HTTP_NOT_FOUND);
+        }
+
+        return [
+            'data' => ServicesAvailedResource::collection($servicesAvailed),
+            'clientservice' => new ClientServiceResource($clientService),
+        ];
     }
 
     /**

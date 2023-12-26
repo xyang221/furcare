@@ -24,16 +24,12 @@ class PDFController extends Controller
 
         $html = $this->generateHTML(ServicesAvailedResource::collection($servicesAvailed), $clientService);
 
-        // Create a DOMPDF instance
         $dompdf = new Dompdf();
 
-        // Load HTML content
         $dompdf->loadHtml($html);
 
-        // (Optional) Set options (e.g., paper size, orientation)
         $dompdf->setPaper('A4', 'portrait');
 
-        // Render the HTML as PDF
         $dompdf->render();
 
         // Return the generated PDF as a response
@@ -57,8 +53,12 @@ class PDFController extends Controller
                     margin-left: 0.25in;
                 }
 
+                .container {
+                    display: flex;
+                }
+
                 table {
-                    width: 40%;
+                    width: 50%;
                     border-collapse: collapse;
                     font-size: 12px;
                 }
@@ -70,29 +70,41 @@ class PDFController extends Controller
                     text-align: left;
                 }
 
-                th {
-                    background-color: #f2f2f2;
+                .flexrow {
+                    width: 50%;
+                    padding-bottom: 10px;
+                    padding-top: 10px;
                 }
 
-                .flexrow {
-                    display: flex;
-                    flex-direction: row;
-                    padding-bottom: 5px;
-                    justify-content: space-between;
+                span {
+                    padding-top: 50px;
                 }
 
                 .total {
                     column-span: 5;
                     text-align: right;
                 }
+
+                h2 {
+                    margin: 5px;
+                    margin-left: 100px;
+                }
+
+                h3 {
+                    margin: 5px;
+                    margin-left: 130px;
+                }
             </style>
         </head>
 
-        <body>
+        <body class="container">
+            <h2>FurCare Clinic</h2>
             <h3>Charge Slip</h3>
-            <span>Client: <?= $clientService->petowner->firstname ?> <?= $clientService->petowner->lastname ?></span>
-            <br />
-            <span>Date: <?= $clientService->date ?></span>
+            <div class="flexrow">
+                <strong>Client:</strong> <span><?= $clientService->petowner->firstname ?> <?= $clientService->petowner->lastname ?></span>
+                <br>
+                <strong>Date:</strong> <span><?= $clientService->date ?></span>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -106,7 +118,7 @@ class PDFController extends Controller
                 </thead>
                 <tbody>
                     <?php
-                    $totalCost = 0; // Initialize total cost
+                    $totalCost = 0;
                     foreach ($servicesAvailed as $service) :
                         $subtotal = $service->quantity * $service->unit_price; // Calculate subtotal for each service
                         $totalCost += $subtotal; // Accumulate subtotal to get the total cost
@@ -142,7 +154,9 @@ class PDFController extends Controller
 
                 </tbody>
             </table>
-
+            <div class="flexrow">
+                <strong>Rendered by:</strong> <span><?= $clientService->rendered_by ?></span>
+            </div>
         </body>
 
         </html>

@@ -164,6 +164,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);
     Route::put('/clientservices/{id}', [ClientServiceController::class, 'update']);
     Route::get('/clientservices/petowner/{id}/all', [ClientServiceController::class, 'showall']);
+    Route::get('/clientservices/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
     Route::post('/clientservices/petowner/{id}', [ClientServiceController::class, 'store']);
 
     Route::apiResource('/deworminglogs', DewormingLogController::class);
