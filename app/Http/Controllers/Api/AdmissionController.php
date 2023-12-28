@@ -8,6 +8,8 @@ use App\Http\Requests\StoreAdmissionRequest;
 use App\Http\Requests\UpdateAdmissionRequest;
 use App\Http\Resources\AdmissionResource;
 use App\Models\ClientService;
+use App\Models\Service;
+use App\Models\ServicesAvailed;
 
 class AdmissionController extends Controller
 {
@@ -21,7 +23,7 @@ class AdmissionController extends Controller
         if ($admissions->isEmpty()) {
             return response()->json(['message' => 'No pet admission records found.'], 404);
         }
-        
+
         return AdmissionResource::collection($admissions);
     }
 
@@ -45,7 +47,26 @@ class AdmissionController extends Controller
     public function show(Admission $admission)
     {
         return new AdmissionResource($admission);
-        
+    }
+
+    public function showPetownerTreatments($id, $sid)
+    {
+        $service = Service::findOrFail($sid);
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+
+        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+            ->where('service_id', $service->id)
+            ->pluck('id');
+
+        $admission = Admission::whereIn('services_availed_id', $servicesAvailed)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($admission->isEmpty()) {
+            return response()->json(['message' => 'No list of pet admissions found.'], 404);
+        }
+
+        return AdmissionResource::collection($admission);
     }
 
     public function getClientAdmissions($id)
@@ -54,14 +75,14 @@ class AdmissionController extends Controller
         $admissions = Admission::where('client_service_id', $clientService->id)->get();
 
         if ($admissions->isEmpty()) {
-            return response()->json(['message' => 'No admission records found in this pet.'], 404);
+            return response()->json(['message' => 'No admission records found in this client.'], 404);
         }
         return AdmissionResource::collection($admissions);
     }
 
     public function getPetAdmissions($id)
     {
-        
+
         $admissions = Admission::where('pet_id', $id)->get();
 
         if ($admissions->isEmpty()) {

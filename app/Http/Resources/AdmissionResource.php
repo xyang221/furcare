@@ -23,9 +23,11 @@ class AdmissionResource extends JsonResource
 
             'pet_id' => $this->pet_id,
             'treatment_id' => $this->treatment_id,
+            'services_availed_id' => $this->services_availed_id,
 
-            // 'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
-            // 'service' => new ServiceResource($this->whenLoaded('service')),
+            'pet' => new PetResource($this->whenLoaded('pet')),
+            'treatment' => new TreatmentResource($this->whenLoaded('treatment')),
+            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];
     }

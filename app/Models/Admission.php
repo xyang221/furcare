@@ -8,18 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admission extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'admission';
 
-    protected $fillable = ['date_admission', 'date_released', 'treatment_cost', 'pet_id', 'treatment_id'];
+    protected $fillable = ['date_admission', 'date_released', 'treatment_cost', 'pet_id', 'treatment_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
 
-    // protected $with = ['pet'];
+    protected $with = ['pet', 'treatment', 'servicesavailed'];
 
-    // public function pet()
-    // {
-    //     return $this->belongsTo(Pet::class, 'pet_id','id');
-    // }
+    public function pet()
+    {
+        return $this->belongsTo(Pet::class, 'pet_id', 'id');
+    }
+    public function treatment()
+    {
+        return $this->belongsTo(Treatment::class, 'treatment_id', 'id');
+    }
+    public function servicesavailed()
+    {
+        return $this->belongsTo(ServicesAvailed::class, 'services_availed_id', 'id');
+    }
 }

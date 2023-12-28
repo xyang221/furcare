@@ -24,11 +24,12 @@ class StoreAdmissionRequest extends FormRequest
         return [
             'date_admission' => 'required|date',
             'date_released' => 'required|date',
-            'treatment_cost' => 'required|numeric|max:55',
+            'treatment_cost' => 'required|numeric',
             'purpose' => 'required|string|max:255',
 
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',
+            'services_availed_id' => 'exists:services_availed,id',
 
         ];
     }
