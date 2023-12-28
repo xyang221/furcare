@@ -20,7 +20,7 @@ class MedicationResource extends JsonResource
             'id'=> $this->id,
             'date' => $this->date,
             'description' => $this->description,
-            'quantity' => $this->drinking,
+            'quantity' => $this->quantity,
             'dosage' => $this->dosage,
 
             'deleted_at' => $this->deleted_at,

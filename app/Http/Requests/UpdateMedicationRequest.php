@@ -22,9 +22,9 @@ class UpdateMedicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'required|string|max:255',
-            'quantity' => 'required|numeric|max:255',
-            'dosage' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'quantity' => 'required|numeric',
+            'dosage' => 'required|string',
         ];
     }
 }

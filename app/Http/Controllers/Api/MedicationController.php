@@ -6,8 +6,12 @@ use App\Models\Medication;
 use App\Models\Treatment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMedicationRequest;
+use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateMedicationRequest;
 use App\Http\Resources\MedicationResource;
+use App\Models\ClientService;
+use App\Models\PetOwner;
+use App\Models\ServicesAvailed;
 
 class MedicationController extends Controller
 {
@@ -21,22 +25,37 @@ class MedicationController extends Controller
         if ($medications->isEmpty()) {
             return response()->json(['message' => 'No pet medication records found.'], 404);
         }
-        
+
         return MedicationResource::collection($medications);
-       
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicationRequest $request, $tid)
+    public function store(StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
     {
         $treatment = Treatment::findOrFail($tid);
-        $data = $request->validated(); //get the data
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
 
-        $data['treatment_id'] = $treatment->id; // Assign treatment ID
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => 19,
+            'unit_price' => $sarequest->input('unit_price'),
+            'quantity' => $sarequest->input('quantity'),
+            'client_service_id' => $clientService->id,
+            'pet_id' => $treatment->pet_id,
+            'status' => "To Pay",
+        ]);
 
-        $medication = Medication::create($data); //create
+        $medication = Medication::create([
+            'quantity' => $servicesAvailed->quantity,
+            'dosage' => $request->input('dosage'),
+            'description' => $request->input('description'),
+            'treatment_id' => $treatment->id,
+            'pet_id' => $treatment->pet_id,
+            'medicine_id' => $request->input('medicine_id'),
+            'services_availed_id' => $servicesAvailed->id,
+        ]);
+
         return new MedicationResource($medication, 201);
     }
 
@@ -72,12 +91,12 @@ class MedicationController extends Controller
 
     public function archivelist()
     {
-        $medications = Medication::onlyTrashed()->orderBy('id','desc')->get();
+        $medications = Medication::onlyTrashed()->orderBy('id', 'desc')->get();
 
         if ($medications->isEmpty()) {
             return response()->json(['message' => 'No pet medication records was archived.'], 404);
         }
-        
+
         return MedicationResource::collection($medications);
     }
 
@@ -93,6 +112,5 @@ class MedicationController extends Controller
         $medication = Medication::withTrashed()->findOrFail($id);
         $medication->forceDelete();
         return response("This pet medication record was Permanently Deleted", 204);
-
     }
 }

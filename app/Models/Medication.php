@@ -14,7 +14,7 @@ class Medication extends Model
 
     protected $table = 'medication';
 
-    protected $fillable = ['date', 'description','quantity', 'dosage', 'medicine_id', 'treatment_id'];
+    protected $fillable = ['date', 'description','quantity', 'dosage', 'medicine_id', 'treatment_id','services_availed_id'];
 
     protected $dates = ['deleted_at'];
 
@@ -28,5 +28,10 @@ class Medication extends Model
     public function treatment()
     {
         return $this->belongsTo(Treatment::class, 'treatment_id','id');
+    }
+
+    public function servicesavailed()
+    {
+        return $this->belongsTo(ServicesAvailed::class, 'services_availed_id','id');
     }
 }
