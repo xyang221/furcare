@@ -203,10 +203,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/treatments', [TreatmentController::class, 'index']);
     Route::post('/treatments/petowner/{poid}/service/{sid}', [TreatmentController::class, 'store']);
-    Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'getCurrentTreatment']);
+    Route::get('/treatments/{id}', [TreatmentController::class, 'show']);
+    Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'showPetownerTreatments']);
     Route::get('/treatments/pet/{id}', [TreatmentController::class, 'getPetTreatments']);
     Route::get('/treatments/{id}/petconditions', [TreatmentController::class, 'getTreatmentPetConditions']);
     Route::get('/treatments/{id}/medications', [TreatmentController::class, 'getTreatmentMedications']);
+    Route::put('/treatments/{id}', [TreatmentController::class, 'update']);
     Route::get('/archives/treatments', [TreatmentController::class, 'archivelist']);
     Route::put('/archives/treatments/{id}', [TreatmentController::class, 'restore']);
     Route::delete('/archives/treatments/{id}', [TreatmentController::class, 'forcedelete']);
@@ -234,7 +236,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/admissions', [AdmissionController::class, 'index']);
     Route::post('/admissions/petowner/{poid}/service/{sid}', [AdmissionController::class, 'store']);
-    Route::get('/admissions/petowner/{id}/service/{sid}', [AdmissionController::class, 'getCurrentTreatment']);
+    Route::get('/admissions/petowner/{id}/service/{sid}', [AdmissionController::class, 'showPetownerTreatments']); 
     Route::get('/admissions/petowner/{id}', [AdmissionController::class, 'getClientAdmissions']);
     Route::get('/admissions/pet/{id}', [AdmissionController::class, 'getPetAdmissions']);
     Route::get('/archives/admissions', [AdmissionController::class, 'archivelist']);

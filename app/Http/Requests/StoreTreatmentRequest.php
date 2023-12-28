@@ -22,20 +22,20 @@ class StoreTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'diagnosis' => 'string|max:255',
-            'body_weight'=>'numeric|max:55',
-            'heart_rate'=>'numeric|max:55',
-            'mucous_membranes'=>'numeric|max:55',
-            'pr_prealbumin'=>'numeric|max:55',
-            'temperature'=>'numeric|max:55',
-            'respiration_rate'=>'numeric|max:55',
-            'caspillar_refill_time'=>'numeric|max:55',
-            'body_condition_score'=>'numeric|max:55',
-            'fluid_rate'=>'numeric|max:55',
-            'comments' => 'string|max:255',
-            
+            'day' => 'required|numeric',
+            'diagnosis' => 'required|string',
+            'body_weight' => 'required|numeric',
+            'heart_rate' => 'numeric',
+            'mucous_membranes' => 'numeric',
+            'pr_prealbumin' => 'numeric',
+            'temperature' => 'numeric',
+            'respiration_rate' => 'numeric',
+            'caspillar_refill_time' => 'numeric',
+            'body_condition_score' => 'numeric',
+            'fluid_rate' => 'numeric',
+            'comments' => 'string',
+
             'pet_id' => 'exists:pets,id',
-            'services_availed_id' => 'exists:services_availed,id',
 
         ];
     }

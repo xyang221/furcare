@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\Treatment;
 use App\Models\PetCondition;
 use App\Models\Medication;
-use App\Models\Pet;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\StoreTreatmentRequest;
@@ -13,12 +12,12 @@ use App\Http\Requests\UpdateTreatmentRequest;
 use App\Http\Resources\TreatmentResource;
 use App\Http\Resources\PetConditionResource;
 use App\Http\Resources\MedicationResource;
+use App\Models\Admission;
 use App\Models\ClientService;
+use App\Models\PetOwner;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
-use Carbon\Carbon;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class TreatmentController extends Controller
 {
@@ -44,23 +43,31 @@ class TreatmentController extends Controller
         $service = Service::findOrFail($sid);
         $clientService = ClientService::where('petowner_id', $poid)->first();
 
-        $servicesAvailed = ServicesAvailed::create([
-            'service_id' => $service->id,
-            'unit_price' => $sarequest->input('unit_price'),
-            'client_service_id' => $clientService->id,
-            'pet_id' => $sarequest->input('pet_id'),
-            'status' => "To Pay",
-        ]);
+        if (!$clientService) {
 
-        // Check if the instance was created successfully
-        if ($servicesAvailed) {
-            return response()->json(['message' => 'ServicesAvailed created successfully'], 200);
-        } else {
-            return response()->json(['message' => 'Failed to create ServicesAvailed'], 500);
+            $petowner = PetOwner::findOrFail($poid);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            if ($staff) {
+                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+            } else {
+                $renderedby = "Admin";
+            }
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                'rendered_by' => $renderedby,
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
         }
 
         $treatment = Treatment::create([
-            'pet_id' => $servicesAvailed->pet_id,
+            'day' => $sarequest->input('day'),
+            'pet_id' => $sarequest->input('pet_id'),
             'diagnosis' => $request->input('diagnosis'),
             'body_weight' => $request->input('body_weight'),
             'heart_rate' => $request->input('heart_rate'),
@@ -72,6 +79,20 @@ class TreatmentController extends Controller
             'body_condition_score' => $request->input('body_condition_score'),
             'fluid_rate' => $request->input('fluid_rate'),
             'comments' => $request->input('comments'),
+        ]);
+
+        $servicesAvailed = ServicesAvailed::create([
+            'service_id' => $service->id,
+            'unit_price' => $sarequest->input('unit_price'),
+            'client_service_id' => $clientService->id,
+            'pet_id' => $treatment->pet_id,
+            'status' => "To Pay",
+        ]);
+
+        Admission::create([
+            'treatment_cost' => $servicesAvailed->unit_price,
+            'pet_id' => $treatment->pet_id,
+            'treatment_id' => $treatment->id,
             'services_availed_id' => $servicesAvailed->id,
         ]);
 
@@ -81,8 +102,9 @@ class TreatmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Treatment $treatment)
+    public function show(Treatment $treatment, $id)
     {
+        $treatment = Treatment::findOrFail($id);
         return new TreatmentResource($treatment);
     }
 
@@ -104,6 +126,8 @@ class TreatmentController extends Controller
 
         return new TreatmentResource($treatment);
     }
+
+
 
     public function getPetTreatments($id)
     {
@@ -141,8 +165,9 @@ class TreatmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTreatmentRequest $request, Treatment $treatment)
+    public function update(UpdateTreatmentRequest $request, Treatment $treatment, $id)
     {
+        $treatment = Treatment::findOrFail($id);
         $data = $request->validated();
         $treatment->update($data);
 

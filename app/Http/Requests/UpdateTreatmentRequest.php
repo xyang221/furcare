@@ -22,17 +22,17 @@ class UpdateTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'diagnosis' => 'required|string|max:255',
-            'body_weight'=>'required|numeric|max:55',
-            'heart_rate'=>'required|numeric|max:55',
-            'mucous_membranes'=>'required|numeric|max:55',
-            'pr_prealbumin'=>'required|numeric|max:55',
-            'temperature'=>'required|numeric|max:55',
-            'respiration_rate'=>'required|numeric|max:55',
-            'caspillar_refill_time'=>'required|numeric|max:55',
-            'body_condition_score'=>'required|numeric|max:55',
-            'fluid_rate'=>'required|numeric|max:55',
-            'comments' => 'required|string|max:255',
+            'diagnosis' => 'required|string',
+            'body_weight' => 'required|numeric',
+            'heart_rate' => 'numeric',
+            'mucous_membranes' => 'numeric',
+            'pr_prealbumin' => 'numeric',
+            'temperature' => 'numeric',
+            'respiration_rate' => 'numeric',
+            'caspillar_refill_time' => 'numeric',
+            'body_condition_score' => 'numeric',
+            'fluid_rate' => 'numeric',
+            'comments' => 'string',
         ];
     }
 }
