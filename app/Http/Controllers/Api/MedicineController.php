@@ -43,6 +43,28 @@ class MedicineController extends Controller
         return new MedicineResource($medicine);
     }
 
+    public function getMedicines($id)
+    {
+        try {
+            $sanitized_name = trim($id); // Trim whitespace from the input
+
+            // Perform search
+            $medicines = Medicine::where('medcat_id', 'like', "%{$sanitized_name}%")
+                ->get();
+
+            // Check if any results are found
+            if ($medicines->isEmpty()) {
+                return response()->json(['message' => 'No medicines found.'], 404);
+            }
+
+            // Return the resource collection
+            return MedicineResource::collection($medicines);
+        } catch (\Exception $e) {
+            // Handle exceptions or errors that may occur during the query
+            return response()->json(['message' => 'An error occurred while searching for pets.'], 500);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -63,15 +85,15 @@ class MedicineController extends Controller
         $medicine->delete();
         return response()->json(['message' => 'This Medicine was archived.'], 204);
     }
-    
+
     public function archivelist()
     {
-        $medicines = Medicine::onlyTrashed()->orderBy('id','desc')->get();
+        $medicines = Medicine::onlyTrashed()->orderBy('id', 'desc')->get();
 
         if ($medicines->isEmpty()) {
             return response()->json(['message' => 'No Medicines was archived found.'], 404);
         }
-        
+
         return MedicineResource::collection($medicines);
     }
 

@@ -22,8 +22,8 @@ class UpdateMedicineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string|max:55',
-            'price'=>'required|numeric|max:55',
+            'name'=>'required|string',
+            'price'=>'required|numeric',
         ];
     }
 }
