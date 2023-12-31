@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\MedicineCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,10 +21,10 @@ class MedicineResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
-            
+            'medcat_id' => $this->medcat_id,
             'deleted_at' => $this->deleted_at,
 
-       
+            'category' => new MedicineCategoryResource($this->whenLoaded('category')),
         ];
     }
 }

@@ -24,6 +24,9 @@ class StoreMedicineRequest extends FormRequest
         return [
             'name'=>'required|string',
             'price'=>'required|numeric',
+
+            'medcat_id' => 'exists:,medicine_category,id',
+
         ];
     }
 }

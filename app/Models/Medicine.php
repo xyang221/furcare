@@ -13,15 +13,14 @@ class Medicine extends Model
 
     protected $table = 'medicines';
 
-    protected $fillable = ['name', 'price'];
-    
+    protected $fillable = ['name', 'price', 'medcat_id'];
+
     protected $dates = ['deleted_at'];
 
+    protected $with = ['category'];
 
-    // protected $with = ['treatment'];
-
-    public function treatment()
+    public function category()
     {
-        return $this->hasMany(Treatment::class);
+        return $this->belongsTo(MedicineCategory::class, 'medcat_id', 'id');
     }
 }
