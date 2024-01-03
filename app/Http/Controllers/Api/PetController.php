@@ -28,6 +28,15 @@ class PetController extends Controller
         return PetResource::collection($pets);
     }
 
+    public function countPets()
+    {
+
+        $pets = Pet::count();
+
+        return response()->json(['data' => $pets]);
+    }
+
+
     public function searchPet($name)
     {
         try {
@@ -82,34 +91,34 @@ class PetController extends Controller
         if (!$request->hasFile('photo')) {
             return response()->json(["message" => "Please select an image"], 400);
         }
-    
+
         // $file = $request->file('photo');
         $file = $validatedData['photo'];
         // Ensure the file is valid
         if (!$file->isValid()) {
             return response()->json(["message" => "Invalid file"], 400);
         }
-    
+
         $name = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->move('storage/pet-photos/', $name);
-    
+
         $pet = Pet::findOrFail($id); // Adjust this according to your model and input data
-    
+
         // Delete the previous image if it exists
         if ($pet->photo) {
             $previousImagePath = public_path($pet->photo);
-    
+
             if (File::exists($previousImagePath)) {
                 File::delete($previousImagePath);
             }
         }
-    
+
         // Update the pet's photo field with the new image path
         $pet->photo = $filePath;
-        
+
         // Save the updated pet details
         $pet->save();
-    
+
         return response()->json(['success' => 'Image uploaded successfully']);
     }
 

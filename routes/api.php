@@ -98,6 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/pets', PetController::class);
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
+    Route::get('/pets-count', [PetController::class, 'countPets']);
 
     Route::get('/species/{id}', [SpecieController::class, 'show']);
     Route::put('/species/{id}', [SpecieController::class, 'update']);
