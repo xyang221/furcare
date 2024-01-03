@@ -91,7 +91,7 @@ class AppointmentController extends Controller
     //get all the appointments scheduled even if wala pa na occur ana nga day 
     public function getConfirmed()
     {
-        $appointments = Appointment::where('status', 'Confirmed')->get();
+        $appointments = Appointment::where('status', 'Confirmed')->orderBy('date', 'desc')->get();
 
         if ($appointments->isEmpty()) {
             return response()->json(['message' => 'No scheduled appointments found.'], Response::HTTP_NOT_FOUND);
@@ -118,9 +118,29 @@ class AppointmentController extends Controller
         return new AppointmentResource($appointment);
     }
 
+    public function noshow($id)
+    {
+        $appointment = Appointment::find($id);
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($appointment->status !== "Confirmed") {
+            return response()->json(['message' => 'Appointment is not scheduled.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $appointment->update(['status' => 'No Show']);
+
+        return new AppointmentResource($appointment);
+    }
+
     public function getCancelled()
     {
-        $appointments = Appointment::where('status', 'Cancelled')->where('status', 'No Show')->orderBy('date', 'desc')->get();
+        $appointments = Appointment::whereIn('status', ['Cancelled', 'No Show'])
+            ->orderBy('date', 'desc')
+            ->get();
+
 
         if ($appointments->isEmpty()) {
             return response()->json(['message' => 'No cancelled appointments found.'], Response::HTTP_NOT_FOUND);
@@ -161,38 +181,16 @@ class AppointmentController extends Controller
         return AppointmentResource::collection($appointments);
     }
 
-    public function noshow($id)
-    {
-        $appointment = Appointment::find($id);
-
-        if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
-        }
-
-        if ($appointment->status !== "Confirmed") {
-            return response()->json(['message' => 'Appointment is not scheduled.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $appointment->update(['status' => 'No Show']);
-
-        return new AppointmentResource($appointment);
-    }
-
-
     //get the appointments within that day
-    public function getbyDate()
+    public function getCurrent()
     {
-        // Get the current date
-        $today = Carbon::now()->toDateString();
-
-        // Find appointments with the specified date
-        $appointments = Appointment::where('status', 'Confirmed')
-            ->whereDate('date', $today)
+        $appointments = Appointment::whereIn('status', ['Confirmed', 'Pending'])
+            ->orderBy('date')
             ->get();
 
         if ($appointments->isEmpty()) {
             return response([
-                'message' => 'No appointments confirmed for today.'
+                'message' => 'No pending and confirmed appointments found.'
             ], 404);
         }
 
@@ -216,9 +214,16 @@ class AppointmentController extends Controller
      */
     public function update(UpdateAppointmentRequest $request, Appointment $appointment, $id)
     {
+        $user = Auth::user();
 
         $appointment = Appointment::findOrFail($id);
         $data = $request->validated();
+
+        if ($user->role_id === 1 && 2) {
+            $data['status'] = "Confirmed";
+        } else {
+            $data['status'] = "Pending";
+        }
 
         $appointment->update($data);
         return new AppointmentResource($appointment);
