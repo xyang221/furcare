@@ -85,6 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/petowners/{id}/restore', [PetOwnerController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [PetOwnerController::class, 'destroy']);
 
+    Route::get('/petowners-count', [PetOwnerController::class, 'countPetowners']);
+
     Route::get('/pets-search/{name}', [PetController::class, 'searchPet']);
     Route::post('/petowners/{id}/addpet', [PetController::class, 'store']);
     Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);

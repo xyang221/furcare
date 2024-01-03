@@ -35,6 +35,14 @@ class PetOwnerController extends Controller
         return PetOwnerResource::collection($petOwners);
     }
 
+    public function countPetowners()
+    {
+
+        $petOwners = PetOwner::count();
+
+        return response()->json(['data' => $petOwners]);
+    }
+
     public function searchPetowner($name)
     {
         try {
