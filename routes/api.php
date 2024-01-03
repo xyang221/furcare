@@ -209,6 +209,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/archives/treatments/{id}', [TreatmentController::class, 'restore']);
     Route::delete('/archives/treatments/{id}', [TreatmentController::class, 'forcedelete']);
 
+    Route::get('/treatments/{id}/generatePDF', [PDFController::class, 'generatePDFTreatment']);
+
     Route::get('/petconditions', [PetConditionController::class, 'index']);
     Route::post('/petconditions/treatment/{id}', [PetConditionController::class, 'store']);
     Route::get('/petconditions/{id}', [PetConditionController::class, 'show']);
