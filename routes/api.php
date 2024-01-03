@@ -20,10 +20,8 @@ use App\Http\Controllers\Api\ServicesAvailedController;
 use App\Http\Controllers\Api\DewormingLogController;
 use App\Http\Controllers\Api\VaccinationLogController;
 use App\Http\Controllers\Api\AgainstController;
-use App\Http\Controllers\Api\VaccinationAgainstController;
 use App\Http\Controllers\Api\DiagnosisController;
 use App\Http\Controllers\Api\DoctorController;
-use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TestResultController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\PetConditionController;
@@ -32,7 +30,6 @@ use App\Http\Controllers\Api\MedicationController;
 use App\Http\Controllers\Api\MedicineCategoryController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\PDFController;
-use App\Http\Controllers\PDFController as ControllersPDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,10 +95,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [PetController::class, 'destroy']);
 
     Route::apiResource('/pets', PetController::class);
+    Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
 
-    // Route::post('/pet/upload-image',[PetController::class, 'uploadImage']);
-
-    Route::apiResource('/species', SpecieController::class);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
     Route::put('/species/{id}', [SpecieController::class, 'update']);
 
@@ -129,7 +124,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/appointments/{id}/completed', [AppointmentController::class, 'completed']);
     Route::get('/appointments/completed', [AppointmentController::class, 'getCompleted']);
     Route::put('/appointments/{id}/noshow', [AppointmentController::class, 'noshow']);
-    Route::get('/appointments/bydate', [AppointmentController::class, 'getbyDate']);
+    Route::get('/appointments/current', [AppointmentController::class, 'getCurrent']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
     Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
@@ -232,14 +227,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/medications', [MedicationController::class, 'index']);
     Route::post('/medications/petowner/{id}/treatment/{tid}', [MedicationController::class, 'store']);
     Route::put('/medications/{id}', [MedicationController::class, 'update']);
-    Route::post('/medications/treatment/{id}', [MedicationController::class, 'store']);
+    Route::get('/medications/{id}', [MedicationController::class, 'show']);
     Route::get('/archives/medications', [MedicationController::class, 'archivelist']);
     Route::put('/archives/medications/{id}', [MedicationController::class, 'restore']);
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
 
     Route::get('/admissions', [AdmissionController::class, 'index']);
     Route::post('/admissions/petowner/{poid}/service/{sid}', [AdmissionController::class, 'store']);
-    Route::get('/admissions/petowner/{id}/service/{sid}', [AdmissionController::class, 'showPetownerTreatments']); 
+    Route::get('/admissions/petowner/{id}/service/{sid}', [AdmissionController::class, 'showPetownerTreatments']);
     Route::get('/admissions/petowner/{id}', [AdmissionController::class, 'getClientAdmissions']);
     Route::get('/admissions/pet/{id}', [AdmissionController::class, 'getPetAdmissions']);
     Route::get('/archives/admissions', [AdmissionController::class, 'archivelist']);
@@ -254,6 +249,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::apiResource('/zipcodes', ZipcodeController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/mobile')->group(function () {
@@ -277,7 +273,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
         Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+        Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+
+        Route::get('/vaccinationlogs/pet/{id}', [VaccinationLogController::class, 'getbyPet']);
+        Route::get('/vaccinationlogs/{id}', [VaccinationLogController::class, 'show']);
+
+        Route::get('/deworminglogs/pet/{id}', [DewormingLogController::class, 'getbyPet']);
+        Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     });
 });
-
-Route::apiResource('/zipcodes', ZipcodeController::class);
