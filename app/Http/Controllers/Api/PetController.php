@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Pet;
 use App\Models\PetOwner;
-use App\Models\Breed;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
 use App\Http\Resources\PetResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 
 class PetController extends Controller
 {
@@ -73,10 +72,10 @@ class PetController extends Controller
         return new PetResource($pet, 201);
     }
 
-    public function uploadImage(StorePetRequest $request, $id)
+    public function uploadImage(Request $request, $id)
     {
         // Validate request data
-        $request->validate([
+        $validatedData = $request->validate([
             'photo' => 'required|file|mimes:jpeg,png,gif,svg|max:2048', // Adjust the max file size as needed
         ]);
 
@@ -84,8 +83,8 @@ class PetController extends Controller
             return response()->json(["message" => "Please select an image"], 400);
         }
     
-        $file = $request->file('photo');
-    
+        // $file = $request->file('photo');
+        $file = $validatedData['photo'];
         // Ensure the file is valid
         if (!$file->isValid()) {
             return response()->json(["message" => "Invalid file"], 400);
