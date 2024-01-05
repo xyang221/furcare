@@ -36,7 +36,7 @@ class AdmissionController extends Controller
 
         $data = $request->validated(); //get the data
 
-        $data['client_service_id'] = $clientService->id;
+        $data['client_deposit_id'] = $clientService->id;
         $admission = Admission::create($data); //create
         return new AdmissionResource($admission, 201);
     }
@@ -54,7 +54,7 @@ class AdmissionController extends Controller
         $service = Service::findOrFail($sid);
         $petowner = ClientService::where('petowner_id', $id)->pluck('id');
 
-        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
             ->where('service_id', $service->id)
             ->pluck('id');
 
@@ -72,7 +72,7 @@ class AdmissionController extends Controller
     public function getClientAdmissions($id)
     {
         $clientService = ClientService::where('petowner_id', $id)->first();
-        $admissions = Admission::where('client_service_id', $clientService->id)->get();
+        $admissions = Admission::where('client_deposit_id', $clientService->id)->get();
 
         if ($admissions->isEmpty()) {
             return response()->json(['message' => 'No admission records found in this client.'], 404);

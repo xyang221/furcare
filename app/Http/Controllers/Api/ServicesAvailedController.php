@@ -63,7 +63,7 @@ class ServicesAvailedController extends Controller
 
         $requestData = $request->validated();
 
-        $requestData['client_service_id'] = $clientService->id;
+        $requestData['client_deposit_id'] = $clientService->id;
         $requestData['service_id'] = $service->id;
         $requestData['status'] = "To Pay";
         ServicesAvailed::create($requestData);
@@ -83,7 +83,7 @@ class ServicesAvailedController extends Controller
     {
         $service = Service::findOrFail($sid);
         $petowner = ClientService::where('petowner_id', $id)->pluck('id');
-        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
             ->where('service_id', $service->id)
             ->orderBy('id', 'desc')->get();
 
@@ -98,7 +98,7 @@ class ServicesAvailedController extends Controller
     {
         $status = 'To Pay';
         $petowner = ClientService::where('petowner_id', $id)->where('status', $status)->pluck('id');
-        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
             ->where('status', $status)
             ->orderBy('id', 'desc')->get();
 
@@ -113,7 +113,7 @@ class ServicesAvailedController extends Controller
     {
         $petowner = ClientService::where('petowner_id', $id)->pluck('id');
         $status = 'Completed';
-        $servicesAvailed = ServicesAvailed::whereIn('client_service_id', $petowner)
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
             ->where('status', $status)
             ->orderBy('pet_id', 'desc')->get();
 

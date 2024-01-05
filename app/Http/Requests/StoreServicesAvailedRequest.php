@@ -25,7 +25,7 @@ class StoreServicesAvailedRequest extends FormRequest
             'status' => 'in:To Pay,Completed',
             'service_id' => 'exists:services,id',
             'unit_price' => 'numeric',
-            'client_service_id' => 'exists:client_service,id',
+            'client_deposit_id' => 'exists:client_deposits,id',
             'pet_id' => 'exists:pets,id',
 
         ];

@@ -21,7 +21,7 @@ class PDFController extends Controller
     public function generatePDF($id)
     {
         $clientService = ClientService::findOrFail($id);
-        $servicesAvailed = ServicesAvailed::where('client_service_id', $clientService->id)
+        $servicesAvailed = ServicesAvailed::where('client_deposit_id', $clientService->id)
             ->orderBy('pet_id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {

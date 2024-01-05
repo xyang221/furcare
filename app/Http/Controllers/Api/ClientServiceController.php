@@ -30,23 +30,38 @@ class ClientServiceController extends Controller
     public function store(StoreClientServiceRequest $request, $id)
     {
         $petowner = PetOwner::find($id);
-        $data = $request->validated(); //get the data
 
-        $data['petowner_id'] = $petowner->id;
+        $verifyclientService = ClientService::where('petowner_id', $petowner->id)
+            ->where(function ($query) {
+                $query->where('status', 'To Pay')
+                    ->orWhere('status', 'Pending');
+            })
+            ->first();
 
-        $user = Auth::user();
-        $staff = $user->staff;
-
-        if ($staff) {
-            $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+        if ($verifyclientService) {
+            return response()->json(['message' => 'There is still on going treatment process.'], 403);
         } else {
-            $renderedby = "Admin";
-        }
 
-        $data['rendered_by'] = $renderedby;
-        $data['status'] = "To Pay";
-        $clientService = ClientService::create($data); //create user
-        return new ClientServiceResource($clientService, Response::HTTP_CREATED);
+            $data = $request->validated(); //get the data
+
+            $data['petowner_id'] = $petowner->id;
+
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            if ($staff) {
+                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+            } else {
+                $renderedby = "Admin";
+            }
+
+            $data['rendered_by'] = $renderedby;
+            $data['status'] = "To Pay";
+            ClientService::create($data);
+
+            // return response()->json(['message' => 'There is still on going treatment process.'], 403);
+
+        }
     }
 
     /**
@@ -72,7 +87,7 @@ class ClientServiceController extends Controller
     public function showallServicesCompleted($id)
     {
         $clientService = ClientService::findOrFail($id);
-        $servicesAvailed = ServicesAvailed::where('client_service_id', $id)->orderBy('pet_id', 'desc')->get();
+        $servicesAvailed = ServicesAvailed::where('client_deposit_id', $id)->orderBy('pet_id', 'desc')->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed yet.'], Response::HTTP_NOT_FOUND);

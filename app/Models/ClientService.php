@@ -11,7 +11,7 @@ class ClientService extends Model
 {
     use HasFactory;
 
-    protected $table = 'client_service';
+    protected $table = 'client_deposits';
 
     protected $fillable = ['date', 'deposit','balance','rendered_by', 'petowner_id', 'status'];
 

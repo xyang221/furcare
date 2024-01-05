@@ -16,7 +16,7 @@ class ServicesAvailed extends Model
 
     protected $table = 'services_availed';
 
-    protected $fillable = ['status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_service_id', 'pet_id'];
+    protected $fillable = ['status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_deposit_id', 'pet_id'];
 
     protected $with = ['service','clientservice', 'pet'];
 
@@ -29,7 +29,7 @@ class ServicesAvailed extends Model
 
     public function clientservice()
     {
-        return $this->belongsTo(ClientService::class, 'client_service_id', 'id');
+        return $this->belongsTo(ClientService::class, 'client_deposit_id', 'id');
     }
 
     public function pet()

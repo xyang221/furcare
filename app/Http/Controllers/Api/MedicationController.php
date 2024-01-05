@@ -41,7 +41,7 @@ class MedicationController extends Controller
             'service_id' => 19,
             'unit_price' => $sarequest->input('unit_price'),
             'quantity' => $sarequest->input('quantity'),
-            'client_service_id' => $clientService->id,
+            'client_deposit_id' => $clientService->id,
             'pet_id' => $treatment->pet_id,
             'status' => "To Pay",
         ]);

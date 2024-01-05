@@ -157,14 +157,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
 
-    Route::get('/clientservice/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
+    Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
 
-    Route::apiResource('/clientservices', ClientServiceController::class);
-    Route::get('/clientservices/petowner/{id}', [ClientServiceController::class, 'show']);
-    Route::put('/clientservices/{id}', [ClientServiceController::class, 'update']);
-    Route::get('/clientservices/petowner/{id}/all', [ClientServiceController::class, 'showall']);
-    Route::get('/clientservices/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
-    Route::post('/clientservices/petowner/{id}', [ClientServiceController::class, 'store']);
+    Route::apiResource('/clientdeposits', ClientServiceController::class);
+    Route::get('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'show']);
+    Route::put('/clientdeposits/{id}', [ClientServiceController::class, 'update']);
+    Route::get('/clientdeposits/petowner/{id}/all', [ClientServiceController::class, 'showall']);
+    Route::get('/clientdeposits/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
+    Route::post('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'store']);
 
     Route::apiResource('/deworminglogs', DewormingLogController::class);
     Route::post('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'store']);

@@ -24,7 +24,7 @@ class ServicesAvailedResource extends JsonResource
             'status' => $this->status,
 
             'service_id' => $this->service_id,
-            'client_service_id' => $this->client_service_id,
+            'client_deposit_id' => $this->client_deposit_id,
             'pet_id' => $this->pet_id,
 
             'service' => new ServiceResource($this->whenLoaded('service')),

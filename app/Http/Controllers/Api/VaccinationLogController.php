@@ -58,7 +58,7 @@ class VaccinationLogController extends Controller
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
-            'client_service_id' => $clientService->id,
+            'client_deposit_id' => $clientService->id,
             'pet_id' => $sarequest->input('pet_id'),
             'status' => "To Pay",
         ]);
@@ -102,7 +102,7 @@ class VaccinationLogController extends Controller
         $servicesAvailedIds = Service::findOrFail($sid);
         $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
 
-        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_service_id', $clientServiceIds)
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
             ->where('service_id', $servicesAvailedIds->id)
             ->pluck('id');
 
