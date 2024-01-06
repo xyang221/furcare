@@ -56,6 +56,13 @@ class PaymentRecordController extends Controller
         return PaymentRecordResource::collection($paymentRecords);
     }
 
+    public function showClientDepositPayment(PaymentRecord $paymentRecord, $id)
+    {
+        $clientdeposit = ClientService::findOrFail($id);
+        $paymentRecords = PaymentRecord::where('client_deposit_id', $clientdeposit->id)->first();
+        return new PaymentRecordResource($paymentRecords);
+    }
+
     /**
      * Update the specified resource in storage.
      */
