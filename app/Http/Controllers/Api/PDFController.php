@@ -63,12 +63,13 @@ class PDFController extends Controller
 
                 .container {
                     display: flex;
-                    width: 45%
+                    width: 45%;
                 }
 
                 table {
                     border-collapse: collapse;
                     font-size: 12px;
+                    width: 100%;
                 }
 
                 th,
