@@ -36,29 +36,24 @@ class ServicesAvailedController extends Controller
 
         if (!$clientService) {
 
-            $clientServicePending = ClientService::where('petowner_id', $id)->where('status', "Pending")->first();
-            if ($clientServicePending) {
-                return response()->json(['message' => 'This client cannot avail services due to pending balance.'], 403);
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            if ($staff) {
+                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
             } else {
-                $petowner = PetOwner::findOrFail($id);
-                $user = Auth::user();
-                $staff = $user->staff;
-
-                if ($staff) {
-                    $renderedby = "$staff->firstname . ' ' . $staff->lastname";
-                } else {
-                    $renderedby = "Admin";
-                }
-
-                $newclientService = ClientService::create([
-                    'petowner_id' => $petowner->id,
-                    'deposit' => 0,
-                    'rendered_by' => $renderedby,
-                    'status' => "To Pay",
-                ]);
-
-                $clientService = $newclientService;
+                $renderedby = "Admin";
             }
+
+            $newclientService = ClientService::create([
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                'rendered_by' => $renderedby,
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
         }
 
         $requestData = $request->validated();
@@ -68,7 +63,6 @@ class ServicesAvailedController extends Controller
         $requestData['status'] = "To Pay";
         ServicesAvailed::create($requestData);
         return response()->json(['message' => 'Service availed was successfully saved.'], 201);
-
     }
 
     /**

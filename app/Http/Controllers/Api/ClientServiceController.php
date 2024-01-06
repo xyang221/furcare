@@ -32,11 +32,9 @@ class ClientServiceController extends Controller
         $petowner = PetOwner::find($id);
 
         $verifyclientService = ClientService::where('petowner_id', $petowner->id)
-            ->where(function ($query) {
-                $query->where('status', 'To Pay')
-                    ->orWhere('status', 'Pending');
-            })
+            ->where('status', 'To Pay')
             ->first();
+
 
         if ($verifyclientService) {
             return response()->json(['message' => 'There is still on going treatment process.'], 403);
@@ -58,8 +56,6 @@ class ClientServiceController extends Controller
             $data['rendered_by'] = $renderedby;
             $data['status'] = "To Pay";
             ClientService::create($data);
-
-            // return response()->json(['message' => 'There is still on going treatment process.'], 403);
 
         }
     }
