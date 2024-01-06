@@ -9,6 +9,7 @@ use App\Http\Resources\ServicesAvailedResource;
 use App\Http\Resources\TreatmentResource;
 use App\Models\ClientService;
 use App\Models\Medication;
+use App\Models\PaymentRecord;
 use App\Models\Pet;
 use App\Models\PetCondition;
 use App\Models\PetOwner;
@@ -21,6 +22,7 @@ class PDFController extends Controller
     public function generatePDF($id)
     {
         $clientService = ClientService::findOrFail($id);
+        $paymentRecord = PaymentRecord::where('client_deposit_id', $clientService->id)->first();
         $servicesAvailed = ServicesAvailed::where('client_deposit_id', $clientService->id)
             ->orderBy('pet_id', 'desc')->get();
 
@@ -28,7 +30,7 @@ class PDFController extends Controller
             return response()->json(['message' => 'No services availed completed of this client found at the moment.'], 404);
         }
 
-        $html = $this->generateHTML(ServicesAvailedResource::collection($servicesAvailed), $clientService);
+        $html = $this->generateHTML(ServicesAvailedResource::collection($servicesAvailed), $clientService, $paymentRecord);
 
         $dompdf = new Dompdf();
 
@@ -44,7 +46,7 @@ class PDFController extends Controller
             ->header('Content-Disposition', 'attachment; filename="generated_pdf.pdf"');
     }
 
-    private function generateHTML($servicesAvailed, $clientService)
+    private function generateHTML($servicesAvailed, $clientService, $paymentRecord)
     {
         ob_start(); // Start output buffering
 
@@ -123,6 +125,9 @@ class PDFController extends Controller
             <hr>
             <h3 style="text-align:center; margin:5px">CHARGE SLIP</h3>
             <div class="flexrow">
+                <strong>Referrence No.</strong> <span><?= $paymentRecord->ref_no ?></span>
+                <br>
+                <br>
                 <strong>Client:</strong> <span><?= $clientService->petowner->firstname ?> <?= $clientService->petowner->lastname ?></span>
                 <br>
                 <strong>Date:</strong> <span><?= $clientService->date ?></span>
@@ -173,8 +178,27 @@ class PDFController extends Controller
                         </td>
                         <td><?= number_format($clientService->balance, 2) ?></td>
                     </tr>
+                    <tr>
+                        <td class="total" colspan="5">
+                            Payment:
+                        </td>
+                        <td><?= $paymentRecord->type ?></td>
+                    </tr>
+                    <tr>
+                        <td class="total" colspan="5">
+                            Amount:
+                        </td>
+                        <td><?= number_format($paymentRecord->amount, 2) ?></td>
+                    </tr>
+
 
                 </tbody>
+                <tr>
+                    <td class="total" colspan="5">
+                        Change:
+                    </td>
+                    <td><?= number_format($paymentRecord->change, 2) ?></td>
+                </tr>
             </table>
             <div class="flexrow">
                 <strong>Rendered by:</strong> <span><?= $clientService->rendered_by ?></span>

@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\Api\MedicationController;
 use App\Http\Controllers\Api\MedicineCategoryController;
 use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\Api\PaymentRecordController;
 use App\Http\Controllers\Api\PDFController;
 
 /*
@@ -100,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
     Route::get('/pets-count', [PetController::class, 'countPets']);
 
+    Route::get('/species', [SpecieController::class, 'index']);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
     Route::put('/species/{id}', [SpecieController::class, 'update']);
 
@@ -165,6 +167,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientdeposits/petowner/{id}/all', [ClientServiceController::class, 'showall']);
     Route::get('/clientdeposits/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
     Route::post('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'store']);
+
+    Route::get('/paymentrecords', [PaymentRecordController::class, 'index']);
+    Route::post('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'store']);
+    Route::get('/paymentrecords/{id}', [PaymentRecordController::class, 'show']);
+    Route::get('/paymentrecords/petowner/{id}', [PaymentRecordController::class, 'showPetownerPayments']);
+    Route::put('/paymentrecords/{id}', [PaymentRecordController::class, 'update']);
+    Route::delete('/paymentrecords/{id}/archive', [PaymentRecordController::class, 'destroy']);
 
     Route::apiResource('/deworminglogs', DewormingLogController::class);
     Route::post('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'store']);

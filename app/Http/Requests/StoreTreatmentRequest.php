@@ -33,7 +33,7 @@ class StoreTreatmentRequest extends FormRequest
             'caspillar_refill_time' => 'numeric',
             'body_condition_score' => 'numeric',
             'fluid_rate' => 'numeric',
-            'comments' => 'string',
+            'comments' => 'nullable|string',
 
             'pet_id' => 'exists:pets,id',
 
