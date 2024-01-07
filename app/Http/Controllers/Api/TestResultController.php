@@ -96,7 +96,7 @@ class TestResultController extends Controller
     public function getbyPet($id)
     {
 
-        $testResult = Pet::where('pet_id', $id)->get();
+        $testResult = TestResult::where('pet_id', $id)->get();
 
         if ($testResult->isEmpty()) {
             return response()->json(['message' => 'No list of test results found for this pet.'], 404);

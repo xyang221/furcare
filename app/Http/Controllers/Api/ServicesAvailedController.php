@@ -118,6 +118,18 @@ class ServicesAvailedController extends Controller
         return ServicesAvailedResource::collection($servicesAvailed);
     }
 
+    public function showByPetServices($id)
+    {
+        $servicesAvailed = ServicesAvailed::where('pet_id', $id)
+            ->orderBy('id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed completed of this pet found at the moment.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
+
     /**
      * Update the specified resource in storage.
      */

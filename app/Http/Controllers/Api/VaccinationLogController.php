@@ -111,7 +111,7 @@ class VaccinationLogController extends Controller
             ->get();
 
         if ($vaccinationLogs->isEmpty()) {
-            return response()->json(['message' => 'No list of pet diagnosis found.'], 404);
+            return response()->json(['message' => 'No list of pet vaccinations found.'], 404);
         }
 
         return VaccinationLogResource::collection($vaccinationLogs);

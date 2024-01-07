@@ -82,10 +82,10 @@ class DiagnosisController extends Controller
     public function getbyPet($id)
     {
 
-        $diagnosis = Pet::where('pet_id', $id)->get();
+        $diagnosis = Diagnosis::where('pet_id', $id)->get();
 
         if ($diagnosis->isEmpty()) {
-            return response()->json(['message' => 'No list of diagnosis found.'], 404);
+            return response()->json(['message' => 'No list of pet diagnosis found.'], 404);
         }
 
         return DiagnosisResource::collection($diagnosis);
