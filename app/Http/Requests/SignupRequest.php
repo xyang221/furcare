@@ -30,7 +30,6 @@ class SignupRequest extends FormRequest
                 'confirmed',
                 Password::min(8)
                     ->letters()
-                    ->mixedCase() 
             ],
             'firstname'=>'required|string|max:55',
             'lastname'=>'required|string|max:55',

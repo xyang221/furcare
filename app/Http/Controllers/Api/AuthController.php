@@ -39,10 +39,7 @@ class AuthController extends Controller
 
         ]);
 
-
-        $token = $user->createToken('main')->plainTextToken;
-
-        return response(compact('petowner', 'user', 'token'));
+        return response()->json(['status' => 204]);
     }
 
     public function login(LoginRequest $request)
@@ -57,7 +54,6 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-
 
         if ($user->trashed()) {
             Auth::logout();
