@@ -15,10 +15,9 @@ class ZipcodeController extends Controller
      */
     public function index()
     {
-        return ZipcodeResource::collection( 
+        return ZipcodeResource::collection(
             Zipcode::query()->orderBy('id')->get()
         );
-
     }
 
     /**
@@ -38,6 +37,29 @@ class ZipcodeController extends Controller
     {
         return new ZipcodeResource($zipcode);
     }
+
+    public function getZipcodeDetails($zipcode)
+    {
+        try {
+            // Trim whitespace from the input
+            $sanitized_name = trim($zipcode);
+
+            // Perform search
+            $zipcodedetails = Zipcode::where('zipcode', '=', $sanitized_name)->first();
+
+            // Check if any results are found
+            if (!$zipcodedetails) {
+                return response()->json(['message' => 'Zipcode is invalid or not found.'], 404);
+            }
+
+            return new ZipcodeResource($zipcodedetails);
+            // return ZipcodeResource::collection($zipcode);
+        } catch (\Exception $e) {
+            // Handle exceptions or errors that may occur during the query
+            return response()->json(['message' => 'An error occurred while searching for zipcodes.'], 500);
+        }
+    }
+
 
     /**
      * Update the specified resource in storage.
