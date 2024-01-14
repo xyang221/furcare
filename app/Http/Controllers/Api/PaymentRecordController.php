@@ -8,6 +8,7 @@ use App\Http\Requests\StorePaymentRecordRequest;
 use App\Http\Requests\UpdatePaymentRecordRequest;
 use App\Http\Resources\PaymentRecordResource;
 use App\Models\ClientService;
+use Carbon\Carbon;
 
 class PaymentRecordController extends Controller
 {
@@ -16,7 +17,7 @@ class PaymentRecordController extends Controller
      */
     public function index()
     {
-        $paymentRecords = PaymentRecord::orderBy('id', 'desc')->paginate(50);
+        $paymentRecords = PaymentRecord::orderBy('id', 'desc')->get();
 
         if ($paymentRecords->isEmpty()) {
             return response()->json(['message' => 'No peyament records found.'], 404);
@@ -24,6 +25,21 @@ class PaymentRecordController extends Controller
 
         return PaymentRecordResource::collection($paymentRecords);
     }
+
+    public function getDailyIncome()
+    {
+        $today = Carbon::now()->toDateString(); 
+        $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
+
+        $totalIncome = $paymentRecords->sum('total');
+
+        if ($paymentRecords->isEmpty()) {
+            return response()->json(['message' => 'No payment records found.'], 404);
+        }
+
+        return response()->json(['data' => $totalIncome]);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -48,11 +64,20 @@ class PaymentRecordController extends Controller
 
     public function showPetownerPayments(PaymentRecord $paymentRecord, $id)
     {
-        $clientdeposit = ClientService::where('petowner_id', $id)->first();
-        $paymentRecords = PaymentRecord::where('client_deposit_id', $clientdeposit->id)->get();
-        if ($paymentRecords->isEmpty()) {
-            return response()->json(['message' => 'No payment records found on this client.'], 404);
+        $clientDepositIds = ClientService::where('petowner_id', $id)->pluck('id')->toArray();
+
+        if (empty($clientDepositIds)) {
+            return response()->json(['message' => 'No payment records found for this client.'], 404);
         }
+
+        $paymentRecords = PaymentRecord::whereIn('client_deposit_id', $clientDepositIds)
+            ->orderByDesc('id')
+            ->get();
+
+        if ($paymentRecords->isEmpty()) {
+            return response()->json(['message' => 'No payment records found for this client.'], 404);
+        }
+
         return PaymentRecordResource::collection($paymentRecords);
     }
 

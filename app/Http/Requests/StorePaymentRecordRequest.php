@@ -22,9 +22,9 @@ class StorePaymentRecordRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'chargeslip_ref_no' => 'required|numeric',
             'type' => 'required|string',
-            'ref_no' => 'required|string',
-            'gcash_ref_no' => 'nullable|string',
+            'type_ref_no' => 'nullable|string',
             'total' => 'required|numeric',
             'amount' => 'required|numeric',
             'change' => 'required|numeric',

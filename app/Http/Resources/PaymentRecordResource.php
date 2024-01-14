@@ -17,8 +17,10 @@ class PaymentRecordResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'date' => $this->date,
+            'chargeslip_ref_no' => $this->chargeslip_ref_no,
             'type' => $this->type,
-            'ref_no' => $this->ref_no,
+            'type_ref_no' => $this->type_ref_no,
             'total' => $this->total,
             'amount' => $this->amount,
             'change' => $this->change,

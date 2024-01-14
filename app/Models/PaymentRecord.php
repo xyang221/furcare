@@ -11,7 +11,7 @@ class PaymentRecord extends Model
 
     protected $table = 'payment_records';
 
-    protected $fillable = ['ref_no', 'type', 'gcash_ref_no', 'total', 'amount', 'change', 'client_deposit_id'];
+    protected $fillable = ['chargeslip_ref_no', 'type', 'type_ref_no', 'total', 'amount', 'change', 'client_deposit_id'];
 
     protected $dates = ['deleted_at'];
 
