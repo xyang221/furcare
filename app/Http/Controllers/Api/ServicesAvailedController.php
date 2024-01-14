@@ -41,7 +41,7 @@ class ServicesAvailedController extends Controller
             $staff = $user->staff;
 
             if ($staff) {
-                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+                $renderedby = "$staff->firstname $staff->lastname";
             } else {
                 $renderedby = "Admin";
             }
@@ -179,13 +179,15 @@ class ServicesAvailedController extends Controller
         $servicesAvailed = ServicesAvailed::findOrFail($id);
         $data = $request->validated();
 
-        $clientService = ClientService::findOrFail($servicesAvailed->client_deposit_id);
+        $clientService = ClientService::findOrFail($servicesAvailed->client_deposit_id)->first();
 
         if ($clientService->status === "Completed") {
             $data['status'] = "Completed";
+            
         }
         $servicesAvailed->update($data);
             return new ServicesAvailedResource($servicesAvailed);
+        
     }
 
     public function archive($id)

@@ -45,7 +45,7 @@ class VaccinationLogController extends Controller
             $staff = $user->staff;
 
             if ($staff) {
-                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+                $renderedby = "$staff->firstname $staff->lastname";
             } else {
                 $renderedby = "Admin";
             }
