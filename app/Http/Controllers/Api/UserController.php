@@ -17,10 +17,9 @@ class UserController extends Controller
     public function index()
     {
 
-        return UserResource::collection( 
-            User::query()->orderBy('id','desc')->paginate(50)
+        return UserResource::collection(
+            User::query()->orderBy('id', 'desc')->paginate(50)
         );
-        
     }
 
     /**
@@ -29,7 +28,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->validated(); //get the data
-        $data['role_id'] = 1; 
+        $data['role_id'] = 1;
         $data['password'] = bcrypt($data['password']); //encypt the password
         $user = User::create($data); //create user
         return new UserResource($user, 201);
@@ -38,7 +37,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user,$id)
+    public function show(User $user, $id)
     {
         $user = User::findOrFail($id);
         return new UserResource($user);
@@ -49,16 +48,17 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return new UserResource($user);
-     
     }
 
-    
     public function archivelist()
     {
-        return UserResource::collection( 
-            User::onlyTrashed()->orderBy('id','desc')->get()
-        );
+        $users = User::onlyTrashed()->orderBy('id', 'desc')->get();
 
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'No user archives found.'], 404);
+        }
+
+        return UserResource::collection($users);
     }
 
     public function restore($id)
@@ -67,12 +67,12 @@ class UserController extends Controller
         $user->restore();
         return response("User restored successfully");
     }
-  
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user,$id)
+    public function update(UpdateUserRequest $request, User $user, $id)
     {
         $user = User::findOrFail($id);
         $data = $request->validated();
@@ -95,6 +95,4 @@ class UserController extends Controller
 
         return response("Permanently Deleted", Response::HTTP_OK);
     }
-
-
 }

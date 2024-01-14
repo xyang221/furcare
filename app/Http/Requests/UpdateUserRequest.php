@@ -29,9 +29,7 @@ class UpdateUserRequest extends FormRequest
                 'confirmed',
                 Password::min(8)
                 ->letters()
-                ->mixedCase() 
             ]
-            
         ];
     }
 }
