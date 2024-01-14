@@ -17,7 +17,7 @@ class MobileAuthController extends Controller
     public function signup(SignupRequest $request)
     {
         $data = $request->validated();
-     
+
         $user = User::create([
             'role_id' => 3,
             'email' => $data['email'],
@@ -38,9 +38,8 @@ class MobileAuthController extends Controller
             'address_id' => $address->id,
 
         ]);
-        $token = $user->createToken('main')->plainTextToken;
 
-        return response(compact('petowner', 'user', 'token'));
+        return response()->json(['status' => 204]);
     }
 
     public function login(LoginRequest $request)
