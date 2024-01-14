@@ -15,7 +15,7 @@ class PetOwner extends Model
 
     protected $table = 'petowners';
 
-    protected $fillable = ['firstname', 'lastname', 'contact_num','user_id','address_id'];
+    protected $fillable = ['firstname', 'lastname', 'contact_num', 'user_id', 'address_id'];
 
     protected $dates = ['deleted_at'];
 
@@ -23,12 +23,12 @@ class PetOwner extends Model
 
     public function address()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function pets()
@@ -40,5 +40,4 @@ class PetOwner extends Model
     {
         return $this->hasMany(Appointment::class);
     }
-
 }

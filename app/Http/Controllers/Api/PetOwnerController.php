@@ -133,9 +133,13 @@ class PetOwnerController extends Controller
 
     public function archivelist()
     {
-        return PetOwnerResource::collection(
-            PetOwner::onlyTrashed()->orderBy('id', 'desc')->get()
-        );
+        $petOwners = PetOwner::onlyTrashed()->orderBy('id', 'desc')->get();
+
+        if ($petOwners->isEmpty()) {
+            return response()->json(['message' => 'No petowner archives found.'], 404);
+        }
+
+        return PetOwnerResource::collection($petOwners);
     }
 
     public function restore($id)
