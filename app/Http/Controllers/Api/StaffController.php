@@ -77,10 +77,13 @@ class StaffController extends Controller
 
     public function archivelist()
     {
-        return StaffResource::collection( 
-            Staff::onlyTrashed()->orderBy('id','desc')->get()
-        );
+        $staffs = Staff::onlyTrashed()->orderBy('id', 'desc')->get();
 
+        if ($staffs->isEmpty()) {
+            return response()->json(['message' => 'No staff archives found.'], 404);
+        }
+
+        return StaffResource::collection($staffs);
     }
 
     public function restore($id)
@@ -108,7 +111,7 @@ class StaffController extends Controller
     public function destroy(Staff $staff, $id)
     {
         $staff = Staff::withTrashed()->findOrFail($id);
-        $staff->delete();
+        $staff->forceDelete();
         return response("Permanently Deleted", 204);
     }
 }
