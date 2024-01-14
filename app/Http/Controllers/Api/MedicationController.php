@@ -6,11 +6,15 @@ use App\Models\Medication;
 use App\Models\Treatment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMedicationRequest;
+use App\Http\Requests\StoreMedicineRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateMedicationRequest;
+use App\Http\Requests\UpdateMedicineRequest;
 use App\Http\Resources\MedicationResource;
 use App\Models\ClientService;
+use App\Models\Medicine;
 use App\Models\PetOwner;
+use App\Models\Service;
 use App\Models\ServicesAvailed;
 
 class MedicationController extends Controller
@@ -32,18 +36,24 @@ class MedicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
+    public function store(StoreMedicineRequest $med, StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
     {
         $treatment = Treatment::findOrFail($tid);
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
 
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => 19,
-            'unit_price' => $sarequest->input('unit_price'),
+            'unit_price' => $med->input('price'),
             'quantity' => $sarequest->input('quantity'),
             'client_deposit_id' => $clientService->id,
             'pet_id' => $treatment->pet_id,
             'status' => "To Pay",
+        ]);
+
+        $medicine = Medicine::create([
+            'medcat_id' => $med->input('medcat_id'),
+            'name' => $med->input('name'),
+            'price' =>  $med->input('price'),
         ]);
 
         $medication = Medication::create([
@@ -52,7 +62,7 @@ class MedicationController extends Controller
             'description' => $request->input('description'),
             'treatment_id' => $treatment->id,
             'pet_id' => $treatment->pet_id,
-            'medicine_id' => $request->input('medicine_id'),
+            'medicine_id' => $medicine->id,
             'services_availed_id' => $servicesAvailed->id,
         ]);
 
@@ -68,16 +78,39 @@ class MedicationController extends Controller
         return new MedicationResource($medication);
     }
 
+    public function showPetownerMedication($id, $sid)
+    {
+        $petowner = PetOwner::findOrFail($id);
+        $service = Service::findOrFail($sid);
+        $clientdeposit = ClientService::where('petowner_id', $petowner->id)->pluck('id');
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientdeposit)
+            ->where('service_id', $service->id)
+            ->pluck('id');
+
+        $medications = Medication::whereIn('services_availed_id', $servicesAvailed)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($medications->isEmpty()) {
+            return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
+        }
+
+        return MedicationResource::collection($medications);
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicationRequest $request, Medication $medication, $id)
+    public function update(UpdateMedicationRequest $request, UpdateMedicineRequest $med, Medication $medication, $id)
     {
         $medication = Medication::findOrFail($id);
+        $medicine = Medicine::findOrFail($medication->medicine_id);
         $data = $request->validated();
+        $meddata = $med->validated();
         $medication->update($data);
+        $medicine->update($meddata);
 
-        return new MedicationResource($medication);
+        return response()->json(['message' => 'Medication updated successfully.'], 204);
     }
 
     /**

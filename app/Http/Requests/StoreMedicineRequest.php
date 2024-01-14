@@ -22,10 +22,10 @@ class StoreMedicineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string',
-            'price'=>'required|numeric',
+            'name' => 'required|string',
+            'price' => 'numeric',
 
-            'medcat_id' => 'exists:,medicine_category,id',
+            'medcat_id' => 'exists:medicine_category,id',
 
         ];
     }

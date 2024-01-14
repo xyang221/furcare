@@ -27,7 +27,7 @@ class MedicineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicineRequest $request)
+    public function store(StoreMedicineRequest $request,$id)
     {
         $data = $request->validated(); //get the data
         $medicine = Medicine::create($data); //create

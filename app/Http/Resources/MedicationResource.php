@@ -27,8 +27,10 @@ class MedicationResource extends JsonResource
 
             'treatment_id' => $this->treatment_id,
             'medicine_id' => $this->medicine_id,
+            'services_availed_id' => $this->services_availed_id,
 
             'medicine' => new MedicineResource($this->whenLoaded('medicine')),
+            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];
     }

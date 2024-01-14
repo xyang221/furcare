@@ -26,6 +26,7 @@ class StoreMedicationRequest extends FormRequest
             'quantity' => 'required|numeric',
             'dosage' => 'required|string',
 
+            'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',
             'medicine_id' => 'exists:medicines,id',
             'services_availed' => 'exists:services_availed,id',

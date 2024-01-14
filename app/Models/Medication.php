@@ -18,7 +18,7 @@ class Medication extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['medicine'];
+    protected $with = ['medicine','servicesavailed'];
 
     public function medicine()
     {
