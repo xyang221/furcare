@@ -19,6 +19,7 @@ class DoctorResource extends JsonResource
         return [
             'id' => $this->id,
             'fullname' => $this->fullname,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }
