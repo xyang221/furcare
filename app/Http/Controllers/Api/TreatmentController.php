@@ -14,10 +14,8 @@ use App\Http\Resources\PetConditionResource;
 use App\Http\Resources\MedicationResource;
 use App\Models\Admission;
 use App\Models\ClientService;
-use App\Models\PetOwner;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
-use Illuminate\Support\Facades\Auth;
 
 class TreatmentController extends Controller
 {
@@ -41,28 +39,10 @@ class TreatmentController extends Controller
     public function store(StoreTreatmentRequest $request, StoreServicesAvailedRequest $sarequest, $poid, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $poid)->first();
+        $clientService = ClientService::where('petowner_id', $poid)->where('status', 'To Pay')->first();
 
         if (!$clientService) {
-
-            $petowner = PetOwner::findOrFail($poid);
-            $user = Auth::user();
-            $staff = $user->staff;
-
-            if ($staff) {
-                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
-            } else {
-                $renderedby = "Admin";
-            }
-
-            $newclientService = ClientService::create([
-                'petowner_id' => $petowner->id,
-                'deposit' => 0,
-                'rendered_by' => $renderedby,
-                'status' => "To Pay",
-            ]);
-
-            $clientService = $newclientService;
+            return response()->json(['message' => 'No client deposit was recorded to proceed for treatment. '], 403);
         }
 
         $treatment = Treatment::create([
@@ -126,8 +106,6 @@ class TreatmentController extends Controller
 
         return new TreatmentResource($treatment);
     }
-
-
 
     public function getPetTreatments($id)
     {
