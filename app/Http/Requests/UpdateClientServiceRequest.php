@@ -24,6 +24,7 @@ class UpdateClientServiceRequest extends FormRequest
         return [
             'deposit'=>'required|numeric',
             'balance'=>'required|numeric',
+            'status'=>'required|string',
         ];
     }
 }

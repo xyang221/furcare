@@ -183,9 +183,9 @@ class ServicesAvailedController extends Controller
 
         if ($clientService->status === "Completed") {
             $data['status'] = "Completed";
-            $servicesAvailed->update($data);
-            return new ServicesAvailedResource($servicesAvailed);
         }
+        $servicesAvailed->update($data);
+            return new ServicesAvailedResource($servicesAvailed);
     }
 
     public function archive($id)
