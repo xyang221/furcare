@@ -37,7 +37,7 @@ class ClientServiceController extends Controller
 
 
         if ($verifyclientService) {
-            return response()->json(['message' => 'There is still on going treatment process.'], 403);
+            return response()->json(['message' => 'This client had already services availed.'], 403);
         } else {
 
             $data = $request->validated(); //get the data
@@ -66,6 +66,12 @@ class ClientServiceController extends Controller
     public function show(ClientService $clientService, $id)
     {
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+        return new ClientServiceResource($clientService);
+    }
+
+    public function showClientdeposit( $id)
+    {
+        $clientService = ClientService::findOrFail($id);
         return new ClientServiceResource($clientService);
     }
 
@@ -106,9 +112,16 @@ class ClientServiceController extends Controller
         if ($data['balance'] === 0) {
             $data['status'] = "Completed";
         } else {
-            $data['status'] = "Pending";
             $data['balance'] = $request->input('balance') + $clientService->balance;
         }
+        $clientService->update($data);
+        return new ClientServiceResource($clientService);
+    }
+
+    public function updateDeposit(UpdateClientServiceRequest $request, ClientService $clientService, $id)
+    {
+        $clientService = ClientService::findOrFail($id);
+        $data = $request->validated();
         $clientService->update($data);
         return new ClientServiceResource($clientService);
     }

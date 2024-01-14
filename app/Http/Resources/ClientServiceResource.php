@@ -26,6 +26,7 @@ class ClientServiceResource extends JsonResource
             'petowner_id' => $this->petowner_id,
 
             'petowner' => new PetOwnerResource($this->whenLoaded('petowner')),
+            'payment' => new PaymentRecordResource($this->whenLoaded('payment')),
             
         ];
     }

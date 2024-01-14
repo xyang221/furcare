@@ -73,6 +73,19 @@ class ServicesAvailedController extends Controller
         return new ServicesAvailedResource($servicesAvailed);
     }
 
+    public function showAllPetownerServiceAvail($id,)
+    {
+        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
+            ->orderBy('id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'This client have no services availed records found.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
+
     public function showByPetownerServiceAvail($id, $sid)
     {
         $service = Service::findOrFail($sid);
@@ -88,11 +101,33 @@ class ServicesAvailedController extends Controller
         return ServicesAvailedResource::collection($servicesAvailed);
     }
 
-    public function showByPetownerBilling($id)
+    public function showServicesByClientDeposits($id)
+    {
+        $petowner = ClientService::findOrFail($id);
+        $servicesAvailed = ServicesAvailed::where('client_deposit_id', $petowner->id)
+            ->orderBy('pet_id', 'desc')
+            ->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
+        }
+
+        // Assuming you're constructing ServicesAvailedResource with both services availed and petowner
+        $data = [
+            'data' => ServicesAvailedResource::collection($servicesAvailed),
+            'clientdeposit' => $petowner, // Assuming $petowner needs to be returned along with services availed
+        ];
+
+        return response()->json($data);
+    }
+
+
+    public function showToPayServicesbyPetowner($id)
     {
         $status = 'To Pay';
-        $petowner = ClientService::where('petowner_id', $id)->where('status', $status)->pluck('id');
-        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
+        $clientServiceID = ClientService::where('petowner_id', $id)->where('status', $status)->pluck('id');
+        $clientService = ClientService::findOrFail($clientServiceID)->first();
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientServiceID)
             ->where('status', $status)
             ->orderBy('id', 'desc')->get();
 
@@ -100,7 +135,13 @@ class ServicesAvailedController extends Controller
             return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
         }
 
-        return ServicesAvailedResource::collection($servicesAvailed);
+        // return ServicesAvailedResource::collection($servicesAvailed);
+        $data = [
+            'data' => ServicesAvailedResource::collection($servicesAvailed),
+            'clientdeposit' => $clientService, // Assuming $petowner needs to be returned along with services availed
+        ];
+
+        return response()->json($data);
     }
 
     public function showByPetownerChargeSlip($id)
@@ -137,9 +178,14 @@ class ServicesAvailedController extends Controller
     {
         $servicesAvailed = ServicesAvailed::findOrFail($id);
         $data = $request->validated();
-        $data['status'] = "Completed";
-        $servicesAvailed->update($data);
-        return new ServicesAvailedResource($servicesAvailed);
+
+        $clientService = ClientService::findOrFail($servicesAvailed->client_deposit_id);
+
+        if ($clientService->status === "Completed") {
+            $data['status'] = "Completed";
+            $servicesAvailed->update($data);
+            return new ServicesAvailedResource($servicesAvailed);
+        }
     }
 
     public function archive($id)

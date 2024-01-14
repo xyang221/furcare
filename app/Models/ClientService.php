@@ -22,8 +22,9 @@ class ClientService extends Model
         return $this->belongsTo(PetOwner::class, 'petowner_id','id');
     }
 
-    // public function service()
-    // {
-    //     return $this->belongsTo(Service::class, 'services_id','id');
-    // }
+    public function payment()
+    {
+        return $this->hasOne(PaymentRecord::class);
+    }
+
 }
