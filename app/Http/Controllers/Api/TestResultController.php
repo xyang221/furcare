@@ -47,11 +47,16 @@ class TestResultController extends Controller
             $user = Auth::user();
             $staff = $user->staff;
 
+            if ($staff) {
+                $renderedby = "$staff->firstname . ' ' . $staff->lastname";
+            } else {
+                $renderedby = "Admin";
+            }
+
             $newclientService = ClientService::create([
                 'petowner_id' => $petowner->id,
                 'deposit' => 0,
-                // 'rendered_by' => $staff->firstname . ' ' . $staff->lastname,
-                'rendered_by' => "ADMIN",
+                'rendered_by' => $renderedby,
                 'status' => "To Pay",
             ]);
 
