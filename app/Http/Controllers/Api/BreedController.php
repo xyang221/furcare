@@ -38,7 +38,7 @@ class BreedController extends Controller
             $sanitized_name = trim($id); // Trim whitespace from the input
 
             // Perform search
-            $breeds = Breed::where('specie_id', 'like', "%{$sanitized_name}%")
+            $breeds = Breed::where('specie_id', '=', $sanitized_name)
             ->get();
 
             // Check if any results are found

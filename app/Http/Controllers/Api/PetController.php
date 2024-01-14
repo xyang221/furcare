@@ -30,9 +30,13 @@ class PetController extends Controller
 
     public function countPets()
     {
-
         $pets = Pet::count();
+        return response()->json(['data' => $pets]);
+    }
 
+    public function countPetownerPets($id)
+    {
+        $pets = Pet::where('petowner_id', $id)->count();
         return response()->json(['data' => $pets]);
     }
 
@@ -155,7 +159,7 @@ class PetController extends Controller
         $pets = Pet::onlyTrashed()->orderBy('id', 'desc')->get();
 
         if ($pets->isEmpty()) {
-            return response()->json(['message' => 'No pet records found.'], 404);
+            return response()->json(['message' => 'No pet archives found.'], 404);
         }
 
         return PetResource::collection($pets);
