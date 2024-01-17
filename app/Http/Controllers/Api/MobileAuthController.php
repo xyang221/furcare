@@ -71,7 +71,7 @@ class MobileAuthController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $user->currentAccessToken()->delete;
+        $user->currentAccessToken()->delete();
         return response('', 204);
     }
 }
