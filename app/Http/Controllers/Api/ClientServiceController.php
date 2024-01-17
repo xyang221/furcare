@@ -24,6 +24,26 @@ class ClientServiceController extends Controller
         return ClientServiceResource::collection($clientService);
     }
 
+    public function balance($id)
+    {
+        $petowner = PetOwner::find($id);
+
+        if (!$petowner) {
+            return response()->json(['error' => 'PetOwner not found'], 404);
+        }
+
+        $clientService = ClientService::where('petowner_id', $petowner->id)
+            ->where('status', 'Pending')
+            ->first();
+
+        if (!$clientService) {
+            return response()->json(['balance' => 0], 204);
+        }
+
+        return response()->json(['balance' => $clientService->balance], 200);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +52,7 @@ class ClientServiceController extends Controller
         $petowner = PetOwner::find($id);
 
         $verifyclientService = ClientService::where('petowner_id', $petowner->id)
-            ->where('status', 'To Pay')
+            ->where('status', 'Pending')
             ->first();
 
 
@@ -56,7 +76,6 @@ class ClientServiceController extends Controller
             $data['rendered_by'] = $renderedby;
             $data['status'] = "To Pay";
             ClientService::create($data);
-
         }
     }
 
@@ -69,7 +88,7 @@ class ClientServiceController extends Controller
         return new ClientServiceResource($clientService);
     }
 
-    public function showClientdeposit( $id)
+    public function showClientdeposit($id)
     {
         $clientService = ClientService::findOrFail($id);
         return new ClientServiceResource($clientService);
@@ -104,19 +123,23 @@ class ClientServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClientServiceRequest $request, ClientService $clientService, $id)
+    public function update(UpdateClientServiceRequest $request, $id)
     {
         $clientService = ClientService::findOrFail($id);
         $data = $request->validated();
 
         if ($data['balance'] === 0) {
             $data['status'] = "Completed";
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
         } else {
-            $data['balance'] = $request->input('balance') + $clientService->balance;
+            $data['status'] = "Pending";
+            $data['balance'] += $clientService->balance; // Use shorthand for adding balance
         }
+
         $clientService->update($data);
         return new ClientServiceResource($clientService);
     }
+
 
     public function updateDeposit(UpdateClientServiceRequest $request, ClientService $clientService, $id)
     {

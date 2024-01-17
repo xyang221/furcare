@@ -183,7 +183,8 @@ class ServicesAvailedController extends Controller
 
         if ($clientService->status === "Completed") {
             $data['status'] = "Completed";
-            
+        }else if ($clientService->status === "Pending") {
+            $data['status'] = "Pending";
         }
         $servicesAvailed->update($data);
             return new ServicesAvailedResource($servicesAvailed);

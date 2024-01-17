@@ -26,21 +26,6 @@ class PaymentRecordController extends Controller
         return PaymentRecordResource::collection($paymentRecords);
     }
 
-    public function getDailyIncome()
-    {
-        $today = Carbon::now()->toDateString(); 
-        $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
-
-        $totalIncome = $paymentRecords->sum('total');
-
-        if ($paymentRecords->isEmpty()) {
-            return response()->json(['message' => 'No payment records found.'], 404);
-        }
-
-        return response()->json(['data' => $totalIncome]);
-    }
-
-
     /**
      * Store a newly created resource in storage.
      */

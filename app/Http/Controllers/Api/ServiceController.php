@@ -16,9 +16,28 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $service = Service::with('category')->orderBy('id', 'asc')->paginate(50);
+        $services = Service::query()
+            ->orderBy('cat_id', 'asc') 
+            ->get();
 
-        return ServiceResource::collection($service);
+        return ServiceResource::collection($services);
+    }
+
+    public function noothertestresults()
+    {
+        $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM', 'LYME DISEASE'])
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return ServiceResource::collection($services);
+    }
+
+
+    public function othertestresults()
+    {
+        $services = Service::whereIn('service', ['4DX', 'EHRLICHIA', 'ANAPLASMA', 'HEARTWORM', 'LYME DISEASE'])->get();
+
+        return ServiceResource::collection($services);
     }
 
     /**

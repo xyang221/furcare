@@ -13,6 +13,7 @@ class Service extends Model
     protected $table = 'services';
 
     protected $fillable = ['service', 'cat_id'];
+    protected $with = ['category'];
 
     public function category()
     {

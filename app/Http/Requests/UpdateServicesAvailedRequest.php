@@ -23,6 +23,7 @@ class UpdateServicesAvailedRequest extends FormRequest
     {
         return [
             'unit_price' => 'nullable|numeric',
+            'status'=>'string',
         ];
     }
 }
