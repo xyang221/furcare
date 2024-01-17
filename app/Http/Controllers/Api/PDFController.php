@@ -22,7 +22,9 @@ class PDFController extends Controller
     public function generatePDF($id)
     {
         $clientService = ClientService::findOrFail($id);
-        $paymentRecord = PaymentRecord::where('client_deposit_id', $clientService->id)->first();
+        $paymentRecord = PaymentRecord::where('client_deposit_id', $clientService->id)
+            ->latest()
+            ->first();
         $servicesAvailed = ServicesAvailed::where('client_deposit_id', $clientService->id)
             ->orderBy('pet_id', 'desc')->get();
 
@@ -126,7 +128,7 @@ class PDFController extends Controller
             <hr>
             <h3 style="text-align:center; margin:5px">CHARGE SLIP</h3>
             <div class="flexrow">
-                <strong>Referrence No.</strong> <span><?= $paymentRecord->ref_no ?></span>
+                <strong>Referrence No.</strong> <span><?= $paymentRecord->chargeslip_ref_no ?></span>
                 <br>
                 <br>
                 <strong>Client:</strong> <span><?= $clientService->petowner->firstname ?> <?= $clientService->petowner->lastname ?></span>
@@ -253,10 +255,10 @@ class PDFController extends Controller
         <html>
 
         <head>
-            <title>Treatment Sheet</title>
+            <title>Pet Medical Report</title>
             <style>
                 @page {
-                    margin-left: 0.25in;
+                    margin: 0.75in;
                 }
 
                 .container {
@@ -291,7 +293,7 @@ class PDFController extends Controller
             </style>
         </head>
 
-        <body class="container">
+        <body>
             <div class="row">
                 <div class="header-center">
                     <div style="padding-bottom: 10px;">
@@ -306,49 +308,51 @@ class PDFController extends Controller
                 </div>
             </div>
             </div>
-            <hr>
-            <h3 style="text-align:center; margin:5px">TREATMENT SHEET</h3>
-            <strong>Date:</strong> <span><?= $treatmentResource->date ?></span>
-            <strong>Day:</strong> <span><?= $treatmentResource->day ?></span>
-            <br>
-            <strong>Diagnosis/Findings:</strong> <span><?= $treatmentResource->diagnosis ?></span>
-            <br>
-            <strong>Petowner:</strong> <span><?= $petowner->firstname ?> <?= $petowner->lastname ?></span>
-            <br>
-            <strong>Patient Name:</strong> <span><?= $pet->name ?></span>
-            <strong>Breed:</strong> <span><?= $pet->breed->breed ?></span>
-            <br>
-            <br>
-            <div style="display: flex; flex-direction:row; ">
-                <div style="display: flex; flex-direction:column; margin-right: 20px; ">
-                    <strong>BW:</strong> <span><?= $treatmentResource->body_weight ?></span>
-                    <br>
-                    <strong>HR:</strong> <span><?= $treatmentResource->heart_rate ?></span>
-                    <br>
-                    <strong>MM:</strong> <span><?= $treatmentResource->mucuos_membranes ?></span>
-                    <br>
-                    <strong>PR:</strong> <span><?= $treatmentResource->pr_prealbumin ?></span>
-                    <br>
-                    <strong>TEMP:</strong> <span><?= $treatmentResource->temperature ?></span>
-                    <br>
-                </div>
-                <div style="display: flex; flex-direction:column;">
-                    <strong>RR:</strong> <span><?= $treatmentResource->respiration_rate ?></span>
-                    <br>
-                    <strong>CRT:</strong> <span><?= $treatmentResource->caspillar_refill_time ?></span>
-                    <br>
-                    <strong>BCS:</strong> <span><?= $treatmentResource->body_condition_score ?></span>
-                    <br>
-                    <strong>Fluid/Rate:</strong> <span><?= $treatmentResource->fluid_rate ?></span>
-                    <br>
-                </div>
+            <!-- <hr> -->
+            <h3 style="text-align:center; margin:15px">PET MEDICAL REPORT</h3>
+            <div style="background-color:black;color:white;padding:2px;padding: left 10px;">
+                <strong>Pet Information</strong>
             </div>
-            <br>
+            <div style="padding: 10px;">
+                <strong>Pet Name:</strong> <span><?= $pet->name ?></span>
+                <strong style="margin-left: 25%;">Pet Owner: </strong><span><?= $petowner->firstname ?> <?= $petowner->lastname ?></span>
+                <br>
+                <strong>Date of Birth:</strong> <span><?= $pet->birthdate ?></span>
+                <strong style="margin-left: 25%;">Breed: </strong><span><?= $pet->breed->breed ?></span>
+                <br>
+            </div>
+            <div style="background-color:black;color:white;padding:2px;padding: left 10px;">
+                <strong>Vital Signs</strong>
+            </div>
+            <div style="padding: 10px;">
+
+
+                <strong>BW:</strong> <span><?= $treatmentResource->body_weight ?></span>
+                <br>
+                <strong>HR:</strong> <span><?= $treatmentResource->heart_rate ?></span>
+                <br>
+                <strong>MM:</strong> <span><?= $treatmentResource->mucuos_membranes ?></span>
+                <br>
+                <strong>PR:</strong> <span><?= $treatmentResource->pr_prealbumin ?></span>
+                <br>
+                <strong>TEMP:</strong> <span><?= $treatmentResource->temperature ?></span>
+                <br>
+                <strong>RR:</strong> <span><?= $treatmentResource->respiration_rate ?></span>
+                <br>
+                <strong>CRT:</strong> <span><?= $treatmentResource->caspillar_refill_time ?></span>
+                <br>
+                <strong>BCS:</strong> <span><?= $treatmentResource->body_condition_score ?></span>
+                <br>
+                <strong>Fluid/Rate:</strong> <span><?= $treatmentResource->fluid_rate ?></span>
+                <br>
+            </div>
             <strong>Comments:</strong> <span><?= $treatmentResource->comments ?></span>
             <br>
             <br>
-            <strong>Pet Condition</strong>
-            <table>
+            <div style="background-color:black;color:white;padding:2px;padding: left 10px;">
+                <strong>Pet Condition</strong>
+            </div>
+            <table style="padding:10px;">
                 <thead>
                     <tr>
                         <th>AM/PM</th>
@@ -371,14 +375,17 @@ class PDFController extends Controller
                             <td><?= $condition->vomit ?></td>
                             <td><?= $condition->defecated ?></td>
                         </tr>
+
                     <?php endforeach; ?>
 
                 </tbody>
             </table>
 
             <br>
-            <strong>Pet Medication</strong>
-            <table>
+            <div style="background-color:black;color:white;padding:2px;padding: left 10px;">
+                <strong>Pet Medication</strong>
+            </div>
+            <table style="padding:10px;">
                 <thead>
                     <tr>
                         <th></th>
@@ -397,7 +404,7 @@ class PDFController extends Controller
                             <td><?= $med->medicine->name ?></td>
                             <td><?= $med->quantity ?></td>
                             <td><?= $med->dosage ?></td>
-                            <td><?= $med->descrption ?></td>
+                            <td><?= $med->description ?></td>
                         </tr>
                     <?php endforeach; ?>
 
