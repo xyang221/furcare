@@ -28,18 +28,11 @@ class PetController extends Controller
         return PetResource::collection($pets);
     }
 
-    public function countPets()
-    {
-        $pets = Pet::count();
-        return response()->json(['data' => $pets]);
-    }
-
     public function countPetownerPets($id)
     {
         $pets = Pet::where('petowner_id', $id)->count();
         return response()->json(['data' => $pets]);
     }
-
 
     public function searchPet($name)
     {
@@ -63,6 +56,28 @@ class PetController extends Controller
         }
     }
 
+    public function searchPetbyPetowner($id, $name)
+    {
+        try {
+            $sanitized_name = trim($name); // Trim whitespace from the input
+
+            // Perform search
+            $pets = Pet::where('name', 'like', "%{$sanitized_name}%")
+                ->where('petowner_id', $id)
+                ->get();
+
+            // Check if any results are found
+            if ($pets->isEmpty()) {
+                return response()->json(['message' => 'No pets found.'], 404);
+            }
+
+            // Return the resource collection
+            return PetResource::collection($pets);
+        } catch (\Exception $e) {
+            // Handle exceptions or errors that may occur during the query
+            return response()->json(['message' => 'An error occurred while searching for pets.'], 500);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      */
