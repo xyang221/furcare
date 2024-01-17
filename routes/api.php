@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\PetOwnerController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\ZipcodeController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AdmissionController;
 use App\Http\Controllers\Api\PetController;
 use App\Http\Controllers\Api\SpecieController;
@@ -59,11 +60,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // });
 
     Route::apiResource('/roles', RoleController::class);
+    Route::get('/counts', [AdminController::class, 'homeComponents']);
 
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::patch('/users/{id}', [UserController::class, 'update']);
 
     Route::delete('/users/{id}/archive', [UserController::class, 'archive']);
     Route::get('/archives/users', [UserController::class, 'archivelist']);
@@ -86,9 +88,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/petowners/{id}/restore', [PetOwnerController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [PetOwnerController::class, 'destroy']);
 
-    Route::get('/petowners-count', [PetOwnerController::class, 'countPetowners']);
+    Route::get('/petowners/{id}/countpets', [PetController::class, 'countPetownerPets']);
 
     Route::get('/pets-search/{name}', [PetController::class, 'searchPet']);
+    Route::get('/petowner/{id}/pets-search/{name}', [PetController::class, 'searchPetbyPetowner']);
     Route::post('/petowners/{id}/addpet', [PetController::class, 'store']);
     Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);
 
@@ -99,7 +102,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/pets', PetController::class);
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
-    Route::get('/pets-count', [PetController::class, 'countPets']);
 
     Route::get('/species', [SpecieController::class, 'index']);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
@@ -118,7 +120,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/staffs/{id}/restore', [StaffController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [StaffController::class, 'destroy']);
 
-    Route::apiResource('/services', ServiceController::class);
+    Route::get('/services', [ServiceController::class, 'index']);
+    Route::get('/services/modified', [ServiceController::class, 'noothertestresults']);
+    Route::get('/services/4dx', [ServiceController::class, 'othertestresults']);
     Route::put('/services/{id}/isAvailable', [ServiceController::class, 'serviceAvailable']);
 
     Route::get('/appointments/pending', [AppointmentController::class, 'getPending']);
@@ -130,14 +134,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/appointments/completed', [AppointmentController::class, 'getCompleted']);
     Route::put('/appointments/{id}/noshow', [AppointmentController::class, 'noshow']);
     Route::get('/appointments/current', [AppointmentController::class, 'getCurrent']);
+    Route::get('/appointments/petowner/{id}/current', [AppointmentController::class, 'getCurrentbyPetowner']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+    Route::get('/appointments/petowner/{id}/today', [AppointmentController::class, 'appointmentToday']);
     Route::post('/appointments/petowner/{id}', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
     Route::apiResource('/vets', DoctorController::class);
+    Route::get('/vets/{id}', [DoctorController::class, 'index']);
+    Route::put('/vets/{id}', [DoctorController::class, 'update']);
+    Route::delete('/vets/{id}/archive', [DoctorController::class, 'archive']);
+    Route::get('/archives/vets', [DoctorController::class, 'archivelist']);
+    Route::put('/vets/{id}/restore', [DoctorController::class, 'restore']);
+    Route::delete('/archives/{id}/forcedelete', [DoctorController::class, 'destroy']);
+    Route::get('/appointments/vet/{id}', [AppointmentController::class, 'getDoctorAppointments']);
 
     Route::get('/diagnosis', [DiagnosisController::class, 'index']);
+    Route::get('/diagnosis/pet/{id}/{date}', [DiagnosisController::class, 'getDiagnosisbyPetbyDate']);
     Route::post('/diagnosis/petowner/{id}/avail/{sid}', [DiagnosisController::class, 'store']);
     Route::get('/diagnosis/{id}', [DiagnosisController::class, 'show']);
     Route::get('/diagnosis/pet/{id}', [DiagnosisController::class, 'getbyPet']);
@@ -148,11 +162,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/diagnosis/{id}/restore', [DiagnosisController::class, 'restore']);
     Route::delete('/archives/{id}/forcedelete', [DiagnosisController::class, 'destroy']);
 
-    Route::get('/servicesavailed', [DiagnosisController::class, 'index']);
+    Route::get('/servicesavailed', [ServicesAvailedController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
+    Route::get('/servicesavailed/petowner/{id}/all', [ServicesAvailedController::class, 'showAllPetownerServiceAvail']);
     Route::get('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'showByPetownerServiceAvail']);
-    Route::get('/servicesavailed/petowner/{id}', [ServicesAvailedController::class, 'showByPetownerBilling']);
+    Route::get('/servicesavailed/clientdeposit/{id}', [ServicesAvailedController::class, 'showServicesByClientDeposits']);
+    Route::get('/servicesavailed/petowner/{id}/toPay', [ServicesAvailedController::class, 'showToPayServicesbyPetowner']);
     Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
+    Route::get('/servicesavailed/pet/{id}', [ServicesAvailedController::class, 'showByPetServices']);
     Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
     Route::delete('/servicesavailed/{id}/archive', [ServicesAvailedController::class, 'archive']);
     Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
@@ -161,9 +178,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
 
-    Route::apiResource('/clientdeposits', ClientServiceController::class);
+    // Route::apiResource('/clientdeposits', ClientServiceController::class);
+    Route::get('/clientdeposits', [ClientServiceController::class, 'index']);
+    Route::get('/clientdeposits/{id}/balance', [ClientServiceController::class, 'balance']);
     Route::get('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'show']);
+    Route::get('/clientdeposits/{id}', [ClientServiceController::class, 'showClientdeposit']);
     Route::put('/clientdeposits/{id}', [ClientServiceController::class, 'update']);
+    Route::put('/clientdeposits/{id}/updatedeposit', [ClientServiceController::class, 'updateDeposit']);
     Route::get('/clientdeposits/petowner/{id}/all', [ClientServiceController::class, 'showall']);
     Route::get('/clientdeposits/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
     Route::post('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'store']);
@@ -172,10 +193,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'store']);
     Route::get('/paymentrecords/{id}', [PaymentRecordController::class, 'show']);
     Route::get('/paymentrecords/petowner/{id}', [PaymentRecordController::class, 'showPetownerPayments']);
+    Route::get('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'showClientDepositPayment']);
     Route::put('/paymentrecords/{id}', [PaymentRecordController::class, 'update']);
     Route::delete('/paymentrecords/{id}/archive', [PaymentRecordController::class, 'destroy']);
 
-    Route::apiResource('/deworminglogs', DewormingLogController::class);
+    // Route::apiResource('/deworminglogs', DewormingLogController::class);
+    Route::get('/deworminglogs/today', [DewormingLogController::class, 'byToday']);
+    Route::get('/deworminglogs/weekly', [DewormingLogController::class, 'byWeek']);
+    Route::get('/deworminglogs/monthly', [DewormingLogController::class, 'byMonth']);
+    Route::get('/deworminglogs/yearly', [DewormingLogController::class, 'byYear']);
     Route::post('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'store']);
     Route::get('/deworminglogs/pet/{id}', [DewormingLogController::class, 'getbyPet']);
     Route::get('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'getDewormingByServiceandPetowner']);
@@ -187,6 +213,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [DewormingLogController::class, 'destroy']);
 
     Route::apiResource('/againsts', AgainstController::class);
+    Route::get('/vaccinationlogs/today', [VaccinationLogController::class, 'byToday']);
+    Route::get('/vaccinationlogs/weekly', [VaccinationLogController::class, 'byWeek']);
+    Route::get('/vaccinationlogs/monthly', [VaccinationLogController::class, 'byMonth']);
+    Route::get('/vaccinationlogs/yearly', [VaccinationLogController::class, 'byYear']);
+    Route::get('/vaccinationlogs/petowner/{id}', [VaccinationLogController::class, 'getbyPetowner']);
     Route::get('/vaccinationlogs/pet/{id}', [VaccinationLogController::class, 'getbyPet']);
     Route::post('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class, 'store']);
     Route::get('/vaccinationlogs/{id}', [VaccinationLogController::class, 'show']);
@@ -201,7 +232,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'store']);
     Route::get('/testresults/{id}', [TestResultController::class, 'show']);
     Route::get('/testresults/pet/{id}', [TestResultController::class, 'getbyPet']);
+    Route::get('/testresults/pet/{id}/{date}', [TestResultController::class, 'getTestsbyPetbyDate']);
     Route::get('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'getDiagnosisByServiceandPetowner']);
+    Route::get('/testresults/petowner/{id}/others', [TestResultController::class, 'getOtherTestsByServiceandPetowner']);
     Route::put('/testresults/{id}', [TestResultController::class, 'update']);
     Route::post('/testresults/{id}/upload-attachment', [TestResultController::class, 'uploadAttachment']);
     Route::delete('/testresults/{id}/archive', [TestResultController::class, 'archive']);
@@ -210,6 +243,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [TestResultController::class, 'destroy']);
 
     Route::get('/treatments', [TreatmentController::class, 'index']);
+    Route::get('/treatments/pet/{id}/{date}', [TreatmentController::class, 'getTreatmentbyPetbyDate']);
     Route::post('/treatments/petowner/{poid}/service/{sid}', [TreatmentController::class, 'store']);
     Route::get('/treatments/{id}', [TreatmentController::class, 'show']);
     Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'showPetownerTreatments']);
@@ -232,6 +266,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/petconditions/{id}', [PetConditionController::class, 'forcedelete']);
 
     Route::apiResource('/medicinescategory', MedicineCategoryController::class);
+
     Route::get('/medicinesbycategory/{id}', [MedicineController::class, 'getMedicines']);
     Route::apiResource('/medicines', MedicineController::class);
     Route::get('/archives/medicines', [MedicineController::class, 'archivelist']);
@@ -242,6 +277,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/medications/petowner/{id}/treatment/{tid}', [MedicationController::class, 'store']);
     Route::put('/medications/{id}', [MedicationController::class, 'update']);
     Route::get('/medications/{id}', [MedicationController::class, 'show']);
+    Route::get('/medications/petowner/{id}/service/{sid}', [MedicationController::class, 'showPetownerMedication']);
     Route::get('/archives/medications', [MedicationController::class, 'archivelist']);
     Route::put('/archives/medications/{id}', [MedicationController::class, 'restore']);
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
@@ -263,13 +299,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::apiResource('/zipcodes', ZipcodeController::class);
+Route::get('/zipcodedetails/{zipcode}', [ZipcodeController::class, 'getZipcodeDetails']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::prefix('/mobile')->group(function () {
-        Route::post('/signup', [MobileAuthController::class, 'signup']);
-        Route::post('/login', [MobileAuthController::class, 'login']);
-
+Route::prefix('/mobile')->group(function () {
+    Route::post('/signup', [MobileAuthController::class, 'signup']);
+    Route::post('/login', [MobileAuthController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users/{id}', [UserController::class, 'show']);
         Route::put('/users/{id}', [UserController::class, 'update']);
 
@@ -279,6 +314,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);
         Route::put('/petowners/{id}', [PetOwnerController::class, 'update']);
 
+        Route::get('/petowners/{id}/countpets', [PetOwnerController::class, 'countPetownerPets']);
         Route::get('/petowners/{ownerId}/pets', [PetController::class, 'getPetOwnersPet']);
 
         Route::get('/petowners/{id}/appointments', [PetOwnerController::class, 'getPetOwnerAppointments']);
@@ -296,3 +332,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     });
 });
+
+// Route::get('/treatments/{id}/generatePDF', [PDFController::class, 'generatePDFTreatment']);
+
+// Route::get('/paymentrecords/daily', [PaymentRecordController::class, 'getDailyIncome']);
+// Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
