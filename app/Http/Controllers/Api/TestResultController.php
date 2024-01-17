@@ -110,6 +110,21 @@ class TestResultController extends Controller
         return TestResultResource::collection($testResult);
     }
 
+    public function getTestsbyPetbyDate($id, $date)
+    {
+        $timestamp = strtotime($date);
+
+        $testResult = TestResult::where('pet_id', $id)
+            ->whereDate('date', '=', date('Y-m-d', $timestamp))
+            ->get();
+
+        if ($testResult->isEmpty()) {
+            return response()->json(['message' => 'No list of test results found for this pet within this date.'], 404);
+        }
+
+        return TestResultResource::collection($testResult);
+    }
+
     public function getDiagnosisByServiceandPetowner($id, $sid)
     {
         $servicesAvailedIds = Service::findOrFail($sid);
@@ -129,6 +144,27 @@ class TestResultController extends Controller
 
         return TestResultResource::collection($testResult);
     }
+
+    public function getOtherTestsByServiceandPetowner($id)
+    {
+        $services = Service::whereIn('service', ['4DX', 'EHRLICHIA', 'ANAPLASMA', 'HEARTWORM', 'LYME DISEASE'])->get();
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+
+        $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
+            ->whereIn('service_id', $services->pluck('id'))
+            ->pluck('id');
+
+        $testResult = TestResult::whereIn('services_availed_id', $servicesAvailedIdsFiltered)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($testResult->isEmpty()) {
+            return response()->json(['message' => 'No list of pet test results found.'], 404);
+        }
+
+        return TestResultResource::collection($testResult);
+    }
+
 
     /**
      * Update the specified resource in storage.

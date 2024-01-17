@@ -15,7 +15,7 @@ class TestResult extends Model
 
     protected $table = 'test_results';
 
-    protected $fillable = ['attachment','description','pet_id', 'services_availed_id'];
+    protected $fillable = ['date','attachment','description','pet_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
     

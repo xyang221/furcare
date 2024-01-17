@@ -17,6 +17,7 @@ class TestResultResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'date' => $this->date,
             'attachment' => $this->attachment,
             'description' => $this->description,
 
