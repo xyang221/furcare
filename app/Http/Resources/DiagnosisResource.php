@@ -21,6 +21,7 @@ class DiagnosisResource extends JsonResource
         return [
             'id'=> $this->id,
             'date' => $this->date,
+            'followup' => $this->followup,
             'remarks' => $this->remarks,
 
             'pet_id' => $this->pet_id,

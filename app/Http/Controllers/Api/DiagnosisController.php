@@ -28,6 +28,20 @@ class DiagnosisController extends Controller
         return DiagnosisResource::collection($diagnosis);
     }
 
+    public function getDiagnosisbyPetbyDate($id, $date)
+    {
+        $timestamp = strtotime($date);
+
+        $diagnosis = Diagnosis::where('pet_id', $id)
+            ->whereDate('date', '=', date('Y-m-d', $timestamp))
+            ->get();
+
+        if ($diagnosis->isEmpty()) {
+            return response()->json(['message' => 'No list of diagnosis found for this pet within this date.'], 404);
+        }
+
+        return DiagnosisResource::collection($diagnosis);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -68,6 +82,7 @@ class DiagnosisController extends Controller
 
         $diagnosis = Diagnosis::create([
             'pet_id' => $servicesAvailed->pet_id,
+            'followup' => $request->input('followup'),
             'remarks' => $request->input('remarks'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
@@ -136,7 +151,7 @@ class DiagnosisController extends Controller
     public function archive($id)
     {
         // $diagnosis = Diagnosis::with('relatedModels')->findOrFail($id);
-    
+
         // // Archive related models first
         // foreach ($diagnosis->relatedModels as $relatedModel) {
         //     $relatedModel->delete();

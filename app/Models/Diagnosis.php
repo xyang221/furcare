@@ -15,7 +15,7 @@ class Diagnosis extends Model
 
     protected $table = 'diagnosis';
 
-    protected $fillable = ['date', 'remarks', 'pet_id', 'services_availed_id'];
+    protected $fillable = ['date','followup', 'remarks', 'pet_id', 'services_availed_id'];
 
     protected $dates = ['deleted_at'];
 

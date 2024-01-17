@@ -22,6 +22,7 @@ class UpdateDiagnosisRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'followup' => 'date',
             'remarks' => 'required|string|max:55',
             'pet_id' => 'exists:pets,id',
             'service_id' => 'exists:services,id',
