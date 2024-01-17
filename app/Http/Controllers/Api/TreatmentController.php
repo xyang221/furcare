@@ -14,6 +14,7 @@ use App\Http\Resources\PetConditionResource;
 use App\Http\Resources\MedicationResource;
 use App\Models\Admission;
 use App\Models\ClientService;
+use App\Models\Pet;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
 
@@ -28,6 +29,22 @@ class TreatmentController extends Controller
 
         if ($treatments->isEmpty()) {
             return response()->json(['message' => 'No pet treatment records found.'], 404);
+        }
+
+        return TreatmentResource::collection($treatments);
+    }
+
+    public function getTreatmentbyPetbyDate($id, $date)
+    {
+        $pet = Pet::findOrFail($id);
+        $timestamp = strtotime($date);
+
+        $treatments = Treatment::where('pet_id', $pet->id)
+            ->whereDate('date', '=', date('Y-m-d', $timestamp))
+            ->get();
+
+        if ($treatments->isEmpty()) {
+            return response()->json(['message' => 'No list of treatments found for this pet within this date.'], 404);
         }
 
         return TreatmentResource::collection($treatments);

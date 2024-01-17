@@ -12,6 +12,7 @@ use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\StoreVaccinationAgainstRequest;
 use App\Http\Requests\UpdateVaccinationLogRequest;
 use App\Http\Resources\VaccinationLogResource;
+use App\Models\Pet;
 use App\Models\PetOwner;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,77 @@ class VaccinationLogController extends Controller
             return response()->json(['message' => 'No vaccination logs found.'], 404);
         }
         return VaccinationLogResource::collection($vaccinationLog);
+    }
+
+    public function byToday()
+    {
+        $today = Carbon::now();
+        $vaccinationLog = VaccinationLog::where('return', $today)->get();
+        if ($vaccinationLog->isEmpty()) {
+            return response()->json(['message' => 'No vaccinations for today found.'], 404);
+        }
+        return VaccinationLogResource::collection($vaccinationLog);
+    }
+
+    public function byWeek()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $vaccinationLog = VaccinationLog::whereBetween('return', [$startOfWeek, $endOfWeek])->get();
+
+        if ($vaccinationLog->isNotEmpty()) {
+            return VaccinationLogResource::collection($vaccinationLog);
+        }
+
+        return response()->json(['message' => 'No vaccinations for this week found.'], 404);
+    }
+
+    public function byMonth()
+    {
+        $month = Carbon::now();
+
+        $vaccinationLog = VaccinationLog::whereMonth('return', $month->month)
+            ->whereYear('return', $month->year)
+            ->get();
+
+        if ($vaccinationLog->isNotEmpty()) {
+            return VaccinationLogResource::collection($vaccinationLog);
+        }
+
+        return response()->json(['message' => 'No vaccinations for this month found.'], 404);
+    }
+
+    public function byYear()
+    {
+        $currentYear = Carbon::now()->year;
+
+        $vaccinationLog = VaccinationLog::whereYear('return', $currentYear)->get();
+
+        if ($vaccinationLog->isNotEmpty()) {
+            return VaccinationLogResource::collection($vaccinationLog);
+        }
+
+        return response()->json(['message' => 'No vaccinations for this year found.'], 404);
+    }
+
+    public function getbyPetowner($id)
+    {
+        $petowner = PetOwner::findOrFail($id);
+        $pets = Pet::where('petowner_id', $petowner->id)->pluck('id');
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $vaccinationLog = VaccinationLog::whereBetween('return', [$startOfWeek, $endOfWeek])
+        ->where('pet_id',$pets)
+        ->get();
+
+        if ($vaccinationLog->isNotEmpty()) {
+            return VaccinationLogResource::collection($vaccinationLog);
+        }
+
+        return response()->json(['message' => 'No vaccinations for this week found.'], 404);
     }
 
     /**

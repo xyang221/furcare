@@ -19,7 +19,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::orderBy('date', 'desc')->paginate(50);
+        $appointments = Appointment::orderBy('date', 'desc')->get();
         return AppointmentResource::collection($appointments);
     }
 
@@ -57,6 +57,27 @@ class AppointmentController extends Controller
 
         return new AppointmentResource($appointment);
     }
+
+    public function appointmentToday($id)
+    {
+        $today = Carbon::now();
+        $petowner = PetOwner::find($id);
+
+        if (!$petowner) {
+            return response()->json(['message' => 'PetOwner not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $appointment = Appointment::where('petowner_id', $petowner->id)
+            ->where('status', 'Completed')
+            ->where('date', $today)
+            ->first();
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
+        }
+        return new AppointmentResource($appointment);
+    }
+
 
     //get all the pending appointment which needs to be confirm or cancel
     public function getPending()
@@ -184,13 +205,34 @@ class AppointmentController extends Controller
     //get the appointments within that day
     public function getCurrent()
     {
+        $today = now()->toDateString();
         $appointments = Appointment::whereIn('status', ['Confirmed', 'Pending'])
+            ->whereDate('date', $today)
             ->orderBy('date')
             ->get();
 
         if ($appointments->isEmpty()) {
             return response([
-                'message' => 'No pending and confirmed appointments found.'
+                'message' => 'No pending and confirmed appointments found today.'
+            ], 404);
+        }
+
+        return AppointmentResource::collection($appointments);
+    }
+
+    public function getCurrentbyPetowner($id)
+    {
+        $today = now()->toDateString();
+
+        $appointments = Appointment::whereIn('status', ['Confirmed', 'Pending'])
+            ->where('petowner_id', $id)
+            ->whereDate('date', $today)
+            ->orderBy('date')
+            ->get();
+
+        if ($appointments->isEmpty()) {
+            return response([
+                'message' => 'No pending and confirmed appointments found today.'
             ], 404);
         }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\DewormingLog;
-use App\Models\Pet;
 use App\Models\ServicesAvailed;
 use App\Models\Service;
 use App\Models\ClientService;
@@ -13,6 +12,7 @@ use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateDewormingLogRequest;
 use App\Http\Resources\DewormingLogResource;
 use App\Models\PetOwner;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DewormingLogController extends Controller
@@ -29,6 +29,58 @@ class DewormingLogController extends Controller
         }
 
         return DewormingLogResource::collection($dewormingLog);
+    }
+
+    public function byToday()
+    {
+        $today = Carbon::now();
+        $dewromingLog = DewormingLog::where('return', $today)->get();
+        if ($dewromingLog->isEmpty()) {
+            return response()->json(['message' => 'No deworming for today found.'], 404);
+        }
+        return DewormingLogResource::collection($dewromingLog);
+    }
+
+    public function byWeek()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $dewromingLog = DewormingLog::whereBetween('return', [$startOfWeek, $endOfWeek])->get();
+
+        if ($dewromingLog->isNotEmpty()) {
+            return DewormingLogResource::collection($dewromingLog);
+        }
+
+        return response()->json(['message' => 'No deworming for this week found.'], 404);
+    }
+
+    public function byMonth()
+    {
+        $month = Carbon::now();
+
+        $dewromingLog = DewormingLog::whereMonth('return', $month->month)
+            ->whereYear('return', $month->year)
+            ->get();
+
+        if ($dewromingLog->isNotEmpty()) {
+            return DewormingLogResource::collection($dewromingLog);
+        }
+
+        return response()->json(['message' => 'No deworming for this month found.'], 404);
+    }
+
+    public function byYear()
+    {
+        $currentYear = Carbon::now()->year;
+
+        $dewromingLog = DewormingLog::whereYear('return', $currentYear)->get();
+
+        if ($dewromingLog->isNotEmpty()) {
+            return DewormingLogResource::collection($dewromingLog);
+        }
+
+        return response()->json(['message' => 'No deworming for this year found.'], 404);
     }
 
     /**
