@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Appointment as EventsAppointment;
 use App\Models\Appointment;
 use App\Models\PetOwner;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
+
+    public function listenForTodayAppointments()
+    {
+        $today = Carbon::today();
+
+        $appointments = Appointment::whereDate('date', $today)->get();
+
+        foreach ($appointments as $appointment) {
+            event(new EventsAppointment($appointment));
+        }
+        return response()->json(['message' => 'Event triggered for today\'s appointments']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -60,24 +74,19 @@ class AppointmentController extends Controller
 
     public function appointmentToday($id)
     {
-        $today = Carbon::now();
-        $petowner = PetOwner::find($id);
+        $today = Carbon::now()->toDateString(); // Format as a date string
 
-        if (!$petowner) {
-            return response()->json(['message' => 'PetOwner not found.'], Response::HTTP_NOT_FOUND);
-        }
-
-        $appointment = Appointment::where('petowner_id', $petowner->id)
+        $appointment = Appointment::where('petowner_id', $id)
             ->where('status', 'Completed')
-            ->where('date', $today)
+            ->whereDate('date', $today) // Use whereDate for precise date comparison
             ->first();
 
         if (!$appointment) {
             return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
         }
+
         return new AppointmentResource($appointment);
     }
-
 
     //get all the pending appointment which needs to be confirm or cancel
     public function getPending()
@@ -115,7 +124,7 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('status', 'Confirmed')->orderBy('date', 'desc')->get();
 
         if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'No scheduled appointments found.'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'No confirmed appointments found.'], Response::HTTP_NOT_FOUND);
         }
 
         return AppointmentResource::collection($appointments);
@@ -206,37 +215,52 @@ class AppointmentController extends Controller
     public function getCurrent()
     {
         $today = now()->toDateString();
-        $appointments = Appointment::whereIn('status', ['Confirmed', 'Pending'])
+
+        $confirmedAppointments = Appointment::where('status', 'Confirmed')
             ->whereDate('date', $today)
             ->orderBy('date')
             ->get();
 
-        if ($appointments->isEmpty()) {
+        $pendingAppointments = Appointment::where('status', 'Pending')
+            ->orderBy('date')
+            ->get();
+
+        $c1 = AppointmentResource::collection($pendingAppointments);
+        $c2 = AppointmentResource::collection($confirmedAppointments);
+        $mergedCollection = $c1->merge($c2);
+        if ($mergedCollection->isEmpty()) {
             return response([
                 'message' => 'No pending and confirmed appointments found today.'
             ], 404);
         }
-
-        return AppointmentResource::collection($appointments);
+        return AppointmentResource::collection($mergedCollection);
     }
+
 
     public function getCurrentbyPetowner($id)
     {
         $today = now()->toDateString();
 
-        $appointments = Appointment::whereIn('status', ['Confirmed', 'Pending'])
+        $confirmedAppointments = Appointment::where('status', 'Confirmed')
             ->where('petowner_id', $id)
             ->whereDate('date', $today)
             ->orderBy('date')
             ->get();
 
-        if ($appointments->isEmpty()) {
+        $pendingAppointments = Appointment::where('status', 'Pending')
+            ->where('petowner_id', $id)
+            ->orderBy('date')
+            ->get();
+
+        $c1 = AppointmentResource::collection($pendingAppointments);
+        $c2 = AppointmentResource::collection($confirmedAppointments);
+        $mergedCollection = $c1->merge($c2);
+        if ($mergedCollection->isEmpty()) {
             return response([
                 'message' => 'No pending and confirmed appointments found today.'
             ], 404);
         }
-
-        return AppointmentResource::collection($appointments);
+        return AppointmentResource::collection($mergedCollection);
     }
 
     public function getDoctorAppointments($id)
