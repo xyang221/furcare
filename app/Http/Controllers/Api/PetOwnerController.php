@@ -14,6 +14,7 @@ use App\Http\Resources\PetOwnerResource;
 
 use App\Models\Appointment;
 use App\Http\Resources\AppointmentResource;
+use App\Models\Pet;
 use Illuminate\Http\Response;
 
 use Illuminate\Support\Facades\Hash;
@@ -44,15 +45,17 @@ class PetOwnerController extends Controller
             // Perform search
             $petOwners = PetOwner::where(function ($query) use ($sanitized_name) {
                 $query->where('firstname', 'like', "%{$sanitized_name}%")
-                    ->orWhere('lastname', 'like', "%{$sanitized_name}%");
-            })->get();
+                    ->orWhere('lastname', 'like', "%{$sanitized_name}%")
+                    ->orWhereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", ["%{$sanitized_name}%"]);
+            })
+                ->get();
+
 
             // Check if any results are found
             if ($petOwners->isEmpty()) {
                 return response()->json(['message' => 'No pet owners found.'], 404);
             }
 
-            // Return the resource collection
             return PetOwnerResource::collection($petOwners);
         } catch (\Exception $e) {
             // Handle exceptions or errors that may occur during the query
