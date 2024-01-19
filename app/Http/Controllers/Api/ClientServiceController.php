@@ -26,22 +26,19 @@ class ClientServiceController extends Controller
 
     public function balance($id)
     {
-        $petowner = PetOwner::find($id);
-
-        if (!$petowner) {
-            return response()->json(['error' => 'PetOwner not found'], 404);
-        }
+        $petowner = PetOwner::findOrFail($id);
 
         $clientService = ClientService::where('petowner_id', $petowner->id)
             ->where('status', 'Pending')
             ->first();
 
         if (!$clientService) {
-            return response()->json(['balance' => 0], 204);
+            return response()->json(['balance' => 0], 404);
         }
 
-        return response()->json(['balance' => $clientService->balance], 200);
+        return response()->json(['balance' => $clientService->balance], 204);
     }
+
 
 
     /**
@@ -134,6 +131,7 @@ class ClientServiceController extends Controller
         } else {
             $data['status'] = "Pending";
             $data['balance'] += $clientService->balance; // Use shorthand for adding balance
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
         }
 
         $clientService->update($data);
