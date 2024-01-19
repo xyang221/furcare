@@ -10,6 +10,7 @@ use App\Http\Resources\AdmissionResource;
 use App\Models\ClientService;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
+use App\Models\Treatment;
 
 class AdmissionController extends Controller
 {
@@ -89,6 +90,17 @@ class AdmissionController extends Controller
             return response()->json(['message' => 'No admission records found in this pet.'], 404);
         }
         return AdmissionResource::collection($admissions);
+    }
+
+    public function showTreatmentAdmission($id)
+    {
+
+        $admission = Admission::where('treatment_id', $id)->first();
+
+        if (!$admission) {
+            return response()->json(['message' => 'No admission record found in this treatment.'], 404);
+        }
+        return new AdmissionResource($admission);
     }
 
     /**
