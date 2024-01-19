@@ -22,11 +22,11 @@ class UpdatePetConditionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'eating' => 'required|string|max:255',
-            'drinking' => 'required|string|max:255',
-            'urinated' => 'required|string|max:255',
-            'vomit' => 'required|string|max:255',
-            'defecated' => 'required|string|max:255',
+            'eating' => 'nullable|string|max:255',
+            'drinking' => 'nullable|string|max:255',
+            'urinated' => 'nullable|string|max:255',
+            'vomit' => 'nullable|string|max:255',
+            'defecated' => 'nullable|string|max:255',
             'is_AM_or_PM' => 'required|string|max:255',
         ];
     }
