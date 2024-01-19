@@ -10,6 +10,7 @@ use App\Http\Requests\StoreMedicineRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateMedicationRequest;
 use App\Http\Requests\UpdateMedicineRequest;
+use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\MedicationResource;
 use App\Models\ClientService;
 use App\Models\Medicine;
@@ -43,7 +44,7 @@ class MedicationController extends Controller
 
         $servicesAvailed = ServicesAvailed::create([
             'service_id' => 19,
-            'unit_price' => $med->input('price'),
+            'unit_price' => $sarequest->input('unit_price'),
             'quantity' => $sarequest->input('quantity'),
             'client_deposit_id' => $clientService->id,
             'pet_id' => $treatment->pet_id,
@@ -53,7 +54,7 @@ class MedicationController extends Controller
         $medicine = Medicine::create([
             'medcat_id' => $med->input('medcat_id'),
             'name' => $med->input('name'),
-            'price' =>  $med->input('price'),
+            'price' =>   $servicesAvailed->unit_price
         ]);
 
         $medication = Medication::create([
@@ -101,14 +102,18 @@ class MedicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicationRequest $request, UpdateMedicineRequest $med, Medication $medication, $id)
+    public function update(UpdateMedicationRequest $request, UpdateMedicineRequest $med,UpdateServicesAvailedRequest $sareq, $id)
     {
         $medication = Medication::findOrFail($id);
         $medicine = Medicine::findOrFail($medication->medicine_id);
+        $servicesAvailed = ServicesAvailed::findOrFail($medication->services_availed_id);
         $data = $request->validated();
         $meddata = $med->validated();
+        $sadata = $sareq->validated();
         $medication->update($data);
         $medicine->update($meddata);
+
+        $servicesAvailed->update($sadata);
 
         return response()->json(['message' => 'Medication updated successfully.'], 204);
     }
@@ -116,9 +121,12 @@ class MedicationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Medication $medication)
+    public function archive(Medication $medication, $id)
     {
+        $medication = Medication::findOrFail($id);
+        $service = ServicesAvailed::findOrFail($medication->services_availed_id);
         $medication->delete();
+        $service->delete();
         return response()->json(['message' => 'The pet medication record within this treatment was archived.'], 204);
     }
 
