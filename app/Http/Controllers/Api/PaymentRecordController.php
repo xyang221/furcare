@@ -49,20 +49,28 @@ class PaymentRecordController extends Controller
 
     public function showPetownerPayments(PaymentRecord $paymentRecord, $id)
     {
-        $clientDepositIds = ClientService::where('petowner_id', $id)->pluck('id')->toArray();
+        // Retrieve client deposits for the given pet owner ID
+        $clientDeposits = ClientService::where('petowner_id', $id)->get();
 
-        if (empty($clientDepositIds)) {
+        // Check if client deposits are empty
+        if ($clientDeposits->isEmpty()) {
             return response()->json(['message' => 'No payment records found for this client.'], 404);
         }
 
+        // Extract client deposit IDs from the collection
+        $clientDepositIds = $clientDeposits->pluck('id')->toArray();
+
+        // Retrieve payment records based on the client deposit IDs
         $paymentRecords = PaymentRecord::whereIn('client_deposit_id', $clientDepositIds)
-            ->orderByDesc('id')
+            ->orderBy('date', 'desc')
             ->get();
 
+        // Check if payment records are empty
         if ($paymentRecords->isEmpty()) {
             return response()->json(['message' => 'No payment records found for this client.'], 404);
         }
 
+        // Return a JSON response with the payment records using a resource
         return PaymentRecordResource::collection($paymentRecords);
     }
 
