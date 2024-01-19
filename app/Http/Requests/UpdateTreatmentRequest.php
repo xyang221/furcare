@@ -24,15 +24,15 @@ class UpdateTreatmentRequest extends FormRequest
         return [
             'diagnosis' => 'required|string',
             'body_weight' => 'required|numeric',
-            'heart_rate' => 'numeric',
-            'mucous_membranes' => 'numeric',
-            'pr_prealbumin' => 'numeric',
-            'temperature' => 'numeric',
-            'respiration_rate' => 'numeric',
-            'caspillar_refill_time' => 'numeric',
-            'body_condition_score' => 'numeric',
-            'fluid_rate' => 'numeric',
-            'comments' => 'string',
+            'heart_rate' => 'nullable|numeric',
+            'mucous_membranes' => 'nullable|numeric',
+            'pr_prealbumin' => 'nullable|numeric',
+            'temperature' => 'nullable|numeric',
+            'respiration_rate' => 'nullable|numeric',
+            'caspillar_refill_time' => 'nullable|numeric',
+            'body_condition_score' => 'nullable|numeric',
+            'fluid_rate' => 'nullable|numeric',
+            'comments' => 'nullable|string',
         ];
     }
 }

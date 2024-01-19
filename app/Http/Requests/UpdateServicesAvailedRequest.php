@@ -22,8 +22,12 @@ class UpdateServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'unit_price' => 'nullable|numeric',
-            'status'=>'string',
+            'unit_price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'status' => 'string',
+            'service_id' => 'exists:services,id',
+            'client_deposit_id' => 'exists:client_deposits,id',
+            'pet_id' => 'exists:pets,id',
         ];
     }
 }

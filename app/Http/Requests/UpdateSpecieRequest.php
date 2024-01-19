@@ -23,7 +23,7 @@ class UpdateSpecieRequest extends FormRequest
     {
         return [
             'specie'=>'required|string|max:55',
-            'description'=>'string|max:55',
+            'description'=>'nullable|string|max:55',
         ];
     }
 }
