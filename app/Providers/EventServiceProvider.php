@@ -18,6 +18,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \App\Events\AppointmentEvent::class => [
+            \App\Listeners\AppointmentListener::class,
+        ],
+        \App\Events\DewormingReturn::class => [
+            \App\Listeners\DewormingListener::class,
+        ],
+        \App\Events\VaccinationReturn::class => [
+            \App\Listeners\VaccinationListener::class,
+        ],
     ];
 
     /**
