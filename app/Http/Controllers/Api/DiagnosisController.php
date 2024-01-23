@@ -93,7 +93,7 @@ class DiagnosisController extends Controller
         $dateTime = Carbon::parse($diagnosis->followup);
         $formattedDateTime = $dateTime->format('F j, Y');
         Notification::create([
-            'date' => $diagnosis->return,
+            'date' => $diagnosis->followup,
             'user_id' => $diagnosis->pet->petowner->user->id,
             'type' => 'Consultation',
             'message' => "{$diagnosis->pet->name}'s consultation follow up date is today $formattedDateTime.",
@@ -108,6 +108,7 @@ class DiagnosisController extends Controller
 
             // Notification for each admin 
             Notification::create([
+            'date' => $diagnosis->followup,
                 'user_id' => $userId,
                 'type' => 'Consultation',
                 'message' => $message,

@@ -112,6 +112,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::where('petowner_id', $id)
             ->where('status', 'Completed')
             ->whereDate('date', $today) // Use whereDate for precise date comparison
+            ->latest()
             ->first();
 
         if (!$appointment) {
@@ -377,6 +378,22 @@ class AppointmentController extends Controller
         }
 
         $appointment->update($data);
+
+        if ($appointment->status === "Pending") {
+            $admins = User::whereIn('role_id', [1,2])->whereNull('deleted_at')->get();
+            $dateTime = Carbon::parse($appointment->date);
+            $formattedDateTime = $dateTime->format('F j, Y h:i a');
+            $firstname = $appointment->petowner->firstname;
+            $lastname = $appointment->petowner->lastname;
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'type' => 'Appointment',
+                    'message' => "$firstname $lastname has updated the appointment for $formattedDateTime.",
+                    'status' => 1, // to notify, not opened, not clicked
+                ]);
+            }
+        }
         return new AppointmentResource($appointment);
     }
 
