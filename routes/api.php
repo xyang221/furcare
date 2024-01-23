@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\Api\MedicationController;
 use App\Http\Controllers\Api\MedicineCategoryController;
 use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentRecordController;
 use App\Http\Controllers\Api\PDFController;
 
@@ -60,7 +61,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // });
 
     Route::apiResource('/roles', RoleController::class);
+
     Route::get('/counts', [AdminController::class, 'homeComponents']);
+    Route::get('/search/petowners-pets/{name}', [AdminController::class, 'searchPetownerandPet']);
 
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
@@ -104,6 +107,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
 
     Route::get('/species', [SpecieController::class, 'index']);
+    Route::post('/species', [SpecieController::class, 'store']);
     Route::get('/species/{id}', [SpecieController::class, 'show']);
     Route::put('/species/{id}', [SpecieController::class, 'update']);
 
@@ -177,6 +181,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
 
     Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
+    Route::get('/clientdeposits/{id}/generate-chargeslip/balancepaid', [PDFController::class, 'generatePDFBalancePaid']);
 
     // Route::apiResource('/clientdeposits', ClientServiceController::class);
     Route::get('/clientdeposits', [ClientServiceController::class, 'index']);
@@ -229,6 +234,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [VaccinationLogController::class, 'destroy']);
 
     Route::get('/testresults', [TestResultController::class, 'index']);
+    // Route::get('/testresults/download/storage/testresult-attachments/{attachment}', [TestResultController::class, 'downloadImage']);
     Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'store']);
     Route::get('/testresults/{id}', [TestResultController::class, 'show']);
     Route::get('/testresults/pet/{id}', [TestResultController::class, 'getbyPet']);
@@ -246,7 +252,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/treatments/pet/{id}/{date}', [TreatmentController::class, 'getTreatmentbyPetbyDate']);
     Route::post('/treatments/petowner/{poid}/service/{sid}', [TreatmentController::class, 'store']);
     Route::get('/treatments/{id}', [TreatmentController::class, 'show']);
-    Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'showPetownerTreatments']);
+    // Route::get('/treatments/petowner/{id}/service/{sid}', [TreatmentController::class, 'showPetownerTreatments']);
     Route::get('/treatments/pet/{id}', [TreatmentController::class, 'getPetTreatments']);
     Route::get('/treatments/{id}/petconditions', [TreatmentController::class, 'getTreatmentPetConditions']);
     Route::get('/treatments/{id}/medications', [TreatmentController::class, 'getTreatmentMedications']);
@@ -278,6 +284,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/medications/{id}', [MedicationController::class, 'update']);
     Route::get('/medications/{id}', [MedicationController::class, 'show']);
     Route::get('/medications/petowner/{id}/service/{sid}', [MedicationController::class, 'showPetownerMedication']);
+    Route::delete('/medications/{id}/archive', [MedicationController::class, 'archive']);
     Route::get('/archives/medications', [MedicationController::class, 'archivelist']);
     Route::put('/archives/medications/{id}', [MedicationController::class, 'restore']);
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
@@ -287,19 +294,31 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admissions/petowner/{id}/service/{sid}', [AdmissionController::class, 'showPetownerTreatments']);
     Route::get('/admissions/petowner/{id}', [AdmissionController::class, 'getClientAdmissions']);
     Route::get('/admissions/pet/{id}', [AdmissionController::class, 'getPetAdmissions']);
+    Route::get('/admissions/treatment/{id}', [AdmissionController::class, 'showTreatmentAdmission']);
     Route::get('/archives/admissions', [AdmissionController::class, 'archivelist']);
     Route::put('/archives/admissions/{id}', [AdmissionController::class, 'restore']);
     Route::delete('/archives/admissions/{id}', [AdmissionController::class, 'forcedelete']);
 
 
+    Route::get('/appointments-triger/today', [AppointmentController::class, 'listenForTodayAppointments']);
+    Route::get('/vaccinations-triger/today', [VaccinationLogController::class, 'listenForTodayVaccinations']);
+    Route::get('/dewormings-triger/today', [DewormingLogController::class, 'listenForTodayDewormings']);
+
+    Route::get('/notifications/{id}', [NotificationController::class, 'getNotifs']);
+    Route::get('/notifications-count/{id}', [NotificationController::class, 'countNotifs']);
+    Route::post('/notifications-opened/{id}', [NotificationController::class, 'updateNotifs']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 // });
 
+Route::post('/verifyemail', [AuthController::class, 'verifyemail']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/zipcodedetails/{zipcode}', [ZipcodeController::class, 'getZipcodeDetails']);
+// Example API route
+// Route::get('/appointments-trigger/today', [AppointmentController::class, 'listenForTodayAppointments']);
+// Route::get('/vaccinations-triger/today', [VaccinationLogController::class, 'listenForTodayVaccinations']);
 
 Route::prefix('/mobile')->group(function () {
     Route::post('/signup', [MobileAuthController::class, 'signup']);
@@ -333,7 +352,5 @@ Route::prefix('/mobile')->group(function () {
     });
 });
 
-// Route::get('/treatments/{id}/generatePDF', [PDFController::class, 'generatePDFTreatment']);
-
-// Route::get('/paymentrecords/daily', [PaymentRecordController::class, 'getDailyIncome']);
-// Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
+// Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
+// Route::get('/clientdeposits/{id}/generate-chargeslip/balancepaid', [PDFController::class, 'generatePDFBalancePaid']);

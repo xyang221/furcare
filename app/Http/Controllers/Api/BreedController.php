@@ -16,10 +16,9 @@ class BreedController extends Controller
     public function index()
     {
 
-        return BreedResource::collection( 
-            Breed::query()->orderBy('id','desc')->get()
+        return BreedResource::collection(
+            Breed::query()->orderBy('id', 'desc')->get()
         );
-
     }
 
     /**
@@ -28,7 +27,7 @@ class BreedController extends Controller
     public function store(StoreBreedRequest $request)
     {
         $data = $request->validated(); //get the data
-        $breed = Breed::create($data); 
+        $breed = Breed::create($data);
         return new BreedResource($breed, 201);
     }
 
@@ -39,7 +38,9 @@ class BreedController extends Controller
 
             // Perform search
             $breeds = Breed::where('specie_id', '=', $sanitized_name)
-            ->get();
+                ->orderBy('breed') // Assuming 'name' is the column you want to order alphabetically
+                ->get();
+
 
             // Check if any results are found
             if ($breeds->isEmpty()) {

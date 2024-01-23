@@ -64,4 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Staff::class);
     }
+
+    // public function receivesBroadcastNotificationsOn()
+    // {
+    //     return 'App.User.' . $this->id;
+    // }
 }

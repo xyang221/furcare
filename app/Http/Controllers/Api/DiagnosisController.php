@@ -14,6 +14,9 @@ use App\Http\Requests\UpdateDiagnosisRequest;
 use App\Http\Resources\DiagnosisResource;
 
 use App\Http\Requests\StoreServicesAvailedRequest;
+use App\Models\Notification;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DiagnosisController extends Controller
@@ -23,7 +26,7 @@ class DiagnosisController extends Controller
      */
     public function index()
     {
-        $diagnosis = Diagnosis::query()->orderBy('id', 'desc')->paginate(50);
+        $diagnosis = Diagnosis::query()->orderBy('id', 'desc')->get();
 
         return DiagnosisResource::collection($diagnosis);
     }
@@ -86,6 +89,31 @@ class DiagnosisController extends Controller
             'remarks' => $request->input('remarks'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
+
+        $dateTime = Carbon::parse($diagnosis->followup);
+        $formattedDateTime = $dateTime->format('F j, Y');
+        Notification::create([
+            'date' => $diagnosis->return,
+            'user_id' => $diagnosis->pet->petowner->user->id,
+            'type' => 'Consultation',
+            'message' => "{$diagnosis->pet->name}'s consultation follow up date is today $formattedDateTime.",
+            'status' => 1, // to notify, not opened, not clicked
+        ]);
+
+        $admins = User::whereIn('role_id', [1, 2])->whereNull('deleted_at')->get();
+
+        foreach ($admins as $admin) {
+            $userId = $admin->id;
+            $message = "{$diagnosis->pet->petowner->firstname} {$diagnosis->pet->petowner->lastname} pet {$diagnosis->pet->name} has follow up consultation today.";
+
+            // Notification for each admin 
+            Notification::create([
+                'user_id' => $userId,
+                'type' => 'Consultation',
+                'message' => $message,
+                'status' => 1, // to notify, not opened, not clicked
+            ]);
+        }
 
         return new DiagnosisResource($diagnosis, 201);
     }

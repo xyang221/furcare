@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\VaccinationReturn;
 use App\Models\VaccinationLog;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
@@ -12,13 +13,27 @@ use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\StoreVaccinationAgainstRequest;
 use App\Http\Requests\UpdateVaccinationLogRequest;
 use App\Http\Resources\VaccinationLogResource;
+use App\Models\Notification;
 use App\Models\Pet;
 use App\Models\PetOwner;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class VaccinationLogController extends Controller
 {
+    public function listenForTodayVaccinations()
+    {
+        $today = Carbon::today();
+
+        $vaccinationLogs = VaccinationLog::whereDate('return', $today)->get();
+
+        foreach ($vaccinationLogs as $vaccination) {
+            event(new VaccinationReturn($vaccination));
+        }
+        return response()->json(['message' => 'Event triggered for today\'s vaccinations.']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -88,18 +103,14 @@ class VaccinationLogController extends Controller
         $petowner = PetOwner::findOrFail($id);
         $pets = Pet::where('petowner_id', $petowner->id)->pluck('id');
 
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
+        $vaccinationLogs = VaccinationLog::where('pet_id', $pets)->whereDate('return', '>=', Carbon::today())->orderBy('return', 'desc')->get();
 
-        $vaccinationLog = VaccinationLog::whereBetween('return', [$startOfWeek, $endOfWeek])
-        ->where('pet_id',$pets)
-        ->get();
 
-        if ($vaccinationLog->isNotEmpty()) {
-            return VaccinationLogResource::collection($vaccinationLog);
+        if ($vaccinationLogs->isNotEmpty()) {
+            return VaccinationLogResource::collection($vaccinationLogs);
         }
 
-        return response()->json(['message' => 'No vaccinations for this week found.'], 404);
+        return response()->json(['message' => 'No upcoming vaccinations found.'], 404);
     }
 
     /**
@@ -149,6 +160,31 @@ class VaccinationLogController extends Controller
             'return' => $request->input('return'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
+
+        $dateTime = Carbon::parse($vaccinationLog->return);
+        $formattedDateTime = $dateTime->format('F j, Y');
+        Notification::create([
+            'date' => $vaccinationLog->return,
+            'user_id' => $vaccinationLog->pet->petowner->user->id,
+            'type' => 'Vaccination',
+            'message' => "{$vaccinationLog->pet->name}'s vaccination return date is today $formattedDateTime.",
+            'status' => 1, // to notify, not opened, not clicked
+        ]);
+
+        $admins = User::whereIn('role_id', [1, 2])->whereNull('deleted_at')->get();
+
+        foreach ($admins as $admin) {
+            $userId = $admin->id;
+            $message = "{$vaccinationLog->pet->petowner->firstname} {$vaccinationLog->pet->petowner->lastname} pet {$vaccinationLog->pet->name} has return vaccination today.";
+
+            // Notification for each admin 
+            Notification::create([
+                'user_id' => $userId,
+                'type' => 'Vaccination',
+                'message' => $message,
+                'status' => 1, // to notify, not opened, not clicked
+            ]);
+        }
 
         return new VaccinationLogResource($vaccinationLog, 201);
     }

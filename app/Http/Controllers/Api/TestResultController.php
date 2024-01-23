@@ -33,6 +33,16 @@ class TestResultController extends Controller
         return TestResultResource::collection($testresults);
     }
 
+    // Example Laravel controller method
+    public function downloadImage($imageName)
+    {
+        $imagePath = public_path('storage/testresult-attachments/' . $imageName);
+
+        return response()->download($imagePath, null, [], null);
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      */

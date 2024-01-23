@@ -39,13 +39,13 @@ class SpeciesSeeder extends Seeder
         'description' => 'Avian species is a group of warm-blooded vertebrates constituting the class Aves, characterized by feathers, toothless beak, laying of hard-shelled eggs, high metabolic rate, four-chambered heart and a strong but lightweight skeleton.',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
-      4 =>
+      5 =>
       array(
         'specie' => 'Equine',
         'description' => 'Equines are odd-toed ungulates with slender legs, long heads, relatively long necks, manes (erect in most subspecies), and long tails.',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
-      4 =>
+      6 =>
       array(
         'specie' => 'Goat',
         'description' => 'A goat is any ruminant and hollow-horned mammal belonging to the genus Capra. It is lighter in build and has horns that arch backward, a short tail, and straighter hair.',
