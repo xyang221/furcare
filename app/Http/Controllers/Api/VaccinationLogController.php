@@ -179,6 +179,7 @@ class VaccinationLogController extends Controller
 
             // Notification for each admin 
             Notification::create([
+                'date'=>$vaccinationLog->return,
                 'user_id' => $userId,
                 'type' => 'Vaccination',
                 'message' => $message,
