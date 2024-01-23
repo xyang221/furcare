@@ -144,7 +144,7 @@ class ServiceSeeder extends Seeder
       ),
       17 =>
       array(
-        'service' => 'HEARTWORM',
+        'service' => 'HEARTWORM TEST',
 
         'isAvailable' => 1,
         'cat_id' => 8,
@@ -153,7 +153,6 @@ class ServiceSeeder extends Seeder
       18 =>
       array(
         'service' => '4DX',
-
         'isAvailable' => 1,
         'cat_id' => 8,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -161,7 +160,6 @@ class ServiceSeeder extends Seeder
       19 =>
       array(
         'service' => 'Medicine',
-
         'isAvailable' => 1,
         'cat_id' => 9,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -188,6 +186,64 @@ class ServiceSeeder extends Seeder
 
         'isAvailable' => 1,
         'cat_id' => 12,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      23 =>
+      array(
+        'service' => 'Leptospirosis Test',
+
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      24 =>
+      array(
+        'service' => 'Flu Test',
+
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      25 =>
+      array(
+        'service' => 'Pregnancy Test',
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      26 =>
+      array(
+        'service' => 'Xray',
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      27 =>
+      array(
+        'service' => 'Urinalysis',
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      28 =>
+      array(
+        'service' => 'Fecalysis',
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      29 =>
+      array(
+        'service' => 'Anaplasma',
+        'isAvailable' => 1,
+        'cat_id' => 8,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      30 =>
+      array(
+        'service' => 'Lyme Disease',
+        'isAvailable' => 1,
+        'cat_id' => 8,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
     ]);

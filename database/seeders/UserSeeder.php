@@ -21,15 +21,6 @@ class UserSeeder extends Seeder
             'password' => bcrypt('abcd1234'),
             'role_id' => 1),
 
-            1 => 
-           array( 'email' => 'staff@test.com',
-            'password' => bcrypt('abcd1234'),
-            'role_id' => 2),
-
-            2=>
-            array( 'email' => 'petowner@test.com',
-             'password' => bcrypt('abcd1234'),
-             'role_id' => 3),
         ]);
     }
 }
