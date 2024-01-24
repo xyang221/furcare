@@ -35,11 +35,6 @@ class ServiceCategorySeeder extends Seeder
                 'category' => 'Grooming',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
               ),
-             5 => 
-            array (
-                'category' => 'Surgery',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-              ),
              6 => 
             array (
                 'category' => 'Vaccination',

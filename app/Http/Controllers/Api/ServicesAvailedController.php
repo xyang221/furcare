@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\ServicesAvailedResource;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ServicesAvailedController extends Controller
@@ -47,6 +48,7 @@ class ServicesAvailedController extends Controller
             }
 
             $newclientService = ClientService::create([
+                'date' => Carbon::now(),
                 'petowner_id' => $petowner->id,
                 'deposit' => 0,
                 'rendered_by' => $renderedby,
@@ -58,6 +60,7 @@ class ServicesAvailedController extends Controller
 
         $requestData = $request->validated();
 
+        $requestData['date'] =  Carbon::now();
         $requestData['client_deposit_id'] = $clientService->id;
         $requestData['service_id'] = $service->id;
         $requestData['status'] = "To Pay";

@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateClientServiceRequest;
 use App\Http\Resources\ClientServiceResource;
 use App\Http\Resources\ServicesAvailedResource;
 use App\Models\ServicesAvailed;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,6 +77,7 @@ class ClientServiceController extends Controller
                 $renderedby = "Admin";
             }
 
+            $data['date'] = Carbon::now();
             $data['rendered_by'] = $renderedby;
             $data['status'] = "To Pay";
             ClientService::create($data);

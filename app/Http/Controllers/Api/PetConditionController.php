@@ -45,7 +45,8 @@ class PetConditionController extends Controller
         } else {
             $data['is_AM_or_PM'] = "PM";
         }
-    
+        
+        $data['date'] = Carbon::now();
         $data['treatment_id'] = $treatment->id; // Assign treatment ID
     
         $petCondition = PetCondition::create($data); // create PetCondition

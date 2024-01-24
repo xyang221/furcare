@@ -46,14 +46,6 @@ class ServiceSeeder extends Seeder
         'cat_id' => 4,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
-      5 =>
-      array(
-        'service' => 'Surgery',
-
-        'isAvailable' => 1,
-        'cat_id' => 5,
-        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-      ),
       6 =>
       array(
         'service' => 'DHLPPI',

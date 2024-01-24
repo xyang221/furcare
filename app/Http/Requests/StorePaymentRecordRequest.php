@@ -22,6 +22,7 @@ class StorePaymentRecordRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date' => 'date',
             'chargeslip_ref_no' => 'required|numeric',
             'type' => 'required|string',
             'type_ref_no' => 'nullable|string',

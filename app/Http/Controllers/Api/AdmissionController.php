@@ -11,6 +11,7 @@ use App\Models\ClientService;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
 use App\Models\Treatment;
+use Carbon\Carbon;
 
 class AdmissionController extends Controller
 {
@@ -37,6 +38,8 @@ class AdmissionController extends Controller
 
         $data = $request->validated(); //get the data
 
+        $data['date_admission'] = Carbon::now();
+        $data['date_released'] = Carbon::now();
         $data['client_deposit_id'] = $clientService->id;
         $admission = Admission::create($data); //create
         return new AdmissionResource($admission, 201);

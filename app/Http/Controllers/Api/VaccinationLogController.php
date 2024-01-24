@@ -134,6 +134,7 @@ class VaccinationLogController extends Controller
             }
 
             $newclientService = ClientService::create([
+                'date' => Carbon::now(),
                 'petowner_id' => $petowner->id,
                 'deposit' => 0,
                 'rendered_by' => $renderedby,
@@ -144,6 +145,7 @@ class VaccinationLogController extends Controller
         }
 
         $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
             'client_deposit_id' => $clientService->id,
@@ -152,6 +154,7 @@ class VaccinationLogController extends Controller
         ]);
 
         $vaccinationLog = VaccinationLog::create([
+            'date' => Carbon::now(),
             'pet_id' => $servicesAvailed->pet_id,
             'weight' => $request->input('weight'),
             'description' => $request->input('description'),

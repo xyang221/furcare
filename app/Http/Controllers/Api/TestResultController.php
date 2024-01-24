@@ -13,6 +13,7 @@ use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateTestResultRequest;
 use App\Http\Resources\TestResultResource;
 use App\Models\PetOwner;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -64,6 +65,7 @@ class TestResultController extends Controller
             }
 
             $newclientService = ClientService::create([
+                'date' => Carbon::now(),
                 'petowner_id' => $petowner->id,
                 'deposit' => 0,
                 'rendered_by' => $renderedby,
@@ -74,6 +76,7 @@ class TestResultController extends Controller
         }
 
         $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
             'client_deposit_id' => $clientService->id,
@@ -88,8 +91,9 @@ class TestResultController extends Controller
         $file = $trrequest->file('attachment');
         $name = time() . '.' . $file->getClientOriginalExtension();
         $name_path = $file->move('storage/testresult-attachments/', $name);
-
+        
         $testResult = TestResult::create([
+            'date' => Carbon::now(),
             'pet_id' => $servicesAvailed->pet_id,
             'attachment' => $name_path,
             'description' => $trrequest->input('description'),
@@ -208,7 +212,7 @@ class TestResultController extends Controller
 
         $name = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->move('storage/testresult-attachments/', $name);
-
+        
         // Fetch the test result by ID or however you identify it
         $testResult = TestResult::findOrFail($id); // Adjust this according to your model and input data
 

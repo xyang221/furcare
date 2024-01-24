@@ -22,6 +22,7 @@ class StoreClientServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date' => 'date',
             'deposit'=>'required|numeric',
             'petowner_id' => 'exists:petowners,id',
         ];

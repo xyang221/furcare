@@ -16,7 +16,7 @@ class ServicesAvailed extends Model
 
     protected $table = 'services_availed';
 
-    protected $fillable = ['status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_deposit_id', 'pet_id'];
+    protected $fillable = ['date','status', 'quantity', 'unit', 'unit_price','date_availed_for','service_id' ,'client_deposit_id', 'pet_id'];
 
     protected $with = ['service','clientservice', 'pet'];
 

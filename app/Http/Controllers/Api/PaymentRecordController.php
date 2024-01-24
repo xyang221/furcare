@@ -33,6 +33,7 @@ class PaymentRecordController extends Controller
     {
         $clientdeposit = ClientService::findOrFail($id);
         $data = $request->validated(); //get the data
+        $data['date'] = Carbon::now();
         $data['client_deposit_id'] = $clientdeposit->id;
         $paymentRecord = PaymentRecord::create($data);
         return new PaymentRecordResource($paymentRecord, 201);

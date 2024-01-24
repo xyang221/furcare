@@ -66,6 +66,7 @@ class DiagnosisController extends Controller
             }
 
             $newclientService = ClientService::create([
+                'date' => Carbon::now(),
                 'petowner_id' => $petowner->id,
                 'deposit' => 0,
                 'rendered_by' => $renderedby,
@@ -76,6 +77,7 @@ class DiagnosisController extends Controller
         }
 
         $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
             'client_deposit_id' => $clientService->id,
@@ -84,6 +86,7 @@ class DiagnosisController extends Controller
         ]);
 
         $diagnosis = Diagnosis::create([
+            'date' => Carbon::now(),
             'pet_id' => $servicesAvailed->pet_id,
             'followup' => $request->input('followup'),
             'remarks' => $request->input('remarks'),

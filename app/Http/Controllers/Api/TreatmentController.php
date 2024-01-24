@@ -17,6 +17,7 @@ use App\Models\ClientService;
 use App\Models\Pet;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
+use Carbon\Carbon;
 
 class TreatmentController extends Controller
 {
@@ -63,6 +64,7 @@ class TreatmentController extends Controller
         }
 
         $treatment = Treatment::create([
+            'date' => Carbon::now(),
             'day' => $sarequest->input('day'),
             'pet_id' => $sarequest->input('pet_id'),
             'diagnosis' => $request->input('diagnosis'),
@@ -79,6 +81,7 @@ class TreatmentController extends Controller
         ]);
 
         $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
             'service_id' => $service->id,
             'unit_price' => $sarequest->input('unit_price'),
             'client_deposit_id' => $clientService->id,
@@ -87,6 +90,8 @@ class TreatmentController extends Controller
         ]);
 
         Admission::create([
+            'date_admission' => Carbon::now(),
+            'date_released' => Carbon::now(),
             'treatment_cost' => $servicesAvailed->unit_price,
             'pet_id' => $treatment->pet_id,
             'treatment_id' => $treatment->id,

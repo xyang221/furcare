@@ -17,6 +17,7 @@ use App\Models\Medicine;
 use App\Models\PetOwner;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
+use Carbon\Carbon;
 
 class MedicationController extends Controller
 {
@@ -43,6 +44,7 @@ class MedicationController extends Controller
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
 
         $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
             'service_id' => 19,
             'unit_price' => $sarequest->input('unit_price'),
             'quantity' => $sarequest->input('quantity'),
@@ -58,6 +60,7 @@ class MedicationController extends Controller
         ]);
 
         $medication = Medication::create([
+            'date' => Carbon::now(),
             'quantity' => $servicesAvailed->quantity,
             'dosage' => $request->input('dosage'),
             'description' => $request->input('description'),

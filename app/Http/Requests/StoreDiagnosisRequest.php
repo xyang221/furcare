@@ -22,6 +22,7 @@ class StoreDiagnosisRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date' => 'date',
             'followup' => 'date',
             'remarks' => 'required|string|max:255',
             'pet_id' => 'exists:pets,id',

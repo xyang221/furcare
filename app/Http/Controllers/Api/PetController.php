@@ -120,7 +120,7 @@ class PetController extends Controller
 
         $name = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->move('storage/pet-photos/', $name);
-
+        
         $pet = Pet::findOrFail($id); // Adjust this according to your model and input data
 
         // Delete the previous image if it exists

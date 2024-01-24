@@ -72,7 +72,6 @@ class AppointmentController extends Controller
         $data['petowner_id'] = $petowner->id;
 
         $appointment = Appointment::create($data);
-        event(new AppointmentEvent($appointment));
 
         if ($appointment->status === "Pending") {
             $admins = User::whereIn('role_id', [1, 2])->whereNull('deleted_at')->get();
@@ -149,8 +148,6 @@ class AppointmentController extends Controller
 
 
         $appointment->update(['status' => 'Confirmed']);
-        // event(new AppointmentEvent($appointment));
-        event(new AppointmentEvent($appointment, $appointment->petowner->user->id));
 
         if ($appointment->status === "Confirmed") {
             $dateTime = Carbon::parse($appointment->date);
@@ -188,7 +185,6 @@ class AppointmentController extends Controller
         }
 
         $appointment->update(['status' => 'Cancelled']);
-        event(new AppointmentEvent($appointment));
 
         if ($appointment->status === 'Cancelled') {
             $dateTime = Carbon::parse($appointment->date);
@@ -278,7 +274,6 @@ class AppointmentController extends Controller
         if ($appointment->status !== "Confirmed") {
             return response()->json(['message' => 'Appointment is not scheduled.'], Response::HTTP_BAD_REQUEST);
         }
-        event(new AppointmentEvent($appointment));
 
         $appointment->update(['status' => 'Completed']);
 
