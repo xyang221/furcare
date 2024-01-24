@@ -48,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $dates = ['deleted_at'];
 
-    // protected $with = ['role'];
+    protected $table = 'users';
 
     public function role()
     {
