@@ -32,11 +32,17 @@ class ClientServiceController extends Controller
             ->where('status', 'Pending')
             ->first();
 
+    
+        // if($balance === null){
+        //     return response()->json(['balance' => 0], 404);
+        // }
+
         if (!$clientService) {
             return response()->json(['balance' => 0], 404);
         }
-
-        return response()->json(['balance' => $clientService->balance], 204);
+        $balance = 0;
+        $balance = $clientService->balance;
+        return response()->json(['balance' => $balance]);
     }
 
 

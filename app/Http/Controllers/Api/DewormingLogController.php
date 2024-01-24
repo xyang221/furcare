@@ -168,6 +168,7 @@ class DewormingLogController extends Controller
 
             // Notification for each admin 
             Notification::create([
+                'date' => $dewormingLog->return,
                 'user_id' => $userId,
                 'type' => 'Deworming',
                 'message' => $message,
