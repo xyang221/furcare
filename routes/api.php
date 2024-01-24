@@ -308,7 +308,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications-count/{id}', [NotificationController::class, 'countNotifs']);
     Route::post('/notifications-opened/{id}', [NotificationController::class, 'updateNotifs']);
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout/{id}', [AuthController::class, 'logout']);
 });
 // });
 

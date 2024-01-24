@@ -63,14 +63,6 @@ class AuthController extends Controller
         return response()->json(['code' => $code]);
     }
 
-    public function getCachedCode($code)
-    {
-        $cachedData = Cache::get('verification_code_' . $user->id);
-
-        return response()->json(['data' => $cachedData]);
-    }
-
-
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
@@ -104,11 +96,13 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request, $id)
     {
         /** @var User $user */
         $user = $request->user();
-        $user->currentAccessToken()->delete();
+        // $user->tokens()->where($user->id, $user->currentAccessToken()->id)->delete();
+        // $user->currentAccessToken()->delete();
+        $user->tokens()->where('id', $id)->delete();
         return response('', 204);
     }
 }
