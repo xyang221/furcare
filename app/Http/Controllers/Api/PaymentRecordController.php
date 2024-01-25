@@ -20,7 +20,7 @@ class PaymentRecordController extends Controller
         $paymentRecords = PaymentRecord::orderBy('id', 'desc')->get();
 
         if ($paymentRecords->isEmpty()) {
-            return response()->json(['message' => 'No peyament records found.'], 404);
+            return response()->json(['message' => 'No payment records found.'], 404);
         }
 
         return PaymentRecordResource::collection($paymentRecords);
