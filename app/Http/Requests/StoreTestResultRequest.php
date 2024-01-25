@@ -22,6 +22,7 @@ class StoreTestResultRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date'=>'date',
             'attachment' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'description'=>'nullable|string',
             'pet_id' => 'exists:pets,id',

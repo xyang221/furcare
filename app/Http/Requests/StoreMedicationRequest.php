@@ -22,6 +22,7 @@ class StoreMedicationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date'=>'date',
             'description' => 'nullable|string',
             'quantity' => 'required|numeric',
             'dosage' => 'required|string',

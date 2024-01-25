@@ -22,6 +22,7 @@ class StoreServicesAvailedRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'date'=>'date',
             'status' => 'in:To Pay,Completed',
             'unit_price' => 'required|numeric',
             'quantity' => 'numeric',

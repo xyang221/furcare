@@ -16,14 +16,14 @@ return new class extends Migration
             $table->timestamp('date')->useCurrent();
             $table->string('diagnosis');
             $table->double('body_weight');
-            $table->double('heart_rate')->nullable();
-            $table->double('mucous_membranes')->nullable();
-            $table->double('pr_prealbumin')->nullable();
-            $table->double('temperature')->nullable();
-            $table->double('respiration_rate')->nullable();
-            $table->double('caspillar_refill_time')->nullable();
-            $table->double('body_condition_score')->nullable();
-            $table->double('fluid_rate')->nullable();
+            $table->string('heart_rate')->nullable();
+            $table->string('mucous_membranes')->nullable();
+            $table->string('pr_prealbumin')->nullable();
+            $table->string('temperature')->nullable();
+            $table->string('respiration_rate')->nullable();
+            $table->string('caspillar_refill_time')->nullable();
+            $table->string('body_condition_score')->nullable();
+            $table->string('fluid_rate')->nullable();
             $table->string('comments')->nullable();
 
             $table->unsignedBigInteger('services_availed_id');
