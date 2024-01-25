@@ -354,6 +354,9 @@ class PDFController extends Controller
 
                         $remainingCharge = $totalCost - $clientService->deposit;
                         $balance = $remainingCharge - $lastpaymentRecord->amount;
+                        if ($remainingCharge < 0) {
+                            $remainingCharge = 0;
+                        }
                     ?>
                         <tr>
                             <td><?= $service->pet->name ?></td>
@@ -544,7 +547,7 @@ class PDFController extends Controller
                 <br>
                 <strong>HR:</strong> <span><?= $treatmentResource->heart_rate ?></span>
                 <br>
-                <strong>MM:</strong> <span><?= $treatmentResource->mucuos_membranes ?></span>
+                <strong>MM:</strong> <span><?= $treatmentResource->mucous_membranes ?></span>
                 <br>
                 <strong>PR:</strong> <span><?= $treatmentResource->pr_prealbumin ?></span>
                 <br>

@@ -53,12 +53,11 @@ class ClientServiceController extends Controller
      */
     public function store(StoreClientServiceRequest $request, $id)
     {
-        $petowner = PetOwner::find($id);
+        $petowner = PetOwner::findOrFail($id);
 
         $verifyclientService = ClientService::where('petowner_id', $petowner->id)
-            ->where('status', 'Pending')
-            ->first();
-
+        ->whereIn('status', ['Pending', 'To Pay'])
+        ->first();    
 
         if ($verifyclientService) {
             return response()->json(['message' => 'This client had already services availed.'], 403);

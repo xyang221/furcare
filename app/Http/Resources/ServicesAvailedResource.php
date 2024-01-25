@@ -20,7 +20,7 @@ class ServicesAvailedResource extends JsonResource
             'quantity' => $this->quantity,
             'unit' => $this->unit,
             'unit_price' => $this->unit_price,
-            'date_availed_for' => $this->date_availed_for,
+            'date' => $this->date,
             'status' => $this->status,
 
             'service_id' => $this->service_id,

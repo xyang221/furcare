@@ -25,7 +25,7 @@ class ServiceController extends Controller
 
     public function noothertestresults()
     {
-        $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE','Medicine'])
+        $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE','Medicine','Admission'])
             ->orderBy('id', 'asc')
             ->get();
 
