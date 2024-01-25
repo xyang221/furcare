@@ -11,9 +11,14 @@ RUN pecl install -o -f redis \
 WORKDIR /var/www
 COPY . .
 
+COPY .env .
+
 COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
+
+RUN composer install
 
 ENV PORT=8000
 RUN chmod 777 docker/entrypoint.sh
 RUN chmod +x docker/entrypoint.sh
+
 ENTRYPOINT [ "docker/entrypoint.sh"]
