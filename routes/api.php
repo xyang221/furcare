@@ -313,12 +313,10 @@ Route::middleware('auth:sanctum')->group(function () {
 // });
 
 Route::post('/verifyemail', [AuthController::class, 'verifyemail']);
+Route::get('/forgotpassword/{email}', [AuthController::class, 'forgotPassword']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/zipcodedetails/{zipcode}', [ZipcodeController::class, 'getZipcodeDetails']);
-// Example API route
-// Route::get('/appointments-trigger/today', [AppointmentController::class, 'listenForTodayAppointments']);
-// Route::get('/vaccinations-triger/today', [VaccinationLogController::class, 'listenForTodayVaccinations']);
 
 Route::prefix('/mobile')->group(function () {
     Route::post('/signup', [MobileAuthController::class, 'signup']);
@@ -351,6 +349,3 @@ Route::prefix('/mobile')->group(function () {
         Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     });
 });
-
-// Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
-// Route::get('/clientdeposits/{id}/generate-chargeslip/balancepaid', [PDFController::class, 'generatePDFBalancePaid']);

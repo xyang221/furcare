@@ -148,8 +148,11 @@ class PDFController extends Controller
                     foreach ($servicesAvailed as $service) :
                         $subtotal = $service->quantity * $service->unit_price; // Calculate subtotal for each service
                         $totalCost += $subtotal; // Accumulate subtotal to get the total cost
-
+                        $remainingBalance = 0;
                         $remainingBalance = $totalCost - $clientService->deposit;
+                        if ($remainingBalance < 0) {
+                            $remainingBalance = 0;
+                        }
                     ?>
                         <tr>
                             <td><?= $service->pet->name ?></td>

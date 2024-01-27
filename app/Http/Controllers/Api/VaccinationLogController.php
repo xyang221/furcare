@@ -103,8 +103,7 @@ class VaccinationLogController extends Controller
         $petowner = PetOwner::findOrFail($id);
         $pets = Pet::where('petowner_id', $petowner->id)->pluck('id');
 
-        $vaccinationLogs = VaccinationLog::where('pet_id', $pets)->whereDate('return', '>=', Carbon::today())->orderBy('return', 'desc')->get();
-
+        $vaccinationLogs = VaccinationLog::whereIn('pet_id', $pets)->whereDate('return', '>=', Carbon::today())->orderBy('return', 'desc')->get();
 
         if ($vaccinationLogs->isNotEmpty()) {
             return VaccinationLogResource::collection($vaccinationLogs);
@@ -112,6 +111,7 @@ class VaccinationLogController extends Controller
 
         return response()->json(['message' => 'No upcoming vaccinations found.'], 404);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -182,7 +182,7 @@ class VaccinationLogController extends Controller
 
             // Notification for each admin 
             Notification::create([
-                'date'=>$vaccinationLog->return,
+                'date' => $vaccinationLog->return,
                 'user_id' => $userId,
                 'type' => 'Vaccination',
                 'message' => $message,

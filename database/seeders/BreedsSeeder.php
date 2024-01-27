@@ -19,8 +19,8 @@ class BreedsSeeder extends Seeder
       //dogs
       0 =>
       array(
-        'breed' => 'Afador',
-        'description' => 'Loyal, energetic, and affectionate, these pups inherited some of the best qualities from both of their parents.',
+        'breed' => 'Aspin',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -51,8 +51,8 @@ class BreedsSeeder extends Seeder
 
       4 =>
       array(
-        'breed' => ' Affen Tzu',
-        'description' => ' Known for their spunky personalities, these little dogs show devotion to their human family members — sometimes to the extreme. ',
+        'breed' => ' Shih Tzu',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -107,7 +107,7 @@ class BreedsSeeder extends Seeder
 
       11 =>
       array(
-        'breed' => ' Affenwich  ',
+        'breed' => 'Affenwich',
         'description' => 'This pup has lots of energy, and they are best for an active home ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -115,7 +115,7 @@ class BreedsSeeder extends Seeder
 
       12 =>
       array(
-        'breed' => '   Afghan Chon ',
+        'breed' => 'Afghan Chon',
         'description' => '  known for a boisterous personality, along with uniquely curly fur. ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -131,7 +131,7 @@ class BreedsSeeder extends Seeder
 
       14 =>
       array(
-        'breed' => ' Afghan Hound ',
+        'breed' => 'Afghan Hound ',
         'description' => 'Known for their independence, intelligence, and loyalty, they are a very old dog breed ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -293,8 +293,8 @@ class BreedsSeeder extends Seeder
 
       34 =>
       array(
-        'breed' => 'Alaskan Goldenmute ',
-        'description' => ' Alaskan Malamutes are very, very high energy pups ',
+        'breed' => 'Chihuahua ',
+        'description' => '',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -320,8 +320,8 @@ class BreedsSeeder extends Seeder
 
       37 =>
       array(
-        'breed' => 'Alaskan Irish Setsky ',
-        'description' => ' an energetic, playful crossbreed beloved by those who maintain active lifestyles ',
+        'breed' => 'Doberman Pinscher',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -766,16 +766,16 @@ class BreedsSeeder extends Seeder
 
       89 =>
       array(
-        'breed' => 'Aussiepom ',
-        'description' => 'Affectionate, fun-loving, and nothing short of adorable, these pups inherited some of the best traits from their parents  ',
+        'breed' => 'Beagle',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       90 =>
       array(
-        'breed' => 'Australian Bernedoodle ',
-        'description' => ' This crossbreed is energetic and athletic, and can keep up (or outdo you!) at many outdoor activities ',
+        'breed' => 'Pomeranian ',
+        'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),

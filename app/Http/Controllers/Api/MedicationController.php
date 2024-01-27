@@ -45,7 +45,7 @@ class MedicationController extends Controller
 
         $servicesAvailed = ServicesAvailed::create([
             'date' => Carbon::now(),
-            'service_id' => 19,
+            'service_id' => 18,
             'unit_price' => $sarequest->input('unit_price'),
             'quantity' => $sarequest->input('quantity'),
             'client_deposit_id' => $clientService->id,

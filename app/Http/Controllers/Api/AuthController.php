@@ -56,6 +56,19 @@ class AuthController extends Controller
         return response()->json(['code' => $code]);
     }
 
+    public function forgotPassword($email)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $subject = 'Email Verification';
+            $code = strtoupper(Str::random(6));
+            Mail::to($email)->send(new VerificationMail($subject, $code));
+            return response()->json(['code' => $code, 'id'=>$user->id]);
+        } else {
+            return response()->json(['message' => "This email is invalid."]);
+        }
+    }
+
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
