@@ -18,7 +18,9 @@ class AdminController extends Controller
 
         $today = Carbon::now()->toDateString();
         $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
-        $totalIncome = $paymentRecords->sum('total');
+        $totalAmount = $paymentRecords->sum('amount');
+        $totalChange = $paymentRecords->sum('change');
+        $totalIncome = $totalAmount - $totalChange;
 
         return response()->json(['pets' => $pets, 'petowners' => $petOwners, 'income' => $totalIncome]);
     }

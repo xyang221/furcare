@@ -314,6 +314,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/verifyemail', [AuthController::class, 'verifyemail']);
 Route::get('/forgotpassword/{email}', [AuthController::class, 'forgotPassword']);
+Route::patch('/users/{id}', [UserController::class, 'update']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/zipcodedetails/{zipcode}', [ZipcodeController::class, 'getZipcodeDetails']);

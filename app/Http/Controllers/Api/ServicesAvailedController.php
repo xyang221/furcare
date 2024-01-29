@@ -20,11 +20,13 @@ class ServicesAvailedController extends Controller
      */
     public function index()
     {
-        return ServicesAvailedResource::collection(
-            ServicesAvailed::query()
-                ->orderBy('id', 'desc')
-                ->get()
-        );
+        $servicesAvailed = ServicesAvailed::query()->orderBy('id', 'desc')->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No services logs found.'], 404);
+        }
+        return ServicesAvailedResource::collection($servicesAvailed);
+
     }
 
     /**

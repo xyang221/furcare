@@ -22,9 +22,12 @@ class StaffController extends Controller
     public function index()
     {
 
-        return StaffResource::collection( 
-            Staff::query()->orderBy('id','desc')->paginate(50)
-        );
+        $staffs = Staff::query()->orderBy('id', 'desc')->get();
+
+        if ($staffs->isEmpty()) {
+            return response()->json(['message' => 'No staff records found.'], 404);
+        }
+        return StaffResource::collection($staffs);
 
     }
 

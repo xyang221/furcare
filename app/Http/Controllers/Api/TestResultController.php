@@ -161,7 +161,7 @@ class TestResultController extends Controller
 
     public function getOtherTestsByServiceandPetowner($id)
     {
-        $services = Service::whereIn('service', ['4DX', 'EHRLICHIA', 'ANAPLASMA', 'HEARTWORM', 'LYME DISEASE'])->get();
+        $services = Service::whereIn('service', ['4DX', 'EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE'])->get();
         $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
 
         $servicesAvailedIdsFiltered = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
