@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Staff;
-use App\Models\Address;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStaffRequest;
-use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Http\Resources\StaffResource;
@@ -34,7 +32,7 @@ class StaffController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStaffRequest $sreq, StoreAddressRequest $addrequest, StoreUserRequest $ureq)
+    public function store(StoreStaffRequest $sreq, StoreUserRequest $ureq)
 {
     // Create a new user.
     $user = User::create([
@@ -44,18 +42,14 @@ class StaffController extends Controller
         'password' => Hash::make($ureq->input('password')),
     ]);
   
-    $address = Address::create([
-        'zipcode_id' => $addrequest->input('zipcode_id'),
-        'barangay' => $addrequest->input('barangay'),
-        'zone' => $addrequest->input('zone'),
-    ]);
-
     $staff = Staff::create([
         'user_id' => $user->id,
         'firstname' => $sreq->input('firstname'),
         'lastname' => $sreq->input('lastname'),
         'contact_num' => $sreq->input('contact_num'),
-        'address_id' => $address->id,
+        'zipcode_id' => $sreq->input('zipcode_id'),
+        'barangay' => $sreq->input('barangay'),
+        'zone' => $sreq->input('zone'),
         
     ]);
     return new StaffResource($staff, 201);

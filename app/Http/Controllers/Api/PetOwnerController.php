@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\PetOwner;
-use App\Models\Address;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\StorePetOwnerRequest;
-use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdatePetOwnerRequest;
 use App\Http\Resources\PetOwnerResource;
 
@@ -67,7 +65,7 @@ class PetOwnerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePetOwnerRequest $porequest, StoreAddressRequest $addrequest, StoreUserRequest $ureq)
+    public function store(StorePetOwnerRequest $porequest, StoreUserRequest $ureq)
     {
         // Create a new user.
         $user = User::create([
@@ -77,20 +75,15 @@ class PetOwnerController extends Controller
             'password' => Hash::make($ureq->input('password')),
         ]);
 
-        $address = Address::create([
-            'zipcode_id' => $addrequest->input('zipcode_id'),
-            'barangay' => $addrequest->input('barangay'),
-            'zone' => $addrequest->input('zone'),
-        ]);
-
         // Create a pet owner associated with the user.
         $petOwner = PetOwner::create([
             'user_id' => $user->id,
             'firstname' => $porequest->input('firstname'),
             'lastname' => $porequest->input('lastname'),
             'contact_num' => $porequest->input('contact_num'),
-            'address_id' => $address->id,
-
+            'zipcode_id' => $porequest->input('zipcode_id'),
+            'barangay' => $porequest->input('barangay'),
+            'zone' => $porequest->input('zone'),
         ]);
         // send verification code
         return new PetOwnerResource($petOwner, 201);

@@ -28,18 +28,14 @@ class AuthController extends Controller
             'password' => bcrypt($data['password'])
         ]);
 
-        $address = Address::create([
-            'zipcode_id' => $data['zipcode_id'],
-            'barangay' => $data['barangay'],
-            'zone' => $data['zone'],
-        ]);
-
-        $petOwner = PetOwner::create([
+        PetOwner::create([
             'user_id' => $user->id,
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
             'contact_num' => $data['contact_num'],
-            'address_id' => $address->id,
+            'zipcode_id' => $data['zipcode_id'],
+            'barangay' => $data['barangay'],
+            'zone' => $data['zone'],
 
         ]);
 

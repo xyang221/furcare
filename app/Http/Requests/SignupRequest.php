@@ -38,7 +38,6 @@ class SignupRequest extends FormRequest
             'barangay' => 'required|string|max:55',
             'zone' => 'required|string|max:55',
             'user_id' => 'exists:users,id',
-            'address_id' => 'exists:addresses,id',
 
         ];
     }

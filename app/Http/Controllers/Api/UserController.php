@@ -47,7 +47,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return new UserResource($user);
+        // return new UserResource($user);
     }
 
     public function archivelist()

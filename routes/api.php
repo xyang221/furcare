@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PetOwnerController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\ZipcodeController;
-use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AdmissionController;
 use App\Http\Controllers\Api\PetController;
@@ -76,8 +75,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [UserController::class, 'destroy']);
 
     Route::apiResource('/zipcodes', ZipcodeController::class);
-
-    Route::apiResource('/addresses', AddressController::class);
 
     Route::get('/petowners', [PetOwnerController::class, 'index']);
     Route::post('/petowners', [PetOwnerController::class, 'store']);
@@ -161,10 +158,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/diagnosis/pet/{id}', [DiagnosisController::class, 'getbyPet']);
     Route::get('/diagnosis/petowner/{id}/service/{sid}', [DiagnosisController::class, 'getDiagnosisByServiceandPetowner']);
     Route::put('/diagnosis/{id}', [DiagnosisController::class, 'update']);
-    Route::delete('/diagnosis/{id}/archive', [DiagnosisController::class, 'archive']);
-    Route::get('/archives/diagnosis', [DiagnosisController::class, 'archivelist']);
-    Route::put('/diagnosis/{id}/restore', [DiagnosisController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [DiagnosisController::class, 'destroy']);
+    Route::delete('/diagnosis/{id}/forcedelete', [DiagnosisController::class, 'destroy']);
 
     Route::get('/servicesavailed', [ServicesAvailedController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
@@ -326,7 +320,6 @@ Route::prefix('/mobile')->group(function () {
         Route::get('/users/{id}', [UserController::class, 'show']);
         Route::put('/users/{id}', [UserController::class, 'update']);
 
-        Route::get('/addresses', [AddressController::class, 'index']);
         Route::get('/zipcodes', [ZipcodeController::class, 'index']);
 
         Route::get('/petowners/{id}', [PetOwnerController::class, 'show']);

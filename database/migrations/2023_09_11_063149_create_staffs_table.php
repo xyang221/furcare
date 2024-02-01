@@ -16,12 +16,14 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('contact_num');
+            $table->string('zone');
+            $table->string('barangay');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('zipcode_id');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
+            $table->foreign('zipcode_id')->references('id')->on('zipcodes');
         
 
         });

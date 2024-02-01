@@ -180,41 +180,15 @@ class DiagnosisController extends Controller
         return new DiagnosisResource($diagnosis);
     }
 
-    public function archive($id)
-    {
-        // $diagnosis = Diagnosis::with('relatedModels')->findOrFail($id);
-
-        // // Archive related models first
-        // foreach ($diagnosis->relatedModels as $relatedModel) {
-        //     $relatedModel->delete();
-        //     // Or if you have an archive method in the related model, call it: $relatedModel->archive();
-        // }
-
-        $diagnosis = Diagnosis::findOrFail($id);
-        $diagnosis->delete();
-        return new DiagnosisResource($diagnosis);
-    }
-
-    public function archivelist()
-    {
-        return DiagnosisResource::collection(
-            Diagnosis::onlyTrashed()->orderBy('id', 'desc')->get()
-        );
-    }
-
-    public function restore($id)
-    {
-        $diagnosis = Diagnosis::withTrashed()->findOrFail($id);
-        $diagnosis->restore();
-        return response("Pet Owner was restored successfully");
-    }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Diagnosis $diagnosis)
+    public function destroy(Diagnosis $diagnosis, $id)
     {
+        $diagnosis = Diagnosis::findOrFail($id);
+        $service = ServicesAvailed::findOrFail($diagnosis->services_availed_id);
         $diagnosis->forceDelete();
-        return response()->json("Diagnosis was archived", 204);
+        $service->forceDelete();
+        return response()->json("Diagnosis was deleted", 204);
     }
 }

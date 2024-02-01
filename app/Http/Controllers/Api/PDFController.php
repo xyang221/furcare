@@ -202,7 +202,7 @@ class PDFController extends Controller
                     </tr>
                     <tr>
                         <td class="total" colspan="5">
-                            Balance:
+                            Amounts Payable:
                         </td>
                         <td><?= number_format($clientService->balance, 2) ?></td>
                     </tr>

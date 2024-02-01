@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Address;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,15 +14,15 @@ class Staff extends Model
 
     protected $table = 'staffs';
 
-    protected $fillable = ['firstname','lastname', 'contact_num','address_id','user_id'];
+    protected $fillable = ['firstname','lastname', 'contact_num','zone', 'barangay', 'zipcode_id','user_id'];
 
     protected $dates = ['deleted_at'];
     
-    protected $with = ['user', 'address'];
+    protected $with = ['user', 'zipcode'];
     
-    public function address()
+    public function zipcode()
     {
-        return $this->belongsTo(Address::class, 'address_id','id');
+        return $this->belongsTo(Zipcode::class, 'zipcode_id','id');
     }
 
     public function user()

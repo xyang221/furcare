@@ -33,7 +33,7 @@ class ClientServiceController extends Controller
             ->where('status', 'Pending')
             ->first();
 
-    
+
         // if($balance === null){
         //     return response()->json(['balance' => 0], 404);
         // }
@@ -56,8 +56,8 @@ class ClientServiceController extends Controller
         $petowner = PetOwner::findOrFail($id);
 
         $verifyclientService = ClientService::where('petowner_id', $petowner->id)
-        ->whereIn('status', ['Pending', 'To Pay'])
-        ->first();    
+            ->whereIn('status', ['Pending', 'To Pay'])
+            ->first();
 
         if ($verifyclientService) {
             return response()->json(['message' => 'This client had already services availed.'], 403);
@@ -132,12 +132,29 @@ class ClientServiceController extends Controller
         $clientService = ClientService::findOrFail($id);
         $data = $request->validated();
 
+        $user = Auth::user();
+        $staff = $user->staff;
+
+        if ($staff) {
+            $renderedby = "$staff->firstname $staff->lastname";
+        } else {
+            $renderedby = "Admin";
+        }
+
         if ($data['balance'] === 0) {
             $data['status'] = "Completed";
             ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
         } else {
+            // ClientService::create([
+            //     'date' => Carbon::now(),
+            //     'petowner_id' => $clientService->petowner->id,
+            //     'deposit' => 0,
+            //     'rendered_by' => $renderedby,
+            //     'status' => "To Pay",
+            // ]);
+
             $data['status'] = "Pending";
-            $data['balance'] += $clientService->balance; // Use shorthand for adding balance
+            $data['balance'] += $clientService->balance;
             ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
         }
 
