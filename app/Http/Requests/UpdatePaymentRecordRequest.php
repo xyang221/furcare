@@ -28,6 +28,7 @@ class UpdatePaymentRecordRequest extends FormRequest
             'total' => 'required|numeric',
             'amount' => 'required|numeric',
             'change' => 'required|numeric',
+            'amounts_payable' => 'required|numeric',
 
             'client_deposit_id' => 'exists:client_deposits,id',
         ];

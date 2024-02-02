@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('client_service', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('date')->useCurrent();
             $table->double('deposit');
             $table->double('balance')->default(0);
             $table->string('rendered_by');

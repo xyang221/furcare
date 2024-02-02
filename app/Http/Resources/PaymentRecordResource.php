@@ -24,6 +24,7 @@ class PaymentRecordResource extends JsonResource
             'total' => $this->total,
             'amount' => $this->amount,
             'change' => $this->change,
+            'amounts_payable' => $this->amounts_payable,
 
             'client_deposit_id' => $this->client_deposit_id,
             'deleted_at' => $this->deleted_at,

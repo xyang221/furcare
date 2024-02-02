@@ -45,6 +45,13 @@ class AuthController extends Controller
     public function verifyemail(SignupVerifyRequest $request)
     {
         $email = $request->input('email');
+
+        $existingUser = User::where('email', $email)->first();
+
+        if ($existingUser) {
+            return response()->json(['error' => 'Email has already been used.'], 422);
+        }
+
         $subject = 'Email Verification';
         $code = strtoupper(Str::random(6));
         Mail::to($email)->send(new VerificationMail($subject, $code));

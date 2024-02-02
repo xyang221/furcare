@@ -187,6 +187,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientdeposits/petowner/{id}/all', [ClientServiceController::class, 'showall']);
     Route::get('/clientdeposits/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
     Route::post('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'store']);
+    Route::put('/clientdeposits/petowner/{id}/balance', [ClientServiceController::class, 'updateBalance']);
 
     Route::get('/paymentrecords', [PaymentRecordController::class, 'index']);
     Route::post('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'store']);
@@ -195,6 +196,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'showClientDepositPayment']);
     Route::put('/paymentrecords/{id}', [PaymentRecordController::class, 'update']);
     Route::delete('/paymentrecords/{id}/archive', [PaymentRecordController::class, 'destroy']);
+
+    Route::get('/paymentrecords-daily', [PDFController::class, 'generatePDFPaymentRecords']);
 
     // Route::apiResource('/deworminglogs', DewormingLogController::class);
     Route::get('/deworminglogs/today', [DewormingLogController::class, 'byToday']);
@@ -343,3 +346,4 @@ Route::prefix('/mobile')->group(function () {
         Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     });
 });
+

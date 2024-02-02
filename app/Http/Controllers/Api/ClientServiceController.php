@@ -6,9 +6,11 @@ use App\Models\ClientService;
 use App\Models\PetOwner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientServiceRequest;
+use App\Http\Requests\StorePaymentRecordRequest;
 use App\Http\Requests\UpdateClientServiceRequest;
 use App\Http\Resources\ClientServiceResource;
 use App\Http\Resources\ServicesAvailedResource;
+use App\Models\PaymentRecord;
 use App\Models\ServicesAvailed;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
@@ -31,12 +33,8 @@ class ClientServiceController extends Controller
 
         $clientService = ClientService::where('petowner_id', $petowner->id)
             ->where('status', 'Pending')
+            ->latest()
             ->first();
-
-
-        // if($balance === null){
-        //     return response()->json(['balance' => 0], 404);
-        // }
 
         if (!$clientService) {
             return response()->json(['balance' => 0], 404);
@@ -83,6 +81,35 @@ class ClientServiceController extends Controller
         }
     }
 
+    public function newBalance(UpdateClientServiceRequest $request, $id)
+    {
+        $petowner = PetOwner::findOrFail($id);
+
+        $verifyclientService = ClientService::where('petowner_id', $petowner->id)
+            ->where('status', 'Pending') // Corrected 'whereIn' to 'where'
+            ->latest()
+            ->first();
+
+        if (!$verifyclientService) {
+            // Handle the case where no pending client service is found
+            // You might want to return a response or redirect
+            return response()->json(['error' => 'No pending client service found.']);
+        }
+
+        $data = $request->validated(); // Get the validated data
+
+        // Assuming 'current_balance' is present in the validated data
+        // Also, corrected the addition to use the actual 'current_balance' value
+        $data['current_balance'] = $request->input('current_balance');
+        $data['prev_balance'] += $verifyclientService->current_balance;
+
+        $verifyclientService->update($data);
+
+        // You might want to return a response or redirect after updating
+        return response()->json(['success' => 'Balance updated successfully.']);
+    }
+
+
     /**
      * Display the specified resource.
      */
@@ -127,40 +154,298 @@ class ClientServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClientServiceRequest $request, $id)
+    public function update(UpdateClientServiceRequest $request, StorePaymentRecordRequest $preq, $id)
     {
         $clientService = ClientService::findOrFail($id);
+        $payment = PaymentRecord::where('client_deposit_id', $clientService->id)->latest()->first();
         $data = $request->validated();
+        $pdata = $preq->validated();
 
         $user = Auth::user();
         $staff = $user->staff;
 
-        if ($staff) {
-            $renderedby = "$staff->firstname $staff->lastname";
-        } else {
-            $renderedby = "Admin";
+        $renderedby = $staff ? "$staff->firstname $staff->lastname" : "Admin";
+
+        if ($data['status'] == "To Pay" && $data['balance'] === 0) {
+            $data['status'] = "Completed";
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+            $clientService->update($data);
+
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $preq->input('total'),
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+                'amounts_payable' => $preq->input('amounts_payable'),
+                'client_deposit_id' => $preq->input('client_deposit_id'),
+            ];
+
+            PaymentRecord::create($newPaymentRecord);
+            return new ClientServiceResource($clientService);
+        } else if ($data['status'] == "To Pay" && $data['balance'] !== 0) {
+            $data['status'] = "Pending";
+            $data['balance'] = $request->input('balance');
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
+            $clientService->update($data);
+
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $preq->input('total'),
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+                'amounts_payable' => $preq->input('amounts_payable'),
+                'client_deposit_id' => $preq->input('client_deposit_id'),
+            ];
+
+            PaymentRecord::create($newPaymentRecord);
+            return new ClientServiceResource($clientService);
+        } else if ($data['status'] == "Pending" && $data['balance'] !== 0) {
+            $data['status'] = "Pending";
+            $data['balance'] = $request->input('balance');
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
+            $clientService->update($data);
+
+            // $newClientServiceData = [
+            //     'date' => Carbon::now(),
+            //     'petowner_id' => $clientService->petowner->id,
+            //     'deposit' => $clientService->deposit,
+            //     'balance' => $request->input('balance'),
+            //     'rendered_by' => $renderedby,
+            //     'status' => "Pending",
+            // ];
+            // $new = ClientService::create($newClientServiceData);
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $payment->total,
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+                'amounts_payable' => $preq->input('amounts_payable'),
+                'client_deposit_id' => $clientService->id,
+            ];
+
+            PaymentRecord::create($newPaymentRecord);
+            return new ClientServiceResource($clientService);
+        }  else if ($data['status'] == "Pending" && $data['balance'] === 0) {
+            $data['status'] = "Completed";
+            $data['balance'] = 0;
+            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+            $clientService->update($data);
+
+            // $newClientServiceData = [
+            //     'date' => Carbon::now(),
+            //     'petowner_id' => $clientService->petowner->id,
+            //     'deposit' => $clientService->deposit,
+            //     'balance' => $request->input('balance'),
+            //     'rendered_by' => $renderedby,
+            //     'status' => "Completed",
+            // ];
+            // $new = ClientService::create($newClientServiceData);
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $payment->total,
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+                'amounts_payable' => $preq->input('amounts_payable'),
+                'client_deposit_id' => $clientService->id,
+            ];
+
+            PaymentRecord::create($newPaymentRecord);
+            return new ClientServiceResource($clientService);
         }
+
+        // if ($data['balance'] === 0) {
+        //     $data['status'] = "Completed";
+        //     $data['balance'] = $clientService->balance;
+        //     ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+        //     $clientService->update($data);
+
+        //     $newClientServiceData = [
+        //         'date' => Carbon::now(),
+        //         'petowner_id' => $clientService->petowner->id,
+        //         'deposit' => 0,
+        //         'balance' => $request->input('balance'),
+        //         'rendered_by' => $renderedby,
+        //         'status' => "Completed",
+        //     ];
+
+        //     $new = ClientService::create($newClientServiceData);
+        //     $newPaymentRecord = [
+        //         'date' => Carbon::now(),
+        //         'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+        //         'type' => $preq->input('type'),
+        //         'type_ref_no' => $preq->input('type_ref_no'),
+        //         'total' => $preq->input('total'),
+        //         'amount' => $preq->input('amount'),
+        //         'change' => $preq->input('change'),
+        //         'client_deposit_id' => $new->id,
+        //     ];
+
+        //     PaymentRecord::create($newPaymentRecord);
+
+        //     return new ClientServiceResource($clientService);
+        // } else {
+        //     // Create a new client service record
+        //     $newClientServiceData = [
+        //         'date' => Carbon::now(),
+        //         'petowner_id' => $clientService->petowner->id,
+        //         'deposit' => $clientService->deposit,
+        //         'balance' => $request->input('balance'),
+        //         'rendered_by' => $renderedby,
+        //         'status' => "Pending",
+        //     ];
+
+        //     $newPaymentRecord = [
+        //         'date' => Carbon::now(),
+        //         'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+        //         'type' => $preq->input('type'),
+        //         'type_ref_no' => $preq->input('type_ref_no'),
+        //         'total' => $preq->input('total'),
+        //         'amount' => $preq->input('amount'),
+        //         'change' => $preq->input('change'),
+        //     ];
+
+        //     if ($data['status'] == "Pending") {
+        //         $new = ClientService::create($newClientServiceData);
+        //         $pdata['client_deposit_id'] = $new->id;
+        //         PaymentRecord::create($newPaymentRecord);
+        //         $data['status'] = "Completed";
+        //         $data['balance'] = $clientService->balance;
+        //         ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+        //         $clientService->update($data);
+        //     } else if ($data['status'] == "To Pay") 
+        //     {
+        //         $newClientServiceData = [
+        //             'date' => Carbon::now(),
+        //             'petowner_id' => $clientService->petowner->id,
+        //             'deposit' => $clientService->deposit,
+        //             'balance' => $request->input('balance'),
+        //             'rendered_by' => $renderedby,
+        //             'status' => "Pending",
+        //         ];
+
+        //         $newPaymentRecord = [
+        //             'date' => Carbon::now(),
+        //             'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+        //             'type' => $preq->input('type'),
+        //             'type_ref_no' => $preq->input('type_ref_no'),
+        //             'total' => $preq->input('total'),
+        //             'amount' => $preq->input('amount'),
+        //             'change' => $preq->input('change'),
+        //         ];
+
+        //         $data['status'] = "Pending";
+        //         $data['balance'] += $clientService->balance;
+        //         ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
+        //         // $pdata['client_deposit_id'] = $clientService->id;
+        //         // PaymentRecord::create($newPaymentRecord);
+        //         $pdata['client_deposit_id'] = $clientService->id;
+        //         PaymentRecord::create($newPaymentRecord);
+        //         $clientService->update($data);
+        //     }
+
+        //     return new ClientServiceResource($clientService);
+        // }
+    }
+
+    public function updateBalance(UpdateClientServiceRequest $request, StorePaymentRecordRequest $preq, $id)
+    {
+        $clientService = ClientService::findOrFail($id)->first();
+        $data = $request->validated();
+        $pdata = $preq->validated();
+
+        $user = Auth::user();
+        $staff = $user->staff;
+
+        $renderedby = $staff ? "$staff->firstname $staff->lastname" : "Admin";
 
         if ($data['balance'] === 0) {
             $data['status'] = "Completed";
+            $data['balance'] = $clientService->balance;
             ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+            $clientService->update($data);
+
+            $newClientServiceData = [
+                'date' => Carbon::now(),
+                'petowner_id' => $clientService->petowner->id,
+                'deposit' => 0,
+                'balance' => $request->input('balance'),
+                'rendered_by' => $renderedby,
+                'status' => "Completed",
+            ];
+
+            $new = ClientService::create($newClientServiceData);
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $preq->input('total'),
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+                'client_deposit_id' => $new->id,
+            ];
+
+            PaymentRecord::create($newPaymentRecord);
+
+            return new ClientServiceResource($clientService);
         } else {
-            // ClientService::create([
-            //     'date' => Carbon::now(),
-            //     'petowner_id' => $clientService->petowner->id,
-            //     'deposit' => 0,
-            //     'rendered_by' => $renderedby,
-            //     'status' => "To Pay",
-            // ]);
+            // Create a new client service record
+            $newClientServiceData = [
+                'date' => Carbon::now(),
+                'petowner_id' => $clientService->petowner->id,
+                'deposit' => $clientService->deposit,
+                'balance' => $request->input('balance'),
+                'rendered_by' => $renderedby,
+                'status' => "Pending",
+            ];
 
-            $data['status'] = "Pending";
-            $data['balance'] += $clientService->balance;
-            ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
+            $newPaymentRecord = [
+                'date' => Carbon::now(),
+                'chargeslip_ref_no' => $preq->input('chargeslip_ref_no'),
+                'type' => $preq->input('type'),
+                'type_ref_no' => $preq->input('type_ref_no'),
+                'total' => $preq->input('total'),
+                'amount' => $preq->input('amount'),
+                'change' => $preq->input('change'),
+            ];
+
+            if ($data['status'] == "Pending") {
+                $new = ClientService::create($newClientServiceData);
+                $pdata['client_deposit_id'] = $new->id;
+                PaymentRecord::create($newPaymentRecord);
+                $data['status'] = "Completed";
+                $data['balance'] = $clientService->balance;
+                ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);
+                $clientService->update($data);
+            } else if ($data['status'] == "To Pay") {
+
+                $data['status'] = "Pending";
+                $data['balance'] += $clientService->balance;
+                ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Pending']);
+                // $pdata['client_deposit_id'] = $clientService->id;
+                // PaymentRecord::create($newPaymentRecord);
+                $clientService->update($data);
+                $pdata['client_deposit_id'] = $clientService->id;
+                PaymentRecord::create($newPaymentRecord);
+            }
+
+            return new ClientServiceResource($clientService);
         }
-
-        $clientService->update($data);
-        return new ClientServiceResource($clientService);
     }
+
+
 
 
     public function updateDeposit(UpdateClientServiceRequest $request, ClientService $clientService, $id)
