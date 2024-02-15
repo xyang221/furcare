@@ -4,11 +4,11 @@ composer install --no-progress --no-interaction
 
 if [ ! -f "/var/www/first_start.txt" ]; then
     sleep 120
-    php artisan migrate
     php artisan db:seed
     touch /var/www/first_start.txt
 fi
 
+php artisan migrate
 php artisan key:generate
 php artisan storage:link
 php artisan cache:clear
