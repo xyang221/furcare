@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('services_availed', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity')->default(1);
-            $table->integer('unit')->default(1);
+            $table->string('unit')->nullable();
             $table->float('unit_price')->nullable();
             $table->timestamp('date')->useCurrent();
             $table->string('status');

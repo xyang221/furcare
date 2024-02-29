@@ -231,7 +231,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [VaccinationLogController::class, 'destroy']);
 
     Route::get('/testresults', [TestResultController::class, 'index']);
-    // Route::get('/testresults/download/storage/testresult-attachments/{attachment}', [TestResultController::class, 'downloadImage']);
     Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'store']);
     Route::get('/testresults/{id}', [TestResultController::class, 'show']);
     Route::get('/testresults/pet/{id}', [TestResultController::class, 'getbyPet']);
@@ -296,7 +295,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/archives/admissions/{id}', [AdmissionController::class, 'restore']);
     Route::delete('/archives/admissions/{id}', [AdmissionController::class, 'forcedelete']);
 
-
     Route::get('/appointments-triger/today', [AppointmentController::class, 'listenForTodayAppointments']);
     Route::get('/vaccinations-triger/today', [VaccinationLogController::class, 'listenForTodayVaccinations']);
     Route::get('/dewormings-triger/today', [DewormingLogController::class, 'listenForTodayDewormings']);
@@ -346,4 +344,3 @@ Route::prefix('/mobile')->group(function () {
         Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     });
 });
-

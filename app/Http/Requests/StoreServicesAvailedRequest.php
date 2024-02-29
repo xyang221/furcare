@@ -24,6 +24,7 @@ class StoreServicesAvailedRequest extends FormRequest
         return [
             'date'=>'date',
             'status' => 'in:To Pay,Completed',
+            'unit' => 'nullable|string',
             'unit_price' => 'required|numeric',
             'quantity' => 'numeric',
             'service_id' => 'exists:services,id',

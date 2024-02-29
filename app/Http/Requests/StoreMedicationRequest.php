@@ -22,14 +22,15 @@ class StoreMedicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'date',
+            'date' => 'date',
             'description' => 'nullable|string',
             'quantity' => 'required|numeric',
             'dosage' => 'required|string',
+            'medicine_name' => 'required|string',
 
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',
-            'medicine_id' => 'exists:medicines,id',
+            'medcat_id' => 'exists:medicine_category,id',
             'services_availed' => 'exists:services_availed,id',
 
         ];

@@ -26,7 +26,7 @@ class AdmissionResource extends JsonResource
 
             'pet' => new PetResource($this->whenLoaded('pet')),
             'treatment' => new TreatmentResource($this->whenLoaded('treatment')),
-            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
+            // 'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];
     }

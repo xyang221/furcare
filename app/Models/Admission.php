@@ -12,11 +12,12 @@ class Admission extends Model
 
     protected $table = 'admission';
 
-    protected $fillable = ['date_admission', 'date_released', 'pet_id', 'treatment_id', 'services_availed_id'];
+    protected $fillable = ['date_admission', 'date_released', 'pet_id', 'treatment_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet', 'treatment', 'servicesavailed'];
+    // protected $with = ['pet', 'treatment', 'servicesavailed'];
+    protected $with = ['pet', 'treatment'];
 
     public function pet()
     {
@@ -26,8 +27,8 @@ class Admission extends Model
     {
         return $this->belongsTo(Treatment::class, 'treatment_id', 'id');
     }
-    public function servicesavailed()
-    {
-        return $this->belongsTo(ServicesAvailed::class, 'services_availed_id', 'id');
-    }
+    // public function servicesavailed()
+    // {
+    //     return $this->belongsTo(ServicesAvailed::class, 'services_availed_id', 'id');
+    // }
 }

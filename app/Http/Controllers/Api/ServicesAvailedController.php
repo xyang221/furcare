@@ -9,7 +9,9 @@ use App\Models\ClientService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServicesAvailedRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
+use App\Http\Resources\MedicationResource;
 use App\Http\Resources\ServicesAvailedResource;
+use App\Models\Medication;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +28,6 @@ class ServicesAvailedController extends Controller
             return response()->json(['message' => 'No services logs found.'], 404);
         }
         return ServicesAvailedResource::collection($servicesAvailed);
-
     }
 
     /**
@@ -127,27 +128,41 @@ class ServicesAvailedController extends Controller
     }
 
 
-    public function showToPayServicesbyPetowner($id)
+    public function showToPayServicesByPetOwner($id)
     {
         $status = 'To Pay';
-        $clientServiceID = ClientService::where('petowner_id', $id)->where('status', $status)->pluck('id');
-        $clientService = ClientService::findOrFail($clientServiceID)->first();
-        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientServiceID)
+
+        $clientService = ClientService::where('petowner_id', $id)
             ->where('status', $status)
-            ->orderBy('id', 'desc')->get();
+            ->latest()
+            ->first();
+
+        if (!$clientService) {
+            return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
+        }
+
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', [$clientService->id])
+            ->where('status', $status)
+            ->orderBy('id', 'desc')
+            ->get();
 
         if ($servicesAvailed->isEmpty()) {
             return response()->json(['message' => 'No services availed of this client found at the moment.'], 404);
         }
 
-        // return ServicesAvailedResource::collection($servicesAvailed);
+        $meds = Medication::whereIn('services_availed_id', $servicesAvailed->pluck('id'))
+        ->orderBy('id', 'desc')
+        ->get();
+
         $data = [
+            'meds' => MedicationResource::collection($meds),
             'data' => ServicesAvailedResource::collection($servicesAvailed),
-            'clientdeposit' => $clientService, // Assuming $petowner needs to be returned along with services availed
+            'clientdeposit' => $clientService,
         ];
 
         return response()->json($data);
     }
+
 
     public function showByPetownerChargeSlip($id)
     {
@@ -188,12 +203,11 @@ class ServicesAvailedController extends Controller
 
         if ($clientService->status === "Completed") {
             $data['status'] = "Completed";
-        }else if ($clientService->status === "Pending") {
+        } else if ($clientService->status === "Pending") {
             $data['status'] = "Pending";
         }
         $servicesAvailed->update($data);
-            return new ServicesAvailedResource($servicesAvailed);
-        
+        return new ServicesAvailedResource($servicesAvailed);
     }
 
     public function archive($id)

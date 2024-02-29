@@ -25,6 +25,8 @@ class UpdateMedicationRequest extends FormRequest
             'description' => 'nullable|string',
             'quantity' => 'required|numeric',
             'dosage' => 'required|string',
+            'medicine_name' => 'required|string',
+            'medcat_id' => 'exists:medicine_category,id',
         ];
     }
 }

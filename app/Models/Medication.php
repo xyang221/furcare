@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Treatment;
-use App\Models\Medicine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,16 +13,20 @@ class Medication extends Model
 
     protected $table = 'medication';
 
-    protected $fillable = ['date', 'description','quantity', 'dosage', 'medicine_id', 'treatment_id','services_availed_id'];
+    protected $fillable = ['date', 'description','quantity', 'dosage', 'medcat_id', 'medicine_name', 'treatment_id','services_availed_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['medicine','servicesavailed'];
+    protected $with = ['servicesavailed', 'category'];
 
-    public function medicine()
+    public function category()
     {
-        return $this->belongsTo(Medicine::class, 'medicine_id','id');
+        return $this->belongsTo(MedicineCategory::class, 'medcat_id', 'id');
     }
+    // public function medicine()
+    // {
+    //     return $this->belongsTo(Medicine::class, 'medicine_id','id');
+    // }
     
     public function treatment()
     {

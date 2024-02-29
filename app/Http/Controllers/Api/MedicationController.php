@@ -38,7 +38,7 @@ class MedicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicineRequest $med, StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
+    public function store(StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
     {
         $treatment = Treatment::findOrFail($tid);
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
@@ -46,6 +46,7 @@ class MedicationController extends Controller
         $servicesAvailed = ServicesAvailed::create([
             'date' => Carbon::now(),
             'service_id' => 18,
+            'unit' => $sarequest->input('unit'),
             'unit_price' => $sarequest->input('unit_price'),
             'quantity' => $sarequest->input('quantity'),
             'client_deposit_id' => $clientService->id,
@@ -53,11 +54,11 @@ class MedicationController extends Controller
             'status' => "To Pay",
         ]);
 
-        $medicine = Medicine::create([
-            'medcat_id' => $med->input('medcat_id'),
-            'name' => $med->input('name'),
-            'price' =>   $servicesAvailed->unit_price
-        ]);
+        // $medicine = Medicine::create([
+        //     'medcat_id' => $med->input('medcat_id'),
+        //     'name' => $med->input('name'),
+        //     'price' =>   $servicesAvailed->unit_price
+        // ]);
 
         $medication = Medication::create([
             'date' => Carbon::now(),
@@ -66,7 +67,8 @@ class MedicationController extends Controller
             'description' => $request->input('description'),
             'treatment_id' => $treatment->id,
             'pet_id' => $treatment->pet_id,
-            'medicine_id' => $medicine->id,
+            'medcat_id' => $request->input('medcat_id'),
+            'medicine_name' => $request->input('medicine_name'),
             'services_availed_id' => $servicesAvailed->id,
         ]);
 

@@ -24,7 +24,6 @@ class UpdateAdmissionRequest extends FormRequest
         return [
             'date_admission' => 'required|date',
             'date_released' => 'required|date',
-            'purpose' => 'required|string|max:255',
         ];
     }
 }

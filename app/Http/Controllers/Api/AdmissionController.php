@@ -8,6 +8,7 @@ use App\Http\Requests\StoreAdmissionRequest;
 use App\Http\Requests\UpdateAdmissionRequest;
 use App\Http\Resources\AdmissionResource;
 use App\Models\ClientService;
+use App\Models\Pet;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
 use App\Models\Treatment;
@@ -56,15 +57,19 @@ class AdmissionController extends Controller
     public function showPetownerTreatments($id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        // $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $pets = Pet::where('petowner_id', $id)->pluck('id');
 
-        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
-            ->where('service_id', $service->id)
-            ->pluck('id');
-
-        $admission = Admission::whereIn('services_availed_id', $servicesAvailed)
+        // $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
+        //     ->where('service_id', $service->id)
+        //     ->pluck('id');
+        $admission = Admission::whereIn('pet_id', $pets)
             ->orderBy('id', 'desc')
             ->get();
+        // ->pluck('id');
+        // $admission = Admission::whereIn('services_availed_id', $servicesAvailed)
+        //     ->orderBy('id', 'desc')
+        //     ->get();
 
         if ($admission->isEmpty()) {
             return response()->json(['message' => 'No list of pet admissions found.'], 404);

@@ -79,6 +79,7 @@ class DiagnosisController extends Controller
         $servicesAvailed = ServicesAvailed::create([
             'date' => Carbon::now(),
             'service_id' => $service->id,
+            'unit' => $sarequest->input('unit'),
             'unit_price' => $sarequest->input('unit_price'),
             'client_deposit_id' => $clientService->id,
             'pet_id' => $sarequest->input('pet_id'),

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('medicines', function (Blueprint $table) {
-            $table->unsignedBigInteger('medcat_id')->after('price');
+        Schema::table('medication', function (Blueprint $table) {
+            $table->unsignedBigInteger('medcat_id')->after('services_availed_id');
             $table->foreign('medcat_id')->references('id')->on('medicine_category');
         });
     }
