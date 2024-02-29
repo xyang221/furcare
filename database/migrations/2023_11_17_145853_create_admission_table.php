@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date_admission')->useCurrent();
             $table->timestamp('date_released')->useCurrent();
-            $table->double('treatment_cost');
 
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');

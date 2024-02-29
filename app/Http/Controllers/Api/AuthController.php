@@ -7,7 +7,6 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\SignupVerifyRequest;
 use App\Mail\VerificationMail;
-use App\Models\Address;
 use App\Models\PetOwner;
 use App\Models\User;
 use Illuminate\Http\Request;

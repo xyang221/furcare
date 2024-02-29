@@ -38,7 +38,7 @@ class BreedController extends Controller
 
             // Perform search
             $breeds = Breed::where('specie_id', '=', $sanitized_name)
-                ->orderBy('breed') // Assuming 'name' is the column you want to order alphabetically
+                ->orderBy('breed') // Assuming 'breed' is the column you want to order alphabetically
                 ->get();
 
 

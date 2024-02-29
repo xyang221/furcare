@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('contact_num');
-            $table->string('zone');
+            $table->string('zone')->nullable();
             $table->string('barangay');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('zipcode_id');

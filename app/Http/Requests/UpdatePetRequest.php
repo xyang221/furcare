@@ -22,10 +22,10 @@ class UpdatePetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string|max:55',
-            'birthdate'=>'required|date',
-            'gender' => 'required|string|max:55',
-            'color' => 'required|string|max:55',
+            'name' => 'required|string|max:55',
+            'birthdate' => 'nullable|date',
+            'gender' => 'nullable|string|max:55',
+            'color' => 'nullable|string|max:55',
             'breed_id' => 'exists:breeds,id',
             'specie_id' => 'exists:species,id',
         ];

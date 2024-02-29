@@ -54,7 +54,8 @@ class TreatmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreatmentRequest $request, StoreServicesAvailedRequest $sarequest, $poid, $sid)
+    public function store(StoreTreatmentRequest $request, $poid, $sid)
+    // public function store(StoreTreatmentRequest $request, StoreServicesAvailedRequest $sarequest, $poid, $sid)
     {
         $service = Service::findOrFail($sid);
         $clientService = ClientService::where('petowner_id', $poid)->where('status', 'To Pay')->first();
@@ -65,8 +66,8 @@ class TreatmentController extends Controller
 
         $treatment = Treatment::create([
             'date' => Carbon::now(),
-            'day' => $sarequest->input('day'),
-            'pet_id' => $sarequest->input('pet_id'),
+            'day' => $request->input('day'),
+            'pet_id' => $request->input('pet_id'),
             'diagnosis' => $request->input('diagnosis'),
             'body_weight' => $request->input('body_weight'),
             'heart_rate' => $request->input('heart_rate'),
@@ -80,22 +81,21 @@ class TreatmentController extends Controller
             'comments' => $request->input('comments'),
         ]);
 
-        $servicesAvailed = ServicesAvailed::create([
-            'date' => Carbon::now(),
-            'service_id' => $service->id,
-            'unit_price' => $sarequest->input('unit_price'),
-            'client_deposit_id' => $clientService->id,
-            'pet_id' => $treatment->pet_id,
-            'status' => "To Pay",
-        ]);
+        // $servicesAvailed = ServicesAvailed::create([
+        //     'date' => Carbon::now(),
+        //     'service_id' => $service->id,
+        //     'unit_price' => $sarequest->input('unit_price'),
+        //     'client_deposit_id' => $clientService->id,
+        //     'pet_id' => $treatment->pet_id,
+        //     'status' => "To Pay",
+        // ]);
 
         Admission::create([
             'date_admission' => Carbon::now(),
             'date_released' => Carbon::now(),
-            'treatment_cost' => $servicesAvailed->unit_price,
             'pet_id' => $treatment->pet_id,
             'treatment_id' => $treatment->id,
-            'services_availed_id' => $servicesAvailed->id,
+            // 'services_availed_id' => $servicesAvailed->id,
         ]);
 
         return new TreatmentResource($treatment, 201);

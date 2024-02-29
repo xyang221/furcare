@@ -23,10 +23,10 @@ class StorePetRequest extends FormRequest
     {
         return [
             'photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'name'=>'required|string|max:55',
-            'birthdate'=>'required|date',
-            'gender' => 'required|string|max:55',
-            'color' => 'required|string|max:55',
+            'name' => 'required|string|max:55',
+            'birthdate' => 'date',
+            'gender' => 'string|max:55',
+            'color' => 'string|max:55',
             'breed_id' => 'exists:breeds,id',
             'petowner_id' => 'exists:petowners,id',
         ];

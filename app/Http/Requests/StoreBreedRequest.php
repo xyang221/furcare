@@ -22,8 +22,8 @@ class StoreBreedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'breed'=>'required|string|max:55',
-            'description'=>'string|max:55',
+            'breed' => 'required|string|max:55',
+            'description' => 'nullable|string|max:55',
             'specie_id' => 'exists:species,id',
         ];
     }
