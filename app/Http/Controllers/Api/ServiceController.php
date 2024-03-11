@@ -6,8 +6,13 @@ use App\Models\Service;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
+use App\Http\Resources\ServiceCategoryResource;
 use App\Http\Resources\ServiceResource;
-
+use App\Http\Resources\ServicesAvailedResource;
+use App\Models\ClientService;
+use App\Models\ServiceCategory;
+use App\Models\ServicesAvailed;
+use App\Models\TestResult;
 
 class ServiceController extends Controller
 {
@@ -16,17 +21,30 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::query()
-            ->orderBy('cat_id', 'asc') 
+        $services = Service::whereNotIn('cat_id', [12, 9, 8])
+            ->orderBy('cat_id', 'asc')
             ->get();
 
         return ServiceResource::collection($services);
     }
 
+    public function category()
+    {
+        $services = ServiceCategory::query()
+            ->where('id', '<>', 10)  // Exclude the category with ID if Admission
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return ServiceCategoryResource::collection($services);
+    }
+
+
+
     public function noothertestresults()
     {
-        $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE','Medicine','Admission'])
-            ->orderBy('id', 'asc')
+        $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE'])
+            ->whereNotIn('cat_id', [12, 9, 8])
+            ->orderBy('cat_id', 'asc')
             ->get();
 
         return ServiceResource::collection($services);
@@ -36,6 +54,16 @@ class ServiceController extends Controller
     public function othertestresults()
     {
         $services = Service::whereIn('service', ['4DX', 'EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE'])->get();
+
+        return ServiceResource::collection($services);
+    }
+
+    public function others()
+    {
+        $services = Service::where('cat_id', 12)
+            ->where('service', '!=', 'Others')
+            ->orderBy('service', 'asc')
+            ->get();
 
         return ServiceResource::collection($services);
     }
@@ -57,6 +85,8 @@ class ServiceController extends Controller
     {
         return new ServiceResource($service);
     }
+
+
 
     /**
      * Update the specified resource in storage.

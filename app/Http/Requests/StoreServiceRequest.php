@@ -22,11 +22,9 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service'=>'required|string|max:55',
-            'price'=>'required|double|max:55',
-            'status' => 'string',
+            'service' => 'required|string|max:55',
             'cat_id' => 'exists:service_category,id',
-       
+
         ];
     }
 }
