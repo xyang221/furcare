@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('medication', function (Blueprint $table) {
-            $table->unsignedBigInteger('medcat_id')->after('services_availed_id')->nullable();
-            $table->foreign('medcat_id')->references('id')->on('medicine_category');
+        Schema::table('products', function (Blueprint $table) {
+            $table->unsignedBigInteger('services_availed_id')->after('treatment_id');
+            $table->foreign('services_availed_id')->references('id')->on('services_availed');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('medicines', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             //
         });
     }
