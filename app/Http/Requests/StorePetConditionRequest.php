@@ -28,7 +28,7 @@ class StorePetConditionRequest extends FormRequest
             'urinated' => 'nullable|string|max:55',
             'vomit' => 'nullable|string|max:55',
             'defecated' => 'nullable|string|max:55',
-            // 'is_AM_or_PM' => 'required|string|max:55',
+            'is_AM_or_PM' => 'required|string|max:55',
             
             'treatment_id' => 'exists:treatment,id',
         ];

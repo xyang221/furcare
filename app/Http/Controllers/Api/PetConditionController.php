@@ -36,16 +36,6 @@ class PetConditionController extends Controller
         $treatment = Treatment::findOrFail($tid);
         $data = $request->validated(); // get the validated data
     
-        $currentTime = Carbon::now();
-        $amStartTime = Carbon::createFromTime(6, 0, 0); // Set your AM start time
-        $pmStartTime = Carbon::createFromTime(12, 0, 0); // Set your PM start time
-    
-        if ($currentTime->between($amStartTime, $pmStartTime)) {
-            $data['is_AM_or_PM'] = "AM";
-        } else {
-            $data['is_AM_or_PM'] = "PM";
-        }
-        
         $data['date'] = Carbon::now();
         $data['treatment_id'] = $treatment->id; // Assign treatment ID
     
