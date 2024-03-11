@@ -20,19 +20,18 @@ class MedicationResource extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->date,
+            'medicine_name' => $this->medicine_name,
             'description' => $this->description,
-            'quantity' => $this->quantity,
             'dosage' => $this->dosage,
 
             'deleted_at' => $this->deleted_at,
 
             'treatment_id' => $this->treatment_id,
-            'medcat_id' => $this->medcat_id,
-            'medicine_name' => $this->medicine_name,
-            'services_availed_id' => $this->services_availed_id,
+            // 'medcat_id' => $this->medcat_id,
+            // 'services_availed_id' => $this->services_availed_id,
 
             'category' => new MedicineCategoryResource($this->whenLoaded('category')),
-            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
+            // 'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];
     }

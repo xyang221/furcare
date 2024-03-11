@@ -38,21 +38,21 @@ class MedicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMedicationRequest $request, StoreServicesAvailedRequest $sarequest, $id, $tid)
+    public function store(StoreMedicationRequest $request, $id, $tid)
     {
         $treatment = Treatment::findOrFail($tid);
-        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+        // $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
 
-        $servicesAvailed = ServicesAvailed::create([
-            'date' => Carbon::now(),
-            'service_id' => 18,
-            'unit' => $sarequest->input('unit'),
-            'unit_price' => $sarequest->input('unit_price'),
-            'quantity' => $sarequest->input('quantity'),
-            'client_deposit_id' => $clientService->id,
-            'pet_id' => $treatment->pet_id,
-            'status' => "To Pay",
-        ]);
+        // $servicesAvailed = ServicesAvailed::create([
+        //     'date' => Carbon::now(),
+        //     'service_id' => 18,
+        //     'unit' => $sarequest->input('unit'),
+        //     'unit_price' => $sarequest->input('unit_price'),
+        //     'quantity' => $sarequest->input('quantity'),
+        //     'client_deposit_id' => $clientService->id,
+        //     'pet_id' => $treatment->pet_id,
+        //     'status' => "To Pay",
+        // ]);
 
         // $medicine = Medicine::create([
         //     'medcat_id' => $med->input('medcat_id'),
@@ -62,14 +62,12 @@ class MedicationController extends Controller
 
         $medication = Medication::create([
             'date' => Carbon::now(),
-            'quantity' => $servicesAvailed->quantity,
             'dosage' => $request->input('dosage'),
             'description' => $request->input('description'),
             'treatment_id' => $treatment->id,
             'pet_id' => $treatment->pet_id,
             'medcat_id' => $request->input('medcat_id'),
             'medicine_name' => $request->input('medicine_name'),
-            'services_availed_id' => $servicesAvailed->id,
         ]);
 
         return new MedicationResource($medication, 201);
@@ -107,18 +105,11 @@ class MedicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicationRequest $request, UpdateMedicineRequest $med,UpdateServicesAvailedRequest $sareq, $id)
+    public function update(UpdateMedicationRequest $request, $id)
     {
         $medication = Medication::findOrFail($id);
-        $medicine = Medicine::findOrFail($medication->medicine_id);
-        $servicesAvailed = ServicesAvailed::findOrFail($medication->services_availed_id);
         $data = $request->validated();
-        $meddata = $med->validated();
-        $sadata = $sareq->validated();
         $medication->update($data);
-        $medicine->update($meddata);
-
-        $servicesAvailed->update($sadata);
 
         return response()->json(['message' => 'Medication updated successfully.'], 204);
     }
