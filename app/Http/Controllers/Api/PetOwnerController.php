@@ -25,7 +25,7 @@ class PetOwnerController extends Controller
     public function index()
     {
 
-        $petOwners = PetOwner::orderBy('id', 'desc')->paginate(50);
+        $petOwners = PetOwner::orderBy('id', 'desc')->get();
 
         if ($petOwners->isEmpty()) {
             return response()->json(['message' => 'No pet owner records found.'], Response::HTTP_NOT_FOUND);

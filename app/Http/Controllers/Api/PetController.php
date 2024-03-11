@@ -19,7 +19,7 @@ class PetController extends Controller
     public function index()
     {
 
-        $pets = Pet::query()->orderBy('id', 'desc')->paginate(50);
+        $pets = Pet::query()->orderBy('name', 'asc')->paginate(50);
 
         if ($pets->isEmpty()) {
             return response()->json(['message' => 'No pet records found.'], 404);
