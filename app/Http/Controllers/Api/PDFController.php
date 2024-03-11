@@ -16,7 +16,6 @@ use App\Models\PetCondition;
 use App\Models\PetOwner;
 use App\Models\ServicesAvailed;
 use App\Models\Treatment;
-use Carbon\Carbon;
 use Dompdf\Dompdf;
 
 class PDFController extends Controller
@@ -39,7 +38,7 @@ class PDFController extends Controller
 
         $dompdf->loadHtml($html);
 
-        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4', 'landscape');
 
         $dompdf->render();
 
@@ -67,12 +66,12 @@ class PDFController extends Controller
 
                 .container {
                     display: flex;
-                    width: 45%;
+                    width: 25%;
                 }
 
                 table {
                     border-collapse: collapse;
-                    font-size: 12px;
+                    font-size: 10px;
                     width: 100%;
                 }
 
@@ -162,19 +161,7 @@ class PDFController extends Controller
                     ?>
                         <tr>
                             <td><?= $service->pet->name ?></td>
-                            <td><?php
-                                $foundMedicine = false;
-                                foreach ($meds as $med) :
-                                    if ($med->services_availed_id === $service->id) {
-                                        echo $med->medicine_name;
-                                        $foundMedicine = true;
-                                    }
-                                endforeach;
-
-                                if (!$foundMedicine && $service->service->service !== "Medicine") {
-                                    echo $service->service->service;
-                                } ?></td>
-
+                            <td><?= $service->service->service ?></td>
                             <td><?= $service->quantity ?></td>
                             <td><?= $service->unit ?></td>
                             <td><?= number_format($service->unit_price, 2) ?></td>
@@ -240,15 +227,20 @@ class PDFController extends Controller
         return $html;
     }
 
-    public function generatePDFPaymentRecords()
+    public function generatePDFPaymentRecords($date)
     {
-        $today = Carbon::now()->toDateString();
-        $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
+        $timestamp = strtotime($date);
+
+        $paymentRecords = PaymentRecord::whereDate('date', '=', date('Y-m-d', $timestamp))
+            ->get();
+
+        // $today = Carbon::now()->toDateString();
+        // $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
         $totalAmount = $paymentRecords->sum('amount');
         $totalChange = $paymentRecords->sum('change');
         $totalIncome = $totalAmount - $totalChange;
 
-        $html = $this->generateHTMLpaymentrecords(PaymentRecordResource::collection($paymentRecords), $totalIncome, $today);
+        $html = $this->generateHTMLpaymentrecords(PaymentRecordResource::collection($paymentRecords), $totalIncome, $timestamp);
 
         $dompdf = new Dompdf();
 
@@ -264,7 +256,7 @@ class PDFController extends Controller
             ->header('Content-Disposition', 'attachment; filename="generated_pdf.pdf"');
     }
 
-    private function generateHTMLpaymentrecords($paymentRecords, $totalIncome, $today)
+    private function generateHTMLpaymentrecords($paymentRecords, $totalIncome, $timestamp)
     {
         ob_start(); // Start output buffering
 
@@ -343,8 +335,9 @@ class PDFController extends Controller
             <hr>
 
             <div style="display:flex; justify-content:space-between;">
-                <h3 style="text-align:center; margin:5px">Charge Slip Records</h3>
-                <h3 style="text-align:center; margin:5px">Date: <?php echo date('F j, Y'); ?></h3>
+                <h2 style="text-align:center; margin:5px">Charge Slip Records</h2>
+                <h3 style="text-align:center; margin:5px; padding-top:3px; padding-bottom:2px;">Date: <?php echo date('F j, Y', $timestamp); ?></h3>
+
             </div>
 
             <table>
@@ -787,7 +780,6 @@ class PDFController extends Controller
                     <tr>
                         <th></th>
                         <th>Medicine</th>
-                        <th>Quantity</th>
                         <th>Dosage</th>
                         <th>Description</th>
                     </tr>
@@ -798,8 +790,7 @@ class PDFController extends Controller
                     ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $med->medicine->name ?></td>
-                            <td><?= $med->quantity ?></td>
+                            <td><?= $med->medicine_name ?></td>
                             <td><?= $med->dosage ?></td>
                             <td><?= $med->description ?></td>
                         </tr>

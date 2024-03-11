@@ -75,6 +75,21 @@ class PaymentRecordController extends Controller
         return PaymentRecordResource::collection($paymentRecords);
     }
 
+    public function getPaymentsbyDate($date)
+    {
+        $timestamp = strtotime($date);
+        $dateString = Carbon::createFromTimestamp($timestamp)->toDateString();
+        
+        $paymentRecords = PaymentRecord::whereDate('date', '=', $dateString)
+            ->get();        
+
+        if ($paymentRecords->isEmpty()) {
+            return response()->json(['message' => 'No list of test results found for this pet within this date.'], 404);
+        }
+
+        return PaymentRecordResource::collection($paymentRecords);
+    }
+
     public function showClientDepositPayment(PaymentRecord $paymentRecord, $id)
     {
         $clientdeposit = ClientService::findOrFail($id);
