@@ -165,6 +165,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/servicesavailed', [ServicesAvailedController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
     Route::post('/servicesavailed/store-medicine/petowner/{id}', [ServicesAvailedController::class, 'storeMedicine']);
+    Route::post('/servicesavailed/store-product/petowner/{id}', [ServicesAvailedController::class, 'storeProduct']);
     Route::get('/servicesavailed/petowner/{id}/all', [ServicesAvailedController::class, 'showAllPetownerServiceAvail']);
     Route::get('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'showByPetownerServiceAvail']);
     Route::get('/servicesavailed/clientdeposit/{id}', [ServicesAvailedController::class, 'showServicesByClientDeposits']);
@@ -178,6 +179,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
     Route::get('/servicesavailed/others/petowner/{id}', [ServicesAvailedController::class, 'getOtherByServiceandPetowner']);
     Route::get('/servicesavailed/medicines/petowner/{id}', [ServicesAvailedController::class, 'getMedicinePetownerServices']);
+    Route::get('/servicesavailed/products/petowner/{id}', [ServicesAvailedController::class, 'getProductPetownerServices']);
 
     Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
     Route::get('/clientdeposits/{id}/generate-chargeslip/balancepaid', [PDFController::class, 'generatePDFBalancePaid']);
@@ -270,7 +272,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/petconditions/{id}', [PetConditionController::class, 'update']);
     Route::get('/archives/petconditions', [PetConditionController::class, 'archivelist']);
     Route::put('/archives/petconditions/{id}', [PetConditionController::class, 'restore']);
-    Route::delete('/archives/petconditions/{id}', [PetConditionController::class, 'forcedelete']);
+    Route::delete('/petconditions/delete/{id}', [PetConditionController::class, 'forcedelete']);
 
     Route::apiResource('/medicinescategory', MedicineCategoryController::class);
 

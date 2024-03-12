@@ -84,7 +84,7 @@ class PaymentRecordController extends Controller
             ->get();        
 
         if ($paymentRecords->isEmpty()) {
-            return response()->json(['message' => 'No list of test results found for this pet within this date.'], 404);
+            return response()->json(['message' => 'No list of payment records found within this date.'], 404);
         }
 
         return PaymentRecordResource::collection($paymentRecords);

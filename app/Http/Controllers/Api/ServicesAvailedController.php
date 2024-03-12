@@ -116,6 +116,49 @@ class ServicesAvailedController extends Controller
         return response()->json(['message' => 'Service availed was successfully saved.'], 201);
     }
 
+    public function storeProduct(StoreServicesAvailedRequest $request, StoreServiceRequest $sreq, $id)
+    {
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            if ($staff) {
+                $renderedby = "$staff->firstname $staff->lastname";
+            } else {
+                $renderedby = "Admin";
+            }
+
+            $newclientService = ClientService::create([
+                'date' => Carbon::now(),
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                'rendered_by' => $renderedby,
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
+
+        $service = Service::create([
+            'service' => $sreq->input('service'),
+            'cat_id' => 9,
+            'isAvailable' => 1,
+        ]);
+
+        $requestData = $request->validated();
+
+        $requestData['date'] =  Carbon::now();
+        $requestData['client_deposit_id'] = $clientService->id;
+        $requestData['service_id'] = $service->id;
+        $requestData['status'] = "To Pay";
+        ServicesAvailed::create($requestData);
+        return response()->json(['message' => 'Service availed was successfully saved.'], 201);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -238,7 +281,7 @@ class ServicesAvailedController extends Controller
 
     public function getOtherByServiceandPetowner($id)
     {
-        $services = Service::where('cat_id', 11)->get();
+        $services = Service::where('cat_id', 12)->get();
         $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
 
         $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
@@ -264,7 +307,24 @@ class ServicesAvailedController extends Controller
             ->get();
 
         if ($servicesAvailed->isEmpty()) {
-            return response()->json(['message' => 'No list of pet test results found.'], 404);
+            return response()->json(['message' => 'No list of medicines found.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
+
+    public function getProductPetownerServices($id)
+    {
+        $services = Service::where('cat_id', 9)->get();
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
+            ->whereIn('service_id', $services->pluck('id'))
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No list of products found.'], 404);
         }
 
         return ServicesAvailedResource::collection($servicesAvailed);
