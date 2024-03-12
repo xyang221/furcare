@@ -26,6 +26,8 @@ class StoreMedicationRequest extends FormRequest
             'description' => 'nullable|string',
             'dosage' => 'required|string',
             'medicine_name' => 'required|string',
+            'am'=>'nullable|boolean',
+            'pm'=>'nullable|boolean',
 
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',

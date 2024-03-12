@@ -93,7 +93,7 @@ class PetConditionController extends Controller
 
     public function forcedelete(PetCondition $petCondition, $id)
     {
-        $petCondition = PetCondition::withTrashed()->findOrFail($id);
+        $petCondition = PetCondition::findOrFail($id);
         $petCondition->forceDelete();
         return response("This pet condition record was Permanently Deleted", 204);
 

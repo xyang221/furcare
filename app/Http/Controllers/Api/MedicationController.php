@@ -41,24 +41,6 @@ class MedicationController extends Controller
     public function store(StoreMedicationRequest $request, $id, $tid)
     {
         $treatment = Treatment::findOrFail($tid);
-        // $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
-
-        // $servicesAvailed = ServicesAvailed::create([
-        //     'date' => Carbon::now(),
-        //     'service_id' => 18,
-        //     'unit' => $sarequest->input('unit'),
-        //     'unit_price' => $sarequest->input('unit_price'),
-        //     'quantity' => $sarequest->input('quantity'),
-        //     'client_deposit_id' => $clientService->id,
-        //     'pet_id' => $treatment->pet_id,
-        //     'status' => "To Pay",
-        // ]);
-
-        // $medicine = Medicine::create([
-        //     'medcat_id' => $med->input('medcat_id'),
-        //     'name' => $med->input('name'),
-        //     'price' =>   $servicesAvailed->unit_price
-        // ]);
 
         $medication = Medication::create([
             'date' => Carbon::now(),
@@ -68,6 +50,8 @@ class MedicationController extends Controller
             'pet_id' => $treatment->pet_id,
             'medcat_id' => $request->input('medcat_id'),
             'medicine_name' => $request->input('medicine_name'),
+            'am' =>  $request->input('am'),
+            'pm' =>  $request->input('pm'),
         ]);
 
         return new MedicationResource($medication, 201);
@@ -120,10 +104,8 @@ class MedicationController extends Controller
     public function archive(Medication $medication, $id)
     {
         $medication = Medication::findOrFail($id);
-        $service = ServicesAvailed::findOrFail($medication->services_availed_id);
-        $medication->delete();
-        $service->delete();
-        return response()->json(['message' => 'The pet medication record within this treatment was archived.'], 204);
+        $medication->forceDelete();
+        return response()->json(['message' => 'The pet medication record within this treatment was deleted.'], 204);
     }
 
     public function archivelist()

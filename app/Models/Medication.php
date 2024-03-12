@@ -13,7 +13,7 @@ class Medication extends Model
 
     protected $table = 'medication';
 
-    protected $fillable = ['date', 'description', 'dosage', 'medicine_name', 'treatment_id'];
+    protected $fillable = ['date', 'description', 'dosage', 'medicine_name', 'treatment_id', 'am', 'pm'];
 
     protected $dates = ['deleted_at'];
 
