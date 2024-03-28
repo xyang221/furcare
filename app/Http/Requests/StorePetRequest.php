@@ -24,7 +24,7 @@ class StorePetRequest extends FormRequest
         return [
             'photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'name' => 'required|string|max:55',
-            'birthdate' => 'date',
+            'birthdate' => 'nullable|date',
             'gender' => 'nullable|string|max:55',
             'color' => 'nullable|string|max:55',
             'breed_id' => 'exists:breeds,id',

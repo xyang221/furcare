@@ -187,6 +187,12 @@ class PDFController extends Controller
                     </tr>
                     <tr>
                         <td class="total" colspan="5">
+                            Discount:
+                        </td>
+                        <td><?= number_format($paymentRecord->discount, 2) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="total" colspan="5">
                             Remaining Charge:
                         </td>
                         <td><?= number_format($remainingBalance, 2) ?></td>

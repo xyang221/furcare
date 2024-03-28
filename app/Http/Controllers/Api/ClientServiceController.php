@@ -86,26 +86,21 @@ class ClientServiceController extends Controller
         $petowner = PetOwner::findOrFail($id);
 
         $verifyclientService = ClientService::where('petowner_id', $petowner->id)
-            ->where('status', 'Pending') // Corrected 'whereIn' to 'where'
+            ->where('status', 'Pending')
             ->latest()
             ->first();
 
         if (!$verifyclientService) {
-            // Handle the case where no pending client service is found
-            // You might want to return a response or redirect
             return response()->json(['error' => 'No pending client service found.']);
         }
 
-        $data = $request->validated(); // Get the validated data
+        $data = $request->validated(); 
 
-        // Assuming 'current_balance' is present in the validated data
-        // Also, corrected the addition to use the actual 'current_balance' value
         $data['current_balance'] = $request->input('current_balance');
         $data['prev_balance'] += $verifyclientService->current_balance;
 
         $verifyclientService->update($data);
 
-        // You might want to return a response or redirect after updating
         return response()->json(['success' => 'Balance updated successfully.']);
     }
 
@@ -177,6 +172,7 @@ class ClientServiceController extends Controller
                 'type' => $preq->input('type'),
                 'type_ref_no' => $preq->input('type_ref_no'),
                 'total' => $preq->input('total'),
+                'discount' => $preq->input('discount'),
                 'amount' => $preq->input('amount'),
                 'change' => $preq->input('change'),
                 'amounts_payable' => $preq->input('amounts_payable'),
@@ -197,6 +193,7 @@ class ClientServiceController extends Controller
                 'type' => $preq->input('type'),
                 'type_ref_no' => $preq->input('type_ref_no'),
                 'total' => $preq->input('total'),
+                'discount' => $preq->input('discount'),
                 'amount' => $preq->input('amount'),
                 'change' => $preq->input('change'),
                 'amounts_payable' => $preq->input('amounts_payable'),
@@ -255,6 +252,7 @@ class ClientServiceController extends Controller
                 'type' => $preq->input('type'),
                 'type_ref_no' => $preq->input('type_ref_no'),
                 'total' => $payment->total,
+                'discount' => $preq->input('discount'),
                 'amount' => $preq->input('amount'),
                 'change' => $preq->input('change'),
                 'amounts_payable' => $preq->input('amounts_payable'),
@@ -392,6 +390,7 @@ class ClientServiceController extends Controller
                 'type' => $preq->input('type'),
                 'type_ref_no' => $preq->input('type_ref_no'),
                 'total' => $preq->input('total'),
+                'discount' => $preq->input('discount'),
                 'amount' => $preq->input('amount'),
                 'change' => $preq->input('change'),
                 'client_deposit_id' => $new->id,
@@ -417,6 +416,7 @@ class ClientServiceController extends Controller
                 'type' => $preq->input('type'),
                 'type_ref_no' => $preq->input('type_ref_no'),
                 'total' => $preq->input('total'),
+                'discount' => $preq->input('discount'),
                 'amount' => $preq->input('amount'),
                 'change' => $preq->input('change'),
             ];
