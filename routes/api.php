@@ -186,6 +186,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route::apiResource('/clientdeposits', ClientServiceController::class);
     Route::get('/clientdeposits', [ClientServiceController::class, 'index']);
+    Route::get('/clientdeposits/today', [ClientServiceController::class, 'depositsToday']);
     Route::get('/clientdeposits/{id}/balance', [ClientServiceController::class, 'balance']);
     Route::get('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'show']);
     Route::get('/clientdeposits/{id}', [ClientServiceController::class, 'showClientdeposit']);
@@ -195,6 +196,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientdeposits/{id}/services', [ClientServiceController::class, 'showallServicesCompleted']);
     Route::post('/clientdeposits/petowner/{id}', [ClientServiceController::class, 'store']);
     Route::put('/clientdeposits/petowner/{id}/balance', [ClientServiceController::class, 'updateBalance']);
+    Route::get('/clientdeposits/filter-date/{date}', [ClientServiceController::class, 'getDepositsbyDate']);
+
+    Route::get('/clientdeposits/date/{date}', [PDFController::class, 'generatePDFClientDeposits']);
 
     Route::get('/paymentrecords', [PaymentRecordController::class, 'index']);
     Route::post('/paymentrecords/clientdeposits/{id}', [PaymentRecordController::class, 'store']);

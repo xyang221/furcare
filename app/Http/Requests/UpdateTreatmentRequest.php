@@ -23,6 +23,7 @@ class UpdateTreatmentRequest extends FormRequest
     {
         return [
             'diagnosis' => 'required|string',
+            'day' => 'required|numeric',
             'body_weight' => 'required|numeric',
             'heart_rate' => 'nullable|string',
             'mucous_membranes' => 'nullable|string',

@@ -17,10 +17,12 @@ class PaymentRecordController extends Controller
      */
     public function index()
     {
-        $paymentRecords = PaymentRecord::orderBy('id', 'desc')->get();
+        $today = Carbon::now()->toDateString();
+
+        $paymentRecords = PaymentRecord::orderBy('id', 'desc')->whereDate('date', $today)->get();
 
         if ($paymentRecords->isEmpty()) {
-            return response()->json(['message' => 'No payment records found.'], 404);
+            return response()->json(['message' => 'No payment records found today.'], 404);
         }
 
         return PaymentRecordResource::collection($paymentRecords);

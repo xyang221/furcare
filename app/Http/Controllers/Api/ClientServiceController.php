@@ -27,6 +27,35 @@ class ClientServiceController extends Controller
         return ClientServiceResource::collection($clientService);
     }
 
+    public function depositsToday()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $deposits = ClientService::orderBy('id', 'desc')->whereDate('date', $today)->get();
+
+        if ($deposits->isEmpty()) {
+            return response()->json(['message' => 'No client deposits found today.'], 404);
+        }
+
+        return ClientServiceResource::collection($deposits);
+    }
+
+    public function getDepositsbyDate($date)
+    {
+        $timestamp = strtotime($date);
+        $dateString = Carbon::createFromTimestamp($timestamp)->toDateString();
+
+        $deposits = ClientService::whereDate('date', '=', $dateString)
+            ->where('deposit', '!=', 0)
+            ->get();
+
+        if ($deposits->isEmpty()) {
+            return response()->json(['message' => 'No list of client deposits found within this date.'], 404);
+        }
+
+        return ClientServiceResource::collection($deposits);
+    }
+
     public function balance($id)
     {
         $petowner = PetOwner::findOrFail($id);
@@ -94,7 +123,7 @@ class ClientServiceController extends Controller
             return response()->json(['error' => 'No pending client service found.']);
         }
 
-        $data = $request->validated(); 
+        $data = $request->validated();
 
         $data['current_balance'] = $request->input('current_balance');
         $data['prev_balance'] += $verifyclientService->current_balance;
@@ -231,7 +260,7 @@ class ClientServiceController extends Controller
 
             PaymentRecord::create($newPaymentRecord);
             return new ClientServiceResource($clientService);
-        }  else if ($data['status'] == "Pending" && $data['balance'] === 0) {
+        } else if ($data['status'] == "Pending" && $data['balance'] === 0) {
             $data['status'] = "Completed";
             $data['balance'] = 0;
             ServicesAvailed::where('client_deposit_id', $clientService->id)->update(['status' => 'Completed']);

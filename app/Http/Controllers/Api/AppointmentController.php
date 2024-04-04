@@ -21,9 +21,7 @@ class AppointmentController extends Controller
     public function listenForTodayAppointments()
 
     {
-        // $today = Carbon::now()->subHour();
         $today = Carbon::now();
-        // $user = User::findOrFail($id);
 
         try {
 
@@ -306,6 +304,14 @@ class AppointmentController extends Controller
             ->orderBy('date')
             ->get();
 
+        Appointment::whereDate('date', '<', $today)
+            ->where('status', 'Confirmed')
+            ->update(['status' => 'No Show']);
+
+        Appointment::whereDate('date', '<', $today)
+            ->where('status', 'Pending')
+            ->update(['status' => 'Cancelled']);
+
         $c1 = AppointmentResource::collection($pendingAppointments);
         $c2 = AppointmentResource::collection($confirmedAppointments);
         $mergedCollection = $c1->merge($c2);
@@ -375,7 +381,7 @@ class AppointmentController extends Controller
         $appointment->update($data);
 
         if ($appointment->status === "Pending") {
-            $admins = User::whereIn('role_id', [1,2])->whereNull('deleted_at')->get();
+            $admins = User::whereIn('role_id', [1, 2])->whereNull('deleted_at')->get();
             $dateTime = Carbon::parse($appointment->date);
             $formattedDateTime = $dateTime->format('F j, Y h:i a');
             $firstname = $appointment->petowner->firstname;

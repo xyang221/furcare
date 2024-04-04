@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientService;
 use App\Models\PaymentRecord;
 use App\Models\Pet;
 use App\Models\PetOwner;
@@ -17,12 +18,14 @@ class AdminController extends Controller
         $petOwners = PetOwner::count();
 
         $today = Carbon::now()->toDateString();
+        $deposits = ClientService::whereDate('date', $today)->get();
         $paymentRecords = PaymentRecord::whereDate('date', $today)->get();
         $totalAmount = $paymentRecords->sum('amount');
         $totalChange = $paymentRecords->sum('change');
         $totalIncome = $totalAmount - $totalChange;
+        $total = $totalIncome + $deposits->sum('deposit');
 
-        return response()->json(['pets' => $pets, 'petowners' => $petOwners, 'income' => $totalIncome]);
+        return response()->json(['pets' => $pets, 'petowners' => $petOwners, 'income' => $total]);
     }
 
     public function searchPetownerandPet($name)
