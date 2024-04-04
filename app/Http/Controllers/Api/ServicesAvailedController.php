@@ -373,8 +373,18 @@ class ServicesAvailedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServicesAvailed $servicesAvailed)
+    public function destroy(ServicesAvailed $servicesAvailed, $id)
     {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
+        $servicesAvailed->forceDelete();
+        return response()->json("Service Availed Deleted", 204);
+    }
+
+    public function destroyProduct(ServicesAvailed $servicesAvailed, $id)
+    {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
+        $service = Service::findOrFail($servicesAvailed->service_id);
+        $service->forceDelete();
         $servicesAvailed->forceDelete();
         return response()->json("Service Availed Deleted", 204);
     }

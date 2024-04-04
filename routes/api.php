@@ -173,10 +173,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
     Route::get('/servicesavailed/pet/{id}', [ServicesAvailedController::class, 'showByPetServices']);
     Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
-    Route::delete('/servicesavailed/{id}/archive', [ServicesAvailedController::class, 'archive']);
-    Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
-    Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
+    // Route::delete('/servicesavailed/{id}/archive', [ServicesAvailedController::class, 'archive']);
+    // Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
+    // Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);
+    Route::delete('/servicesavailed/{id}/forcedelete', [ServicesAvailedController::class, 'destroy']);
+    Route::delete('/servicesavailed/{id}/forcedelete/product', [ServicesAvailedController::class, 'destroyProduct']);
     Route::get('/servicesavailed/others/petowner/{id}', [ServicesAvailedController::class, 'getOtherByServiceandPetowner']);
     Route::get('/servicesavailed/medicines/petowner/{id}', [ServicesAvailedController::class, 'getMedicinePetownerServices']);
     Route::get('/servicesavailed/products/petowner/{id}', [ServicesAvailedController::class, 'getProductPetownerServices']);
@@ -220,12 +221,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/deworminglogs/petowner/{id}/service/{sid}', [DewormingLogController::class, 'getDewormingByServiceandPetowner']);
     Route::get('/deworminglogs/{id}', [DewormingLogController::class, 'show']);
     Route::put('/deworminglogs/{id}', [DewormingLogController::class, 'update']);
-    Route::delete('/deworminglogs/{id}/archive', [DewormingLogController::class, 'archive']);
-    Route::get('/archives/deworminglogs', [DewormingLogController::class, 'archivelist']);
-    Route::put('/deworminglogs/{id}/restore', [DewormingLogController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [DewormingLogController::class, 'destroy']);
+    // Route::delete('/deworminglogs/{id}/archive', [DewormingLogController::class, 'archive']);
+    // Route::get('/archives/deworminglogs', [DewormingLogController::class, 'archivelist']);
+    // Route::put('/deworminglogs/{id}/restore', [DewormingLogController::class, 'restore']);
+    Route::delete('/deworminglogs/{id}/forcedelete', [DewormingLogController::class, 'destroy']);
 
-    Route::apiResource('/againsts', AgainstController::class);
     Route::get('/vaccinationlogs/today', [VaccinationLogController::class, 'byToday']);
     Route::get('/vaccinationlogs/weekly', [VaccinationLogController::class, 'byWeek']);
     Route::get('/vaccinationlogs/monthly', [VaccinationLogController::class, 'byMonth']);
@@ -236,10 +236,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vaccinationlogs/{id}', [VaccinationLogController::class, 'show']);
     Route::get('/vaccinationlogs/petowner/{id}/service/{sid}', [VaccinationLogController::class, 'getDiagnosisByServiceandPetowner']);
     Route::put('/vaccinationlogs/{id}', [VaccinationLogController::class, 'update']);
-    Route::delete('/vaccinationlogs/{id}/archive', [VaccinationLogController::class, 'archive']);
-    Route::get('/archives/vaccinationlogs', [VaccinationLogController::class, 'archivelist']);
-    Route::put('/vaccinationlogs/{id}/restore', [VaccinationLogController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [VaccinationLogController::class, 'destroy']);
+    // Route::delete('/vaccinationlogs/{id}/archive', [VaccinationLogController::class, 'archive']);
+    // Route::get('/archives/vaccinationlogs', [VaccinationLogController::class, 'archivelist']);
+    // Route::put('/vaccinationlogs/{id}/restore', [VaccinationLogController::class, 'restore']);
+    Route::delete('/vaccinationlogs/{id}/forcedelete', [VaccinationLogController::class, 'destroy']);
 
     Route::get('/testresults', [TestResultController::class, 'index']);
     Route::post('/testresults/petowner/{id}/service/{sid}', [TestResultController::class, 'store']);
@@ -250,10 +250,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/testresults/petowner/{id}/others', [TestResultController::class, 'getOtherTestsByServiceandPetowner']);
     Route::put('/testresults/{id}', [TestResultController::class, 'update']);
     Route::post('/testresults/{id}/upload-attachment', [TestResultController::class, 'uploadAttachment']);
-    Route::delete('/testresults/{id}/archive', [TestResultController::class, 'archive']);
-    Route::get('/archives/testresults', [TestResultController::class, 'archivelist']);
-    Route::put('/testresults/{id}/restore', [TestResultController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [TestResultController::class, 'destroy']);
+    // Route::delete('/testresults/{id}/archive', [TestResultController::class, 'archive']);
+    // Route::get('/archives/testresults', [TestResultController::class, 'archivelist']);
+    // Route::put('/testresults/{id}/restore', [TestResultController::class, 'restore']);
+    Route::delete('/testresults/{id}/forcedelete', [TestResultController::class, 'destroy']);
 
     Route::get('/treatments', [TreatmentController::class, 'index']);
     Route::get('/treatments/pet/{id}/{date}', [TreatmentController::class, 'getTreatmentbyPetbyDate']);

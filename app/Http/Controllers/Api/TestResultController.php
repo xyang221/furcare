@@ -82,7 +82,7 @@ class TestResultController extends Controller
         $file = $trrequest->file('attachment');
         $name = time() . '.' . $file->getClientOriginalExtension();
         $name_path = $file->move('storage/testresult-attachments/', $name);
-        
+
         $testResult = TestResult::create([
             'date' => Carbon::now(),
             'pet_id' => $servicesAvailed->pet_id,
@@ -203,7 +203,7 @@ class TestResultController extends Controller
 
         $name = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->move('storage/testresult-attachments/', $name);
-        
+
         // Fetch the test result by ID or however you identify it
         $testResult = TestResult::findOrFail($id); // Adjust this according to your model and input data
 
@@ -257,7 +257,9 @@ class TestResultController extends Controller
     public function destroy(TestResult $testResult, $id)
     {
         $testResult = TestResult::withTrashed()->findOrFail($id);
+        $service = ServicesAvailed::findOrFail($testResult->services_availed_id);
         $testResult->forceDelete();
-        return response()->json(['message' => 'This test result was permanently deleted.'], 404);
+        $service->forceDelete();
+        return response()->json("Test result was deleted", 204);
     }
 }

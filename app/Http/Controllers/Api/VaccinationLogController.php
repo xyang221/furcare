@@ -273,7 +273,9 @@ class VaccinationLogController extends Controller
     public function destroy(VaccinationLog $vaccinationLog, $id)
     {
         $vaccinationLog = VaccinationLog::findOrFail($id);
+        $service = ServicesAvailed::findOrFail($vaccinationLog->services_availed_id);
         $vaccinationLog->forceDelete();
+        $service->forceDelete();
         return response("Permanently Deleted", 201);
     }
 }

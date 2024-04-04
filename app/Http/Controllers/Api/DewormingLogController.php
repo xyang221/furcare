@@ -263,7 +263,9 @@ class DewormingLogController extends Controller
     public function destroy(DewormingLog $dewormingLog, $id)
     {
         $dewormingLog = DewormingLog::findOrFail($id);
+        $service = ServicesAvailed::findOrFail($dewormingLog->services_availed_id);
         $dewormingLog->forceDelete();
+        $service->forceDelete();
         return response("Permanently Deleted", 201);
     }
 }

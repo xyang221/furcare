@@ -30,7 +30,6 @@ class VaccinationLogResource extends JsonResource
             'pet' => new PetResource($this->whenLoaded('pet')),
             'vet' => new DoctorResource($this->whenLoaded('vet')),
             'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
-            'againsts' => AgainstResource::collection($this->whenLoaded('againsts')),
 
         ];
     }
