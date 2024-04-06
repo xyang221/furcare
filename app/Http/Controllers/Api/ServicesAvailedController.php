@@ -99,12 +99,16 @@ class ServicesAvailedController extends Controller
             $clientService = $newclientService;
         }
 
-
-        $service = Service::create([
-            'service' => $sreq->input('service'),
-            'cat_id' => 8,
-            'isAvailable' => 1,
-        ]);
+        $findservice = Service::where('service', $sreq->input('service'))->first();
+        if (!$findservice) {
+            $service = Service::create([
+                'service' => $sreq->input('service'),
+                'cat_id' => 8,
+                'isAvailable' => 1,
+            ]);
+        } else {
+            $service = $findservice;
+        }
 
         $requestData = $request->validated();
 
@@ -143,11 +147,16 @@ class ServicesAvailedController extends Controller
             $clientService = $newclientService;
         }
 
-        $service = Service::create([
-            'service' => $sreq->input('service'),
-            'cat_id' => 9,
-            'isAvailable' => 1,
-        ]);
+        $findservice = Service::where('service', $sreq->input('service'))->first();
+        if (!$findservice) {
+            $service = Service::create([
+                'service' => $sreq->input('service'),
+                'cat_id' => 9,
+                'isAvailable' => 1,
+            ]);
+        } else {
+            $service = $findservice;
+        }
 
         $requestData = $request->validated();
 

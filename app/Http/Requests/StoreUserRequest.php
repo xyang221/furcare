@@ -24,9 +24,9 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'role_id' => 'exists:roles,id',
-            'email'=>'required|email|unique:users,email',
+            'email'=>'nullable|email|unique:users,email',
             'password' => [
-                'required',
+                // 'required',
                 'confirmed',
                 Password::min(8)
                 ->letters()

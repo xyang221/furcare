@@ -68,11 +68,26 @@ class PetOwnerController extends Controller
     public function store(StorePetOwnerRequest $porequest, StoreUserRequest $ureq)
     {
         // Create a new user.
+        $lastname = $porequest->input('lastname');
+
+        $email = $ureq->input('email');
+        $password = strtolower($lastname) . '1234';
+
+        if (!$email) {
+            $email = strtolower($lastname) . '@gmail.com';
+
+            $count = User::where('email', $email)->count(); //recheck
+
+            while ($count > 0) {
+                $email = $lastname . rand(1, 9999) . '@gmail.com';
+                $count = User::where('email', $email)->count();
+            }
+        }
+
         $user = User::create([
             'role_id' => 3,
-            'username' => $ureq->input('username'),
-            'email' => $ureq->input('email'),
-            'password' => Hash::make($ureq->input('password')),
+            'email' => $email,
+            'password' => Hash::make($password),
         ]);
 
         // Create a pet owner associated with the user.
