@@ -26,34 +26,48 @@ class StaffController extends Controller
             return response()->json(['message' => 'No staff records found.'], 404);
         }
         return StaffResource::collection($staffs);
-
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStaffRequest $sreq, StoreUserRequest $ureq)
-{
-    // Create a new user.
-    $user = User::create([
-        'role_id' =>2,
-        'username' => $ureq->input('username'),
-        'email' => $ureq->input('email'),
-        'password' => Hash::make($ureq->input('password')),
-    ]);
-  
-    $staff = Staff::create([
-        'user_id' => $user->id,
-        'firstname' => $sreq->input('firstname'),
-        'lastname' => $sreq->input('lastname'),
-        'contact_num' => $sreq->input('contact_num'),
-        'zipcode_id' => $sreq->input('zipcode_id'),
-        'barangay' => $sreq->input('barangay'),
-        'zone' => $sreq->input('zone'),
-        
-    ]);
-    return new StaffResource($staff, 201);
-}
+    {
+        // Create a new user.
+        $lastname = $sreq->input('lastname');
+
+        $email = $ureq->input('email');
+        $password = strtolower($lastname) . '1234';
+
+        if (!$email) {
+            $email = strtolower($lastname) . '@gmail.com';
+
+            $count = User::where('email', $email)->count(); //recheck
+
+            while ($count > 0) {
+                $email = $lastname . rand(1, 9999) . '@gmail.com';
+                $count = User::where('email', $email)->count();
+            }
+        }
+
+        $user = User::create([
+            'role_id' => 2,
+            'email' => $email,
+            'password' => Hash::make($password),
+        ]);
+
+        $staff = Staff::create([
+            'user_id' => $user->id,
+            'firstname' => $sreq->input('firstname'),
+            'lastname' => $sreq->input('lastname'),
+            'contact_num' => $sreq->input('contact_num'),
+            'zipcode_id' => $sreq->input('zipcode_id'),
+            'barangay' => $sreq->input('barangay'),
+            'zone' => $sreq->input('zone'),
+
+        ]);
+        return new StaffResource($staff, 201);
+    }
 
     /**
      * Display the specified resource.
@@ -69,7 +83,6 @@ class StaffController extends Controller
         $staff = Staff::findOrFail($id);
         $staff->delete();
         return new StaffResource($staff);
-     
     }
 
     public function archivelist()
@@ -99,7 +112,6 @@ class StaffController extends Controller
         $data = $request->validated();
         $staff->update($data);
         return new StaffResource($staff);
-
     }
 
     /**

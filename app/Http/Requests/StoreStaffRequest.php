@@ -24,11 +24,11 @@ class StoreStaffRequest extends FormRequest
         return [
             'firstname'=>'required|string|max:55',
             'lastname'=>'required|string|max:55',
-            'contact_num' => 'required|string|min:8|max:11',
+            'contact_num' => 'required|string|size:10',
             'user_id' => 'exists:users,id',
             'zipcode_id' => 'exists:zipcodes,id',
             'barangay' => 'required|string|max:55',
-            'zone' => 'required|string|max:55',
+            'zone' => 'nullable|string|max:55',
 
         ];
     }
