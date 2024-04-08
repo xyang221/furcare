@@ -166,6 +166,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
     Route::post('/servicesavailed/store-medicine/petowner/{id}', [ServicesAvailedController::class, 'storeMedicine']);
     Route::post('/servicesavailed/store-product/petowner/{id}', [ServicesAvailedController::class, 'storeProduct']);
+
+    Route::get('/servicesavailed/{id}', [ServicesAvailedController::class, 'show']);
     Route::get('/servicesavailed/petowner/{id}/all', [ServicesAvailedController::class, 'showAllPetownerServiceAvail']);
     Route::get('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'showByPetownerServiceAvail']);
     Route::get('/servicesavailed/clientdeposit/{id}', [ServicesAvailedController::class, 'showServicesByClientDeposits']);
@@ -173,6 +175,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/servicesavailed/petowner/{id}/completed', [ServicesAvailedController::class, 'showByPetownerChargeSlip']);
     Route::get('/servicesavailed/pet/{id}', [ServicesAvailedController::class, 'showByPetServices']);
     Route::put('/servicesavailed/{id}', [ServicesAvailedController::class, 'update']);
+    Route::put('/servicesavailed/{id}/update', [ServicesAvailedController::class, 'updateService']);
     // Route::delete('/servicesavailed/{id}/archive', [ServicesAvailedController::class, 'archive']);
     // Route::get('/archives/servicesavailed', [ServicesAvailedController::class, 'archivelist']);
     // Route::put('/servicesavailed/{id}/restore', [ServicesAvailedController::class, 'restore']);

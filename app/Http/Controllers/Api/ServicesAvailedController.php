@@ -171,8 +171,9 @@ class ServicesAvailedController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ServicesAvailed $servicesAvailed)
+    public function show(ServicesAvailed $servicesAvailed, $id)
     {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
         return new ServicesAvailedResource($servicesAvailed);
     }
 
@@ -354,6 +355,14 @@ class ServicesAvailedController extends Controller
         } else if ($clientService->status === "Pending") {
             $data['status'] = "Pending";
         }
+        $servicesAvailed->update($data);
+        return new ServicesAvailedResource($servicesAvailed);
+    }
+
+    public function updateService(UpdateServicesAvailedRequest $request, $id)
+    {
+        $servicesAvailed = ServicesAvailed::findOrFail($id);
+        $data = $request->validated();
         $servicesAvailed->update($data);
         return new ServicesAvailedResource($servicesAvailed);
     }
