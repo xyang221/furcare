@@ -8,6 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
 use App\Http\Resources\PetResource;
+use App\Models\Admission;
+use App\Models\DewormingLog;
+use App\Models\Diagnosis;
+use App\Models\Medication;
+use App\Models\PetCondition;
+use App\Models\ServicesAvailed;
+use App\Models\TestResult;
+use App\Models\Treatment;
+use App\Models\VaccinationLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -120,7 +129,7 @@ class PetController extends Controller
 
         $name = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->move('storage/pet-photos/', $name);
-        
+
         $pet = Pet::findOrFail($id); // Adjust this according to your model and input data
 
         // Delete the previous image if it exists
@@ -163,8 +172,17 @@ class PetController extends Controller
     public function archive($id)
     {
         $pet = Pet::findOrFail($id);
+        DewormingLog::where('pet_id', $pet->id)->delete();
+        VaccinationLog::where('pet_id', $pet->id)->delete();
+        Diagnosis::where('pet_id', $pet->id)->delete();
+        Admission::where('pet_id', $pet->id)->delete();
+        TestResult::where('pet_id', $pet->id)->delete();
+        Treatment::where('pet_id', $pet->id)->delete();
+        PetCondition::where('pet_id', $pet->treatment->pet->id)->delete();
+        Medication::where('pet_id', $pet->treatment->pet->id)->delete();
+        ServicesAvailed::where('pet_id', $pet->id)->delete();
         $pet->delete();
-        return new PetResource($pet);
+        return response("Pet was archived.");
     }
 
 
@@ -182,8 +200,16 @@ class PetController extends Controller
 
     public function restore($id)
     {
-        $pet = Pet::withTrashed()->findOrFail($id);
-        $pet->restore();
+        $pet = Pet::withTrashed()->findOrFail($id)->restore();
+        DewormingLog::where('pet_id', $pet->id)->restore();
+        VaccinationLog::where('pet_id', $pet->id)->restore();
+        Diagnosis::where('pet_id', $pet->id)->restore();
+        Admission::where('pet_id', $pet->id)->restore();
+        TestResult::where('pet_id', $pet->id)->restore();
+        Treatment::where('pet_id', $pet->id)->restore();
+        PetCondition::where('pet_id', $pet->treatment->pet->id)->restore();
+        Medication::where('pet_id', $pet->treatment->pet->id)->restore();
+        ServicesAvailed::where('pet_id', $pet->id)->restore();
         return response("Pet restored successfully");
     }
 
@@ -204,6 +230,15 @@ class PetController extends Controller
     public function destroy(Pet $pet, $id)
     {
         $pet = Pet::withTrashed()->findOrFail($id);
+        DewormingLog::where('pet_id', $pet->id)->forceDelete();
+        VaccinationLog::where('pet_id', $pet->id)->forceDelete();
+        Diagnosis::where('pet_id', $pet->id)->forceDelete();
+        Admission::where('pet_id', $pet->id)->forceDelete();
+        TestResult::where('pet_id', $pet->id)->forceDelete();
+        Treatment::where('pet_id', $pet->id)->forceDelete();
+        PetCondition::where('pet_id', $pet->treatment->pet->id)->forceDelete();
+        Medication::where('pet_id', $pet->treatment->pet->id)->forceDelete();
+        ServicesAvailed::where('pet_id', $pet->id)->forceDelete();
         $pet->forceDelete();
         return response("Permanently Deleted", 200);
     }
