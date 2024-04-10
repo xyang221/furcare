@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             BreedsSeeder::class, 
             ServiceCategorySeeder::class, 
             ServiceSeeder::class, 
-            MedicineCategorySeeder::class, 
         ]);
 
     }

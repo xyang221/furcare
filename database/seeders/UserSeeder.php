@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Seeders;
 use Illuminate\Support\Facades\DB;
 
 
@@ -18,7 +16,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             0 =>
             array(
-                'email' => 'dianne@test.com',
+                'email' => 'admin@test.com',
                 'password' => bcrypt('abcd1234'),
                 'role_id' => 1
             ),

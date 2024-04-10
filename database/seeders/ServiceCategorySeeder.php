@@ -57,7 +57,7 @@ class ServiceCategorySeeder extends Seeder
       ),
       9 =>
       array(
-        'category' => 'Tick/Flea Treatment',
+        'category' => 'Products',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       10 =>
@@ -66,6 +66,11 @@ class ServiceCategorySeeder extends Seeder
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       11 =>
+      array(
+        'category' => 'Tick/Flea Treatment',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      12 =>
       array(
         'category' => 'Others',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

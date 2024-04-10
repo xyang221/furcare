@@ -27,31 +27,31 @@ class BreedsSeeder extends Seeder
 
       1 =>
       array(
-        'breed' => 'Afaird ',
-        'description' => 'This breed has a strong personality marked by intelligence and protective attitudes towards human family members ',
+        'breed' => 'Undefined',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       2 =>
       array(
-        'breed' => 'Affen Border Terrier ',
-        'description' => 'known for their wiry fur and strong-willed personalities.  ',
+        'breed' => 'Shit Tzu',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       3 =>
       array(
-        'breed' => 'Affen Spaniel ',
-        'description' => 'loyal, tend to love children, and can make excellent watchdogs ',
+        'breed' => 'Dachshund Corgi',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       4 =>
       array(
-        'breed' => ' Shih Tzu',
+        'breed' => 'Siberian Husky',
         'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -59,56 +59,56 @@ class BreedsSeeder extends Seeder
 
       5 =>
       array(
-        'breed' => 'Affenchon  ',
-        'description' => 'have active minds and bodies, requiring both emotional and physical attention. ',
+        'breed' => 'Border Collie / Poodle ',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       6 =>
       array(
-        'breed' => 'Affengriffon ',
-        'description' => 'has a playful, sometimes clownish personality. This breed is prone to being vocal and hyper.  ',
+        'breed' => 'Mixed Spitz',
+        'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       7 =>
       array(
-        'breed' => 'Affenhuahua ',
-        'description' => 'Petite, sassy, and highly energetic, these pups inherited some of the best traits from both of their parents  ',
+        'breed' => 'Japanese Spitz',
+        'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       8 =>
       array(
-        'breed' => 'Affenpoo ',
-        'description' => ' known to be intelligent and eager to learn. ',
+        'breed' => 'Pomeranian',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       9 =>
       array(
-        'breed' => ' Affenpug ',
-        'description' => 'fame are their charming looks and clownish personality ',
+        'breed' => 'Golden Retriever',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       10 =>
       array(
-        'breed' => ' Affenshire  ',
-        'description' => 'Known to be overprotective and sometimes noisy, Affenshires form strong attachments with their family ',
+        'breed' => 'Terrier',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       11 =>
       array(
-        'breed' => 'Affenwich',
-        'description' => 'This pup has lots of energy, and they are best for an active home ',
+        'breed' => 'Labrador',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -147,7 +147,7 @@ class BreedsSeeder extends Seeder
 
       16 =>
       array(
-        'breed' => ' Afghan Sheepdog ',
+        'breed' => 'Afghan Sheepdog ',
         'description' => 'a unique, high-energy mix rising in popularity with many dog parents ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -171,7 +171,7 @@ class BreedsSeeder extends Seeder
 
       19 =>
       array(
-        'breed' => ' Airedale Shepherd',
+        'breed' => 'Airedale Shepherd',
         'description' => 'an energetic, intelligent crossbreed beloved by those who maintain active lifestyles ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -179,7 +179,7 @@ class BreedsSeeder extends Seeder
 
       20 =>
       array(
-        'breed' => ' Airedale Terrier',
+        'breed' => 'Airedale Terrier',
         'description' => 'commonly called the “King of Terriers,” is the largest of all terrier breeds ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -187,7 +187,7 @@ class BreedsSeeder extends Seeder
 
       21 =>
       array(
-        'breed' => ' Airedoodle',
+        'breed' => 'Airedoodle',
         'description' => 'known as the King of the Terriers. They are a unique-looking sporting breed with a long snout and curly hair ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -203,7 +203,7 @@ class BreedsSeeder extends Seeder
 
       23 =>
       array(
-        'breed' => ' Akbash Pyrenees',
+        'breed' => 'Akbash Pyrenees',
         'description' => 'a very large and very loyal new crossbreed ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -235,7 +235,7 @@ class BreedsSeeder extends Seeder
 
       27 =>
       array(
-        'breed' => ' Akita Basset',
+        'breed' => 'Akita Basset',
         'description' => 'they serve as guardians and affectionate companions ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -251,7 +251,7 @@ class BreedsSeeder extends Seeder
 
       29 =>
       array(
-        'breed' => ' Akita Chow',
+        'breed' => 'Akita Chow',
         'description' => 'Large, independent, and loyal, these pups inherited some of the best traits from both of their parents ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -267,7 +267,7 @@ class BreedsSeeder extends Seeder
 
       31 =>
       array(
-        'breed' => ' Akita Pit',
+        'breed' => 'Akita Pit',
         'description' => ' Intelligent, protective, and loyal, these pups inherited some of the best traits from both of their parents ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -356,7 +356,7 @@ class BreedsSeeder extends Seeder
 
       41 =>
       array(
-        'breed' => ' Alaskan Pit Bull Terrier',
+        'breed' => 'Alaskan Pit Bull Terrier',
         'description' => ' a good match for active households ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -436,7 +436,7 @@ class BreedsSeeder extends Seeder
 
       50 =>
       array(
-        'breed' => ' American Bull Dogue De Bordeaux',
+        'breed' => 'American Bull Dogue De Bordeaux',
         'description' => ' their playfulness and love for their families shines through in their personalities ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -461,7 +461,7 @@ class BreedsSeeder extends Seeder
 
       53 =>
       array(
-        'breed' => ' American Bull-Aussie',
+        'breed' => 'American Bull-Aussie',
         'description' => ' their playfulness and love for their families shines through in their personalities.',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -469,7 +469,7 @@ class BreedsSeeder extends Seeder
 
       54 =>
       array(
-        'breed' => ' American Bull-Jack',
+        'breed' => 'American Bull-Jack',
         'description' => '  the breed is often a spirited family pet',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -485,7 +485,7 @@ class BreedsSeeder extends Seeder
 
       56 =>
       array(
-        'breed' => ' American Bulldog Shepherd',
+        'breed' => 'American Bulldog Shepherd',
         'description' => 'often perceived as a bad-boy guard dog, in addition to their use in police work ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -666,7 +666,7 @@ class BreedsSeeder extends Seeder
 
       77 =>
       array(
-        'breed' => ' American Water Spaniel',
+        'breed' => 'American Water Spaniel',
         'description' => ' is prized for its exceptional hunting and retrieving abilities, especially in waterfowl environments ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -675,7 +675,7 @@ class BreedsSeeder extends Seeder
 
       78 =>
       array(
-        'breed' => ' Amstiff',
+        'breed' => 'Amstiff',
         'description' => ' playful, loyal, and intelligent ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -3366,6 +3366,27 @@ class BreedsSeeder extends Seeder
         'breed' => 'Goat',
         'description' => '',
         'specie_id' => 6,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      411 =>
+      array(
+        'breed' => 'Puspin',
+        'description' => ' ',
+        'specie_id' => 2,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      412 =>
+      array(
+        'breed' => 'Undefined',
+        'description' => ' ',
+        'specie_id' => 2,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      413 =>
+      array(
+        'breed' => 'Undefined',
+        'description' => ' ',
+        'specie_id' => 7,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       )
 

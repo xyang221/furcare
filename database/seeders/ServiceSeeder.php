@@ -149,7 +149,7 @@ class ServiceSeeder extends Seeder
         'service' => 'Tick/Flea Treatment',
 
         'isAvailable' => 1,
-        'cat_id' => 9,
+        'cat_id' => 11,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       20 =>
@@ -165,7 +165,7 @@ class ServiceSeeder extends Seeder
         'service' => 'Others',
 
         'isAvailable' => 1,
-        'cat_id' => 11,
+        'cat_id' => 12,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       22 =>
@@ -226,6 +226,28 @@ class ServiceSeeder extends Seeder
         'cat_id' => 7,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
+      30 =>
+      array(
+        'service' => 'Doctor\'s Fee',
+        'isAvailable' => 1,
+        'cat_id' => 12,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      31 =>
+      array(
+        'service' => 'Miscellaneous Fee',
+        'isAvailable' => 1,
+        'cat_id' => 12,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      32 =>
+      array(
+        'service' => 'Emergency Fee',
+        'isAvailable' => 1,
+        'cat_id' => 12,
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      
     ]);
   }
 }

@@ -51,6 +51,12 @@ class SpeciesSeeder extends Seeder
         'description' => 'A goat is any ruminant and hollow-horned mammal belonging to the genus Capra. It is lighter in build and has horns that arch backward, a short tail, and straighter hair.',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
+      7 =>
+      array(
+        'specie' => 'Undefined',
+        'description' => ' ',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
 
     ]);
   }
