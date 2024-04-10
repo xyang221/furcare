@@ -20,6 +20,8 @@ return new class extends Migration
             $table->float('change');
             $table->unsignedBigInteger('client_deposit_id');
             $table->foreign('client_deposit_id')->references('id')->on('client_deposits');
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

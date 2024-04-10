@@ -17,24 +17,9 @@ class Medication extends Model
 
     protected $dates = ['deleted_at'];
 
-    // protected $with = ['servicesavailed'];
-
-    // public function category()
-    // {
-    //     return $this->belongsTo(MedicineCategory::class, 'medcat_id', 'id');
-    // }
-    // public function medicine()
-    // {
-    //     return $this->belongsTo(Medicine::class, 'medicine_id','id');
-    // }
-
     public function treatment()
     {
         return $this->belongsTo(Treatment::class, 'treatment_id', 'id');
     }
 
-    // public function servicesavailed()
-    // {
-    //     return $this->belongsTo(ServicesAvailed::class, 'services_availed_id', 'id');
-    // }
 }

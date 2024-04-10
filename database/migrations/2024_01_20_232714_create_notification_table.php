@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('type');
             $table->string('message');
             $table->integer('status');
-
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -31,9 +31,6 @@ class StoreMedicationRequest extends FormRequest
 
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',
-            // 'medcat_id' => 'exists:medicine_category,id',
-            // 'services_availed' => 'exists:services_availed,id',
-
         ];
     }
 }

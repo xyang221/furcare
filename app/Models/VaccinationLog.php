@@ -33,8 +33,4 @@ class VaccinationLog extends Model
         return $this->belongsTo(ServicesAvailed::class, 'services_availed_id','id');
     }
 
-    public function againsts()
-    {
-        return $this->hasMany(Against::class, 'vaccination_log_id');
-    }
 }

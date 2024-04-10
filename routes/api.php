@@ -19,15 +19,12 @@ use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ServicesAvailedController;
 use App\Http\Controllers\Api\DewormingLogController;
 use App\Http\Controllers\Api\VaccinationLogController;
-use App\Http\Controllers\Api\AgainstController;
 use App\Http\Controllers\Api\DiagnosisController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\TestResultController;
-use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\PetConditionController;
 use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\Api\MedicationController;
-use App\Http\Controllers\Api\MedicineCategoryController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentRecordController;
@@ -280,14 +277,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/archives/petconditions', [PetConditionController::class, 'archivelist']);
     Route::put('/archives/petconditions/{id}', [PetConditionController::class, 'restore']);
     Route::delete('/petconditions/delete/{id}', [PetConditionController::class, 'forcedelete']);
-
-    Route::apiResource('/medicinescategory', MedicineCategoryController::class);
-
-    Route::get('/medicinesbycategory/{id}', [MedicineController::class, 'getMedicines']);
-    Route::apiResource('/medicines', MedicineController::class);
-    Route::get('/archives/medicines', [MedicineController::class, 'archivelist']);
-    Route::put('/archives/medicines/{id}', [MedicineController::class, 'restore']);
-    Route::delete('/archives/medicines/{id}', [MedicineController::class, 'forcedelete']);
 
     Route::get('/medications', [MedicationController::class, 'index']);
     Route::post('/medications/petowner/{id}/treatment/{tid}', [MedicationController::class, 'store']);

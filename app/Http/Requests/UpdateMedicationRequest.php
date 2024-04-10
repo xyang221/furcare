@@ -27,7 +27,6 @@ class UpdateMedicationRequest extends FormRequest
             'medicine_name' => 'required|string',
             'am'=>'nullable|boolean',
             'pm'=>'nullable|boolean',
-            // 'medcat_id' => 'exists:medicine_category,id',
         ];
     }
 }

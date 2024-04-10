@@ -143,29 +143,38 @@ class PetOwnerController extends Controller
     {
         $petOwner = PetOwner::findOrFail($id);
         User::where('id', $petOwner->user_id)->delete();
-        Notification::where('id', $petOwner->user_id)->delete();
+        Notification::where('user_id', $petOwner->user_id)->delete();
         $pets = Pet::where('petowner_id', $petOwner->id)->get();
-        foreach ($pets as $pet) {
-            DewormingLog::where('pet_id', $pet->id)->delete();
-            VaccinationLog::where('pet_id', $pet->id)->delete();
-            Diagnosis::where('pet_id', $pet->id)->delete();
-            Admission::where('pet_id', $pet->id)->delete();
-            TestResult::where('pet_id', $pet->id)->delete();
-            Treatment::where('pet_id', $pet->id)->delete();
-            PetCondition::where('pet_id', $pet->treatment->pet->id)->delete();
-            Medication::where('pet_id', $pet->treatment->pet->id)->delete();
-            $pet->delete();
+        if ($pets->isNotEmpty()) {
+            foreach ($pets as $pet) {
+                DewormingLog::where('pet_id', $pet->id)->delete();
+                VaccinationLog::where('pet_id', $pet->id)->delete();
+                Diagnosis::where('pet_id', $pet->id)->delete();
+                Admission::where('pet_id', $pet->id)->delete();
+                TestResult::where('pet_id', $pet->id)->delete();
+                $treatments = Treatment::where('pet_id', $pet->id)->get();
+                if ($treatments->isNotEmpty()) {
+                    foreach ($treatments as $treatment) {
+                        PetCondition::where('treatment_id', $treatment->id)->delete();
+                        Medication::where('treatment_id', $treatment->id)->delete();
+                        $treatment->delete();
+                    }
+                }
+                $pet->delete();
+            }
         }
         $services = ClientService::where('petowner_id', $petOwner->id)->get();
-        foreach ($services as $service){
-            ServicesAvailed::where('client_deposit_id', $service->id)->delete();
-            PaymentRecord::where('client_deposit_id', $service->id)->delete();
-            $service->delete();
+        if ($services->isNotEmpty()) {
+            foreach ($services as $service) {
+                ServicesAvailed::where('client_deposit_id', $service->id)->delete();
+                PaymentRecord::where('client_deposit_id', $service->id)->delete();
+                $service->delete();
+            }
         }
         $petOwner->delete();
         return response("Pet Owner was archived.");
     }
-    
+
 
     public function archivelist()
     {
@@ -196,7 +205,7 @@ class PetOwnerController extends Controller
             $pet->restore();
         }
         $services = ClientService::where('petowner_id', $petOwner->id)->get();
-        foreach ($services as $service){
+        foreach ($services as $service) {
             ServicesAvailed::where('client_deposit_id', $service->id)->restore();
             PaymentRecord::where('client_deposit_id', $service->id)->restore();
             $service->restore();
@@ -236,7 +245,7 @@ class PetOwnerController extends Controller
             $pet->forceDelete();
         }
         $services = ClientService::where('petowner_id', $petOwner->id)->get();
-        foreach ($services as $service){
+        foreach ($services as $service) {
             ServicesAvailed::where('client_deposit_id', $service->id)->forceDelete();
             PaymentRecord::where('client_deposit_id', $service->id)->forceDelete();
             $service->forceDelete();

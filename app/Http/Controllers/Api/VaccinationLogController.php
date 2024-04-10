@@ -10,7 +10,6 @@ use App\Models\ClientService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVaccinationLogRequest;
 use App\Http\Requests\StoreServicesAvailedRequest;
-use App\Http\Requests\StoreVaccinationAgainstRequest;
 use App\Http\Requests\UpdateVaccinationLogRequest;
 use App\Http\Resources\VaccinationLogResource;
 use App\Models\Notification;

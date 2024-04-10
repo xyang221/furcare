@@ -18,7 +18,7 @@ class PetCondition extends Model
 
     protected $dates = ['deleted_at'];
 
-    // protected $with = ['treatment'];
+    protected $with = ['treatment'];
 
     public function treatment()
     {
