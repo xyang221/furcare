@@ -144,6 +144,7 @@ class PetOwnerController extends Controller
         $petOwner = PetOwner::findOrFail($id);
         User::where('id', $petOwner->user_id)->delete();
         Notification::where('user_id', $petOwner->user_id)->delete();
+        Appointment::where('petowner_id', $petOwner->id)->delete();
         $pets = Pet::where('petowner_id', $petOwner->id)->get();
         if ($pets->isNotEmpty()) {
             foreach ($pets as $pet) {
@@ -189,9 +190,10 @@ class PetOwnerController extends Controller
 
     public function restore($id)
     {
-        $petOwner = PetOwner::withTrashed()->findOrFail($id)->restore();
+        $petOwner = PetOwner::withTrashed()->findOrFail($id);
         User::where('id', $petOwner->user_id)->restore();
         Notification::where('id', $petOwner->user_id)->restore();
+        Appointment::where('petowner_id', $petOwner->id)->restore();
         $pets = Pet::where('petowner_id', $petOwner->id)->get();
         foreach ($pets as $pet) {
             DewormingLog::where('pet_id', $pet->id)->restore();
@@ -199,9 +201,14 @@ class PetOwnerController extends Controller
             Diagnosis::where('pet_id', $pet->id)->restore();
             Admission::where('pet_id', $pet->id)->restore();
             TestResult::where('pet_id', $pet->id)->restore();
-            Treatment::where('pet_id', $pet->id)->restore();
-            PetCondition::where('pet_id', $pet->treatment->pet->id)->restore();
-            Medication::where('pet_id', $pet->treatment->pet->id)->restore();
+            $treatments = Treatment::where('pet_id', $pet->id)->get();
+            if ($treatments->isNotEmpty()) {
+                foreach ($treatments as $treatment) {
+                    PetCondition::where('treatment_id', $treatment->id)->restore();
+                    Medication::where('treatment_id', $treatment->id)->restore();
+                    $treatment->restore();
+                }
+            }
             $pet->restore();
         }
         $services = ClientService::where('petowner_id', $petOwner->id)->get();
@@ -210,6 +217,7 @@ class PetOwnerController extends Controller
             PaymentRecord::where('client_deposit_id', $service->id)->restore();
             $service->restore();
         }
+        $petOwner->restore();
         return response("Pet Owner was restored successfully");
     }
 
@@ -232,6 +240,7 @@ class PetOwnerController extends Controller
         $petOwner = PetOwner::withTrashed()->findOrFail($id);
         User::where('id', $petOwner->user_id)->forceDelete();
         Notification::where('id', $petOwner->user_id)->forceDelete();
+        Appointment::where('petowner_id', $petOwner->id)->forceDelete();
         $pets = Pet::where('petowner_id', $petOwner->id)->get();
         foreach ($pets as $pet) {
             DewormingLog::where('pet_id', $pet->id)->forceDelete();
@@ -239,9 +248,14 @@ class PetOwnerController extends Controller
             Diagnosis::where('pet_id', $pet->id)->forceDelete();
             Admission::where('pet_id', $pet->id)->forceDelete();
             TestResult::where('pet_id', $pet->id)->forceDelete();
-            Treatment::where('pet_id', $pet->id)->forceDelete();
-            PetCondition::where('pet_id', $pet->treatment->pet->id)->forceDelete();
-            Medication::where('pet_id', $pet->treatment->pet->id)->forceDelete();
+            $treatments = Treatment::where('pet_id', $pet->id)->get();
+            if ($treatments->isNotEmpty()) {
+                foreach ($treatments as $treatment) {
+                    PetCondition::where('treatment_id', $treatment->id)->forceDelete();
+                    Medication::where('treatment_id', $treatment->id)->forceDelete();
+                    $treatment->forceDelete();
+                }
+            }
             $pet->forceDelete();
         }
         $services = ClientService::where('petowner_id', $petOwner->id)->get();

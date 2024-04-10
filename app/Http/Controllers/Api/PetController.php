@@ -177,9 +177,14 @@ class PetController extends Controller
         Diagnosis::where('pet_id', $pet->id)->delete();
         Admission::where('pet_id', $pet->id)->delete();
         TestResult::where('pet_id', $pet->id)->delete();
-        Treatment::where('pet_id', $pet->id)->delete();
-        PetCondition::where('pet_id', $pet->treatment->pet->id)->delete();
-        Medication::where('pet_id', $pet->treatment->pet->id)->delete();
+        $treatments = Treatment::where('pet_id', $pet->id)->get();
+        if ($treatments->isNotEmpty()) {
+            foreach ($treatments as $treatment) {
+                PetCondition::where('treatment_id', $treatment->id)->delete();
+                Medication::where('treatment_id', $treatment->id)->delete();
+                $treatment->delete();
+            }
+        }
         ServicesAvailed::where('pet_id', $pet->id)->delete();
         $pet->delete();
         return response("Pet was archived.");
@@ -200,16 +205,22 @@ class PetController extends Controller
 
     public function restore($id)
     {
-        $pet = Pet::withTrashed()->findOrFail($id)->restore();
+        $pet = Pet::withTrashed()->findOrFail($id);
         DewormingLog::where('pet_id', $pet->id)->restore();
         VaccinationLog::where('pet_id', $pet->id)->restore();
         Diagnosis::where('pet_id', $pet->id)->restore();
         Admission::where('pet_id', $pet->id)->restore();
         TestResult::where('pet_id', $pet->id)->restore();
-        Treatment::where('pet_id', $pet->id)->restore();
-        PetCondition::where('pet_id', $pet->treatment->pet->id)->restore();
-        Medication::where('pet_id', $pet->treatment->pet->id)->restore();
+        $treatments = Treatment::where('pet_id', $pet->id)->get();
+        if ($treatments->isNotEmpty()) {
+            foreach ($treatments as $treatment) {
+                PetCondition::where('treatment_id', $treatment->id)->restore();
+                Medication::where('treatment_id', $treatment->id)->restore();
+                $treatment->restore();
+            }
+        }
         ServicesAvailed::where('pet_id', $pet->id)->restore();
+        $pet->restore();
         return response("Pet restored successfully");
     }
 
@@ -235,11 +246,16 @@ class PetController extends Controller
         Diagnosis::where('pet_id', $pet->id)->forceDelete();
         Admission::where('pet_id', $pet->id)->forceDelete();
         TestResult::where('pet_id', $pet->id)->forceDelete();
-        Treatment::where('pet_id', $pet->id)->forceDelete();
-        PetCondition::where('pet_id', $pet->treatment->pet->id)->forceDelete();
-        Medication::where('pet_id', $pet->treatment->pet->id)->forceDelete();
+        $treatments = Treatment::where('pet_id', $pet->id)->get();
+        if ($treatments->isNotEmpty()) {
+            foreach ($treatments as $treatment) {
+                PetCondition::where('treatment_id', $treatment->id)->forceDelete();
+                Medication::where('treatment_id', $treatment->id)->forceDelete();
+                $treatment->forceDelete();
+            }
+        }
         ServicesAvailed::where('pet_id', $pet->id)->forceDelete();
         $pet->forceDelete();
-        return response("Permanently Deleted", 200);
+        return response("Permanently Deleted", 201);
     }
 }

@@ -95,7 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/pets/{id}/archive', [PetController::class, 'archive']);
     Route::get('/archives/pets', [PetController::class, 'archivelist']);
     Route::put('/pets/{id}/restore', [PetController::class, 'restore']);
-    Route::delete('/archives/{id}/forcedelete', [PetController::class, 'destroy']);
+    Route::delete('/pets/archives/{id}/forcedelete', [PetController::class, 'destroy']);
 
     Route::apiResource('/pets', PetController::class);
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
