@@ -26,7 +26,7 @@ class UpdatePaymentRecordRequest extends FormRequest
             'type' => 'required|string',
             'type_ref_no' => 'nullable|string',
             'total' => 'required|numeric',
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
             'amount' => 'required|numeric',
             'change' => 'required|numeric',
             'amounts_payable' => 'required|numeric',
