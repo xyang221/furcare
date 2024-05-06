@@ -57,7 +57,7 @@ class AdmissionController extends Controller
     public function showPetownerTreatments($id, $sid)
     {
         $service = Service::findOrFail($sid);
-        // $petowner = ClientService::where('petowner_id', $id)->pluck('id');
+        $clientService = ClientService::where('petowner_id', $id)->first();
         $pets = Pet::where('petowner_id', $id)->pluck('id');
 
         // $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
@@ -71,11 +71,24 @@ class AdmissionController extends Controller
         //     ->orderBy('id', 'desc')
         //     ->get();
 
+
+
+        $data = [
+            'data' => AdmissionResource::collection($admission),
+            'clientdeposit' => $clientService,
+        ];
+
         if ($admission->isEmpty()) {
-            return response()->json(['message' => 'No list of pet admissions found.'], 404);
+            return response()->json([
+                'message' => 'No list of pet admissions found.',
+                'clientdeposit' => $clientService,
+            ], 404);
+        } else {
+            return response()->json($data);
         }
 
-        return AdmissionResource::collection($admission);
+
+        // return AdmissionResource::collection($admission);
     }
 
     public function getClientAdmissions($id)
@@ -86,6 +99,9 @@ class AdmissionController extends Controller
         if ($admissions->isEmpty()) {
             return response()->json(['message' => 'No admission records found in this client.'], 404);
         }
+
+        return response()->json(['message' => 'No admission records found in this pet.',], 404);
+
         return AdmissionResource::collection($admissions);
     }
 

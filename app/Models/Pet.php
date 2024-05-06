@@ -26,7 +26,6 @@ class Pet extends Model
         return $this->belongsTo(Breed::class, 'breed_id','id');
     }
     
-
     public function petowner()
     {
         return $this->belongsTo(PetOwner::class, 'petowner_id', 'id');

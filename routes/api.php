@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentRecordController;
 use App\Http\Controllers\Api\PDFController;
+use App\Http\Controllers\Api\PetStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/archives/pets', [PetController::class, 'archivelist']);
     Route::put('/pets/{id}/restore', [PetController::class, 'restore']);
     Route::delete('/pets/archives/{id}/forcedelete', [PetController::class, 'destroy']);
+
+    Route::post('/pets/{id}/status', [PetStatusController::class, 'store']);
+    Route::get('/pets/{id}/status', [PetStatusController::class, 'getPetStatus']);
 
     Route::apiResource('/pets', PetController::class);
     Route::post('/pets/{id}/upload-image', [PetController::class, 'uploadImage']);
