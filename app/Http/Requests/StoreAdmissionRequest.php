@@ -24,7 +24,7 @@ class StoreAdmissionRequest extends FormRequest
         return [
             'date_admission' => 'required|date',
             'date_released' => 'required|date',
-            'purpose' => 'required|string|max:255',
+            'status' => 'nullable|string|max:255',
 
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',

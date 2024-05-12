@@ -14,11 +14,11 @@ class Treatment extends Model
 
     protected $table = 'treatment';
 
-    protected $fillable = ['pet_id', 'date', 'day', 'diagnosis', 'body_weight', 'heart_rate', 'mucous_membranes', 'pr_prealbumin', 'temperature', 'respiration_rate', 'caspillar_refill_time', 'body_condition_score', 'fluid_rate', 'comments'];
+    protected $fillable = ['pet_id', 'admission_id', 'date', 'day', 'diagnosis', 'body_weight', 'heart_rate', 'mucous_membranes', 'pr_prealbumin', 'temperature', 'respiration_rate', 'caspillar_refill_time', 'body_condition_score', 'fluid_rate', 'comments'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['pet'];
+    protected $with = ['pet','admission'];
 
     public function pet()
     {
@@ -28,5 +28,10 @@ class Treatment extends Model
     public function petcondition()
     {
         return $this->hasMany(PetCondition::class);
+    }
+
+    public function admission()
+    {
+        return $this->belongsTo(Admission::class,'admission_id', 'id');
     }
 }

@@ -12,7 +12,7 @@ class Admission extends Model
 
     protected $table = 'admission';
 
-    protected $fillable = ['date_admission', 'date_released', 'pet_id', 'treatment_id'];
+    protected $fillable = ['status', 'date_admission', 'date_released', 'pet_id', 'treatment_id'];
 
     protected $dates = ['deleted_at'];
 

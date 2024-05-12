@@ -31,7 +31,9 @@ class ClientServiceController extends Controller
     {
         $today = Carbon::now()->toDateString();
 
-        $deposits = ClientService::orderBy('id', 'desc')->whereDate('date', $today)->get();
+        $deposits = ClientService::orderBy('id', 'desc')->whereDate('date', $today)
+            ->where('deposit', '!=', 0)
+            ->get();
 
         if ($deposits->isEmpty()) {
             return response()->json(['message' => 'No client deposits found today.'], 404);

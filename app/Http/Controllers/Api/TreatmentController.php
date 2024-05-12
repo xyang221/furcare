@@ -55,7 +55,6 @@ class TreatmentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreTreatmentRequest $request, $poid, $sid)
-    // public function store(StoreTreatmentRequest $request, StoreServicesAvailedRequest $sarequest, $poid, $sid)
     {
         $service = Service::findOrFail($sid);
         $clientService = ClientService::where('petowner_id', $poid)->where('status', 'To Pay')->first();
@@ -63,6 +62,19 @@ class TreatmentController extends Controller
         if (!$clientService) {
             return response()->json(['message' => 'No client deposit was recorded to proceed for treatment. '], 403);
         }
+
+        $pet = $request->input('pet_id');
+
+        $latestAdmission = Admission::where('pet_id',$pet)->where('status', 'Admitted')->latest()->first();
+        if (!$latestAdmission) {
+            $latestAdmission = Admission::create([
+                'date_admission' => Carbon::now(),
+                'pet_id' => $pet,
+                'status' => 'Admitted',
+            ]);
+        }
+
+      
 
         $treatment = Treatment::create([
             'date' => Carbon::now(),
@@ -79,6 +91,7 @@ class TreatmentController extends Controller
             'body_condition_score' => $request->input('body_condition_score'),
             'fluid_rate' => $request->input('fluid_rate'),
             'comments' => $request->input('comments'),
+            'admission_id' => $latestAdmission->id,
         ]);
 
         // $servicesAvailed = ServicesAvailed::create([
@@ -90,13 +103,7 @@ class TreatmentController extends Controller
         //     'status' => "To Pay",
         // ]);
 
-        Admission::create([
-            'date_admission' => Carbon::now(),
-            'date_released' => Carbon::now(),
-            'pet_id' => $treatment->pet_id,
-            'treatment_id' => $treatment->id,
-            // 'services_availed_id' => $servicesAvailed->id,
-        ]);
+       
 
         return new TreatmentResource($treatment, 201);
     }

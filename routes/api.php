@@ -300,6 +300,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admissions/treatment/{id}', [AdmissionController::class, 'showTreatmentAdmission']);
     Route::get('/archives/admissions', [AdmissionController::class, 'archivelist']);
     Route::put('/archives/admissions/{id}', [AdmissionController::class, 'restore']);
+    Route::put('/admissions/released/{id}', [AdmissionController::class, 'petrealesed']);
+    Route::put('/admissions/deceased/{id}', [AdmissionController::class, 'perdeceased']);
     Route::delete('/archives/admissions/{id}', [AdmissionController::class, 'forcedelete']);
 
     Route::get('/appointments-triger/today', [AppointmentController::class, 'listenForTodayAppointments']);

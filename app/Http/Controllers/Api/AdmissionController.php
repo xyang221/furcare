@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdmissionRequest;
 use App\Http\Requests\UpdateAdmissionRequest;
 use App\Http\Resources\AdmissionResource;
+use App\Http\Resources\TreatmentResource;
 use App\Models\ClientService;
 use App\Models\Pet;
 use App\Models\Service;
@@ -40,7 +41,7 @@ class AdmissionController extends Controller
         $data = $request->validated(); //get the data
 
         $data['date_admission'] = Carbon::now();
-        $data['date_released'] = Carbon::now();
+        // $data['date_released'] = Carbon::now();
         $data['client_deposit_id'] = $clientService->id;
         $admission = Admission::create($data); //create
         return new AdmissionResource($admission, 201);
@@ -57,13 +58,13 @@ class AdmissionController extends Controller
     public function showPetownerTreatments($id, $sid)
     {
         $service = Service::findOrFail($sid);
-        $clientService = ClientService::where('petowner_id', $id)->first();
+        $clientService = ClientService::where('petowner_id', $id)->latest()->first();
         $pets = Pet::where('petowner_id', $id)->pluck('id');
 
         // $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $petowner)
         //     ->where('service_id', $service->id)
         //     ->pluck('id');
-        $admission = Admission::whereIn('pet_id', $pets)
+        $treatment = Treatment::whereIn('pet_id', $pets)
             ->orderBy('id', 'desc')
             ->get();
         // ->pluck('id');
@@ -74,14 +75,19 @@ class AdmissionController extends Controller
 
 
         $data = [
-            'data' => AdmissionResource::collection($admission),
+            'data' => TreatmentResource::collection($treatment),
             'clientdeposit' => $clientService,
         ];
 
-        if ($admission->isEmpty()) {
+        if ($treatment->isEmpty()) {
             return response()->json([
-                'message' => 'No list of pet admissions found.',
+                'message' => 'No list of pet treatments found.',
                 'clientdeposit' => $clientService,
+            ], 404);
+        } else if ($treatment->isEmpty() && $clientService->isEmpty()) {
+            return response()->json([
+                'message' => 'No list of pet treatments found.',
+                'clientdeposit' => 'No deposit',
             ], 404);
         } else {
             return response()->json($data);
@@ -107,14 +113,15 @@ class AdmissionController extends Controller
 
     public function getPetAdmissions($id)
     {
+        $admission = Admission::where('pet_id', $id)->latest()->first();
 
-        $admissions = Admission::where('pet_id', $id)->get();
-
-        if ($admissions->isEmpty()) {
-            return response()->json(['message' => 'No admission records found in this pet.'], 404);
+        if (!$admission) {
+            return response()->json(['message' => 'No admission records found for this pet.'], 404);
         }
-        return AdmissionResource::collection($admissions);
+
+        return new AdmissionResource($admission);
     }
+
 
     public function showTreatmentAdmission($id)
     {
@@ -133,6 +140,30 @@ class AdmissionController extends Controller
     public function update(UpdateAdmissionRequest $request, Admission $admission)
     {
         $data = $request->validated();
+        $admission->update($data);
+
+        return new AdmissionResource($admission);
+    }
+
+    public function petrealesed(UpdateAdmissionRequest $request, Admission $admission, $id)
+    {
+        $admission = Admission::findOrFail($id);
+        $data = $request->validated();
+        $data['status'] = "Released";
+        $data['date_released'] = Carbon::now();
+
+        $admission->update($data);
+
+        return new AdmissionResource($admission);
+    }
+
+    public function perdeceased(UpdateAdmissionRequest $request, Admission $admission, $id)
+    {
+        $admission = Admission::findOrFail($id);
+        $data = $request->validated();
+        $data['status'] = "Deceased";
+        $data['date_released'] = Carbon::now();
+
         $admission->update($data);
 
         return new AdmissionResource($admission);

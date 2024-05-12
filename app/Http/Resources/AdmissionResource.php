@@ -19,13 +19,14 @@ class AdmissionResource extends JsonResource
             'id' => $this->id,
             'date_admission' => $this->date_admission,
             'date_released' => $this->date_released,
+            'status' => $this->status,
 
             'pet_id' => $this->pet_id,
-            'treatment_id' => $this->treatment_id,
-            'services_availed_id' => $this->services_availed_id,
+            // 'treatment_id' => $this->treatment_id,
+            // 'services_availed_id' => $this->services_availed_id,
 
             'pet' => new PetResource($this->whenLoaded('pet')),
-            'treatment' => new TreatmentResource($this->whenLoaded('treatment')),
+            // 'treatment' => new TreatmentResource($this->whenLoaded('treatment')),
             // 'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];

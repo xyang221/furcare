@@ -35,7 +35,9 @@ class TreatmentResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             
             'pet_id' => $this->pet_id,
+            'admission_id' => $this->admission_id,
             'pet' => new PetResource($this->whenLoaded('pet')),
+            'admission' => new AdmissionResource($this->whenLoaded('admission')),
         ];
     }
 }

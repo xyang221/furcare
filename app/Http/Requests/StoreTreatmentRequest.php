@@ -36,6 +36,7 @@ class StoreTreatmentRequest extends FormRequest
             'comments' => 'nullable|string',
 
             'pet_id' => 'exists:pets,id',
+            'admisson_id' => 'exists:admisson,id',
 
         ];
     }

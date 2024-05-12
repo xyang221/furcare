@@ -22,8 +22,8 @@ class UpdateAdmissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date_admission' => 'required|date',
-            'date_released' => 'required|date',
+            'date_released' => 'nullable|date',
+            'status' => 'nullable|string',
         ];
     }
 }
