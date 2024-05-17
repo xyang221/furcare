@@ -24,11 +24,12 @@ class StoreMedicationRequest extends FormRequest
         return [
             'date' => 'date',
             'description' => 'nullable|string',
-            'dosage' => 'required|string',
-            'medicine_name' => 'required|string',
+            'dosage' => 'required|numeric',
+            'unit' => 'required|string',
             'am'=>'nullable|boolean',
             'pm'=>'nullable|boolean',
 
+            'med_id' => 'exists:medicines,id',
             'pet_id' => 'exists:pets,id',
             'treatment_id' => 'exists:treatment,id',
         ];

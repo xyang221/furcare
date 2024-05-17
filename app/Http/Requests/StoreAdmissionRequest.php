@@ -27,7 +27,6 @@ class StoreAdmissionRequest extends FormRequest
             'status' => 'nullable|string|max:255',
 
             'pet_id' => 'exists:pets,id',
-            'treatment_id' => 'exists:treatment,id',
             // 'services_availed_id' => 'exists:services_availed,id',
 
         ];

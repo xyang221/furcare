@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pet_status', function (Blueprint $table) {
+        Schema::create('medicines', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
-            $table->timestamp('date')->useCurrent();
+            $table->string('name');
+            $table->double('price');
+            $table->string('unit');
+            $table->integer('injectable');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pet_status');
+        Schema::dropIfExists('medicines');
     }
 };

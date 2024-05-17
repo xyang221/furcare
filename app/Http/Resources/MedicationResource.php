@@ -18,15 +18,19 @@ class MedicationResource extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->date,
-            'medicine_name' => $this->medicine_name,
             'description' => $this->description,
             'dosage' => $this->dosage,
+            'unit' => $this->unit,
             'am' => $this->am,
             'pm' => $this->pm,
+            'med_id' => $this->med_id,
 
             'deleted_at' => $this->deleted_at,
 
             'treatment_id' => $this->treatment_id,
+
+            'medicine' => new MedicineResource($this->whenLoaded('medicine')),
+
         ];
     }
 }

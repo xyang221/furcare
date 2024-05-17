@@ -73,7 +73,6 @@ class AdmissionController extends Controller
         //     ->get();
 
 
-
         $data = [
             'data' => TreatmentResource::collection($treatment),
             'clientdeposit' => $clientService,
@@ -84,7 +83,14 @@ class AdmissionController extends Controller
                 'message' => 'No list of pet treatments found.',
                 'clientdeposit' => $clientService,
             ], 404);
-        } else if ($treatment->isEmpty() && $clientService->isEmpty()) {
+        // } else if ($clientService->isEmpty()) {
+        //     return response()->json([
+        //         'data' => TreatmentResource::collection($treatment),
+        //         'clientdeposit' => 'No deposit',
+        //     ], 404);
+        // } 
+        }
+        else if ($treatment->isEmpty() && $clientService->isEmpty()) {
             return response()->json([
                 'message' => 'No list of pet treatments found.',
                 'clientdeposit' => 'No deposit',

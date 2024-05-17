@@ -13,13 +13,20 @@ class Medication extends Model
 
     protected $table = 'medication';
 
-    protected $fillable = ['date', 'description', 'dosage', 'medicine_name', 'treatment_id', 'am', 'pm'];
+    protected $fillable = ['date', 'description', 'dosage','unit', 'treatment_id',  'med_id','am', 'pm'];
 
     protected $dates = ['deleted_at'];
+
+    protected $with = ['treatment','medicine'];
 
     public function treatment()
     {
         return $this->belongsTo(Treatment::class, 'treatment_id', 'id');
+    }
+
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class, 'med_id', 'id');
     }
 
 }

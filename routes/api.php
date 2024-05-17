@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\TestResultController;
 use App\Http\Controllers\Api\PetConditionController;
 use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\Api\MedicationController;
+use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentRecordController;
@@ -291,6 +292,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/archives/medications', [MedicationController::class, 'archivelist']);
     Route::put('/archives/medications/{id}', [MedicationController::class, 'restore']);
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
+
+    Route::get('/medicines', [MedicineController::class, 'index']);
+    Route::get('/medicines/injectables', [MedicineController::class, 'injectables']);
 
     Route::get('/admissions', [AdmissionController::class, 'index']);
     Route::post('/admissions/petowner/{poid}/service/{sid}', [AdmissionController::class, 'store']);

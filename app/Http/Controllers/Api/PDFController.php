@@ -934,6 +934,7 @@ class PDFController extends Controller
                         <th></th>
                         <th>Medicine</th>
                         <th>Dosage</th>
+                        <th>Unit</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -943,8 +944,9 @@ class PDFController extends Controller
                     ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= $med->medicine_name ?></td>
+                            <td><?= $med->medicine->name ?></td>
                             <td><?= $med->dosage ?></td>
+                            <td><?= $med->unit ?></td>
                             <td><?= $med->description ?></td>
                         </tr>
                     <?php endforeach; ?>

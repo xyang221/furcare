@@ -11,10 +11,12 @@ use App\Http\Requests\UpdateMedicationRequest;
 use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\MedicationResource;
 use App\Models\ClientService;
+use App\Models\Medicine;
 use App\Models\PetOwner;
 use App\Models\Service;
 use App\Models\ServicesAvailed;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MedicationController extends Controller
 {
@@ -39,14 +41,67 @@ class MedicationController extends Controller
     {
         $treatment = Treatment::findOrFail($tid);
 
+        $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
+
+        if (!$clientService) {
+
+            $petowner = PetOwner::findOrFail($id);
+            $user = Auth::user();
+            $staff = $user->staff;
+
+            if ($staff) {
+                $renderedby = "$staff->firstname $staff->lastname";
+            } else {
+                $renderedby = "Admin";
+            }
+
+            $newclientService = ClientService::create([
+                'date' => Carbon::now(),
+                'petowner_id' => $petowner->id,
+                'deposit' => 0,
+                'rendered_by' => $renderedby,
+                'status' => "To Pay",
+            ]);
+
+            $clientService = $newclientService;
+        }
+
+        $findMedicine = Medicine::where('id', $request->input('med_id'))->first();
+
+        $findservice = Service::where('service', $findMedicine->name)->first();
+
+        if (!$findservice) {
+            $service = Service::create([
+                'service' => $findMedicine->name,
+                'cat_id' => 8,
+                'isAvailable' => 1,
+            ]);
+        } else {
+            $service = $findservice;
+        }
+
+        $quantity = $request->input('dosage');
+
+        $servicesAvailed = ServicesAvailed::create([
+            'date' => Carbon::now(),
+            'service_id' => $service->id,
+            'unit' => 'shot',
+            'unit_price' => 100,
+            'quantity' => ($quantity > 1) ? $quantity : 1,
+            'client_deposit_id' => $clientService->id,
+            'pet_id' => $treatment->pet->id,
+            'status' => "To Pay",
+        ]);
+
         $medication = Medication::create([
             'date' => Carbon::now(),
             'dosage' => $request->input('dosage'),
+            'unit' => $request->input('unit'),
             'description' => $request->input('description'),
             'treatment_id' => $treatment->id,
             'pet_id' => $treatment->pet_id,
-            'medcat_id' => $request->input('medcat_id'),
-            'medicine_name' => $request->input('medicine_name'),
+            'services_availed_id' => $servicesAvailed->id,
+            'med_id' => $request->input('med_id'),
             'am' =>  $request->input('am'),
             'pm' =>  $request->input('pm'),
         ]);

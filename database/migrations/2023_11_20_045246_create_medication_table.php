@@ -19,8 +19,10 @@ return new class extends Migration
             
             $table->timestamp('date');
             $table->string('description')->nullable();
-            $table->string('dosage');
-            $table->string('medicine_name');
+            $table->double('dosage');
+            $table->string('unit');
+            $table->integer('am');
+            $table->integer('pm');
 
             $table->softDeletes();
             $table->timestamps();
