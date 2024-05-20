@@ -27,6 +27,7 @@ class UpdatePetRequest extends FormRequest
             'gender' => 'nullable|string|max:55',
             'color' => 'nullable|string|max:55',
             'breed_id' => 'exists:breeds,id',
+            'breed2_id' => 'nullable|exists:breeds,id',
             'specie_id' => 'exists:species,id',
         ];
     }

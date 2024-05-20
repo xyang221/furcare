@@ -28,6 +28,7 @@ class StorePetRequest extends FormRequest
             'gender' => 'nullable|string|max:55',
             'color' => 'nullable|string|max:55',
             'breed_id' => 'exists:breeds,id',
+            'breed2_id' => 'nullable|exists:breeds,id',
             'petowner_id' => 'exists:petowners,id',
         ];
     }

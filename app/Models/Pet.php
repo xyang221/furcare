@@ -15,15 +15,20 @@ class Pet extends Model
 
     protected $table = 'pets';
 
-    protected $fillable = ['name', 'birthdate', 'gender','color', 'photo', 'breed_id', 'petowner_id'];
+    protected $fillable = ['name', 'birthdate', 'gender','color', 'photo', 'breed_id','breed2_id', 'petowner_id'];
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['breed', 'petowner'];
+    protected $with = ['breed', 'petowner', 'breed2'];
 
     public function breed()
     {
         return $this->belongsTo(Breed::class, 'breed_id','id');
+    }
+
+    public function breed2()
+    {
+        return $this->belongsTo(Breed::class, 'breed2_id','id');
     }
     
     public function petowner()

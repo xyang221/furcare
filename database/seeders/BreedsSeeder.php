@@ -43,7 +43,7 @@ class BreedsSeeder extends Seeder
 
       3 =>
       array(
-        'breed' => 'Dachshund Corgi',
+        'breed' => 'Dachshund',
         'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -59,7 +59,7 @@ class BreedsSeeder extends Seeder
 
       5 =>
       array(
-        'breed' => 'Border Collie / Poodle ',
+        'breed' => 'Shih-Poo',
         'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -67,7 +67,7 @@ class BreedsSeeder extends Seeder
 
       6 =>
       array(
-        'breed' => 'Mixed Spitz',
+        'breed' => 'St. Bernard',
         'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -115,16 +115,16 @@ class BreedsSeeder extends Seeder
 
       12 =>
       array(
-        'breed' => 'Afghan Chon',
-        'description' => '  known for a boisterous personality, along with uniquely curly fur. ',
+        'breed' => 'German Shepherd',
+        'description' => '   ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       13 =>
       array(
-        'breed' => 'Afghan Collie  ',
-        'description' => ' they also can both be quite a lot for someone new to dogs',
+        'breed' => 'Toy Poodle',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -311,7 +311,7 @@ class BreedsSeeder extends Seeder
 
       36 =>
       array(
-        'breed' => ' Alaskan Husky Shepherd',
+        'breed' => 'Alaskan Husky Shepherd',
         'description' => ' is an energetic, driven crossbreed beloved by those who maintain active lifestyles',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -469,15 +469,15 @@ class BreedsSeeder extends Seeder
 
       54 =>
       array(
-        'breed' => 'American Bull-Jack',
-        'description' => '  the breed is often a spirited family pet',
+        'breed' => 'French Bulldog',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
 
       55 =>
       array(
-        'breed' => 'American Bulldog ',
+        'breed' => 'American Bulldog',
         'description' => ' known for their stocky build, muscular body, and distinctive “bulldog” head ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -493,7 +493,7 @@ class BreedsSeeder extends Seeder
 
       57 =>
       array(
-        'breed' => ' American Bullhuahua',
+        'breed' => 'American Bullhuahua',
         'description' => 'appreciated for their intense watchdog capabilities in a small package ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -541,7 +541,7 @@ class BreedsSeeder extends Seeder
 
       63 =>
       array(
-        'breed' => ' American Eskimo Dog',
+        'breed' => 'American Eskimo Dog',
         'description' => ' known for their intelligence and eagerness to please their owners. They are highly trainable and excel in obedience and agility activities ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -586,7 +586,7 @@ class BreedsSeeder extends Seeder
 
       68 =>
       array(
-        'breed' => ' American Hairless Terrier',
+        'breed' => 'American Hairless Terrier',
         'description' => ' the breed is known as an active companion dog and an especially great choice for allergy sufferers ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -613,7 +613,7 @@ class BreedsSeeder extends Seeder
 
       71 =>
       array(
-        'breed' => ' American Molossus',
+        'breed' => 'American Molossus',
         'description' => ' this breed may be very large, they have an equally big personality and a lot of heart  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -630,7 +630,7 @@ class BreedsSeeder extends Seeder
 
       73 =>
       array(
-        'breed' => ' American Pit Corso',
+        'breed' => 'American Pit Corso',
         'description' => 'Their gentle disposition also lent them to being nanny dogs, as they were known to be excellent with children  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -711,7 +711,7 @@ class BreedsSeeder extends Seeder
 
       82 =>
       array(
-        'breed' => ' Armenian Gampr',
+        'breed' => 'Armenian Gampr',
         'description' => ' is a rare breed of livestock guardian dog originating from the Armenian Highlands ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -742,8 +742,8 @@ class BreedsSeeder extends Seeder
 
       86 =>
       array(
-        'breed' => 'Aussie Shiba ',
-        'description' => ' Known today for its cuteness, Shiba Inus once hunted powerful game like wild boar ',
+        'breed' => 'Shiba Inu',
+        'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -766,7 +766,7 @@ class BreedsSeeder extends Seeder
 
       89 =>
       array(
-        'breed' => 'Beagle',
+        'breed' => 'Bull Terrier',
         'description' => ' ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -806,7 +806,7 @@ class BreedsSeeder extends Seeder
 
       94 =>
       array(
-        'breed' => ' Australian Labradoodle',
+        'breed' => 'Australian Labradoodle',
         'description' => ' With their high energy and athleticism, they excel in various outdoor activities  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -854,7 +854,7 @@ class BreedsSeeder extends Seeder
 
       100 =>
       array(
-        'breed' => ' Australian Stumpy Tail Cattle Dog',
+        'breed' => 'Australian Stumpy Tail Cattle Dog',
         'description' => '   characteristic short or sometimes non-existent tail, is a descendant of wild dingoes and domesticated herding dogs from the late 19th century ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -910,7 +910,7 @@ class BreedsSeeder extends Seeder
 
       107 =>
       array(
-        'breed' => ' Bascottie',
+        'breed' => 'Bascottie',
         'description' => ' This breed, created for those experienced with stubborn breeds, continues to gain devoted fans due to its loyalty ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -971,7 +971,7 @@ class BreedsSeeder extends Seeder
       ),
       115 =>
       array(
-        'breed' => ' Basset Retriever',
+        'breed' => 'Basset Retriever',
         'description' => ' a great family dog with a mild-mannered disposition, a willingness to please, and a loving and devoted nature ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -1042,14 +1042,14 @@ class BreedsSeeder extends Seeder
       ),
       125 =>
       array(
-        'breed' => ' Belgian Malinois',
+        'breed' => 'Belgian Malinois',
         'description' => ' a dog breed with a loyal nature, strong work ethic, and herding instincts ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       126 =>
       array(
-        'breed' => ' Belgian Sheepdog',
+        'breed' => 'Belgian Sheepdog',
         'description' => ' Belgian Sheepdogs are alert, devoted, and protective ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -1098,7 +1098,7 @@ class BreedsSeeder extends Seeder
       ),
       133 =>
       array(
-        'breed' => ' Bichonaranian',
+        'breed' => 'Bichonaranian',
         'description' => ' This breed is short in stature. However, they’re huge in personality, and can be a rewarding companion ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -1160,7 +1160,7 @@ class BreedsSeeder extends Seeder
 
       141 =>
       array(
-        'breed' => ' Saint Bernard',
+        'breed' => 'Saint Bernard',
         'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -1385,7 +1385,7 @@ class BreedsSeeder extends Seeder
       ),
       172 =>
       array(
-        'breed' => ' Fox Terrier',
+        'breed' => 'Fox Terrier',
         'description' => '  ',
         'specie_id' => 1,
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

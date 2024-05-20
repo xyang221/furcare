@@ -154,75 +154,77 @@ class PDFController extends Controller
                 <tbody>
                     <?php
                     $totalCost = 0;
-                    foreach ($servicesAvailed as $service) :
-                        $subtotal = $service->quantity * $service->unit_price; // Calculate subtotal for each service
-                        $totalCost += $subtotal; // Accumulate subtotal to get the total cost
-                        $remainingBalance = 0;
+                    $groupedServices = [];
+
+                    // Grouping services by pet name and service
+                    foreach ($servicesAvailed as $service) {
+                        $key = $service->pet->name . '-' . $service->service->service;
+                        if (!isset($groupedServices[$key])) {
+                            $groupedServices[$key] = [
+                                'pet_name' => $service->pet->name,
+                                'service' => $service->service->service,
+                                'quantity' => 0,
+                                'unit' => $service->unit,
+                                'unit_price' => $service->unit_price,
+                                'subtotal' => 0
+                            ];
+                        }
+                        $groupedServices[$key]['quantity'] += $service->quantity;
+                        $groupedServices[$key]['subtotal'] += $service->quantity * $service->unit_price;
+                    }
+
+                    // Calculate total cost and render table rows
+                    foreach ($groupedServices as $service) {
+                        $totalCost += $service['subtotal'];
                         $remainingBalance = $totalCost - $clientService->deposit - $paymentRecord->discount;
                         if ($remainingBalance < 0) {
                             $remainingBalance = 0;
                         }
                     ?>
                         <tr>
-                            <td><?= $service->pet->name ?></td>
-                            <td><?= $service->service->service ?></td>
-                            <td><?= $service->quantity ?></td>
-                            <td><?= $service->unit ?></td>
-                            <td><?= number_format($service->unit_price, 2) ?></td>
-                            <td><?= number_format($subtotal, 2) ?></td>
+                            <td><?= $service['pet_name'] ?></td>
+                            <td><?= $service['service'] ?></td>
+                            <td><?= $service['quantity'] ?></td>
+                            <td><?= $service['unit'] ?></td>
+                            <td><?= number_format($service['unit_price'], 2) ?></td>
+                            <td><?= number_format($service['subtotal'], 2) ?></td>
                         </tr>
-
-                    <?php endforeach; ?>
+                    <?php } ?>
 
                     <tr>
-                        <td class="total" colspan="5">
-                            Total:
-                        </td>
+                        <td class="total" colspan="5">Total:</td>
                         <td><?= number_format($totalCost, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Deposit:
-                        </td>
+                        <td class="total" colspan="5">Deposit:</td>
                         <td><?= number_format($clientService->deposit, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Discount:
-                        </td>
+                        <td class="total" colspan="5">Discount:</td>
                         <td><?= number_format($paymentRecord->discount, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Remaining Charge:
-                        </td>
+                        <td class="total" colspan="5">Remaining Charge:</td>
                         <td><?= number_format($remainingBalance, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Type of Payment:
-                        </td>
+                        <td class="total" colspan="5">Type of Payment:</td>
                         <td><?= $paymentRecord->type ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Amount:
-                        </td>
+                        <td class="total" colspan="5">Amount:</td>
                         <td><?= number_format($paymentRecord->amount, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Change:
-                        </td>
+                        <td class="total" colspan="5">Change:</td>
                         <td><?= number_format($paymentRecord->change, 2) ?></td>
                     </tr>
                     <tr>
-                        <td class="total" colspan="5">
-                            Amounts Payable:
-                        </td>
+                        <td class="total" colspan="5">Amounts Payable:</td>
                         <td><?= number_format($paymentRecord->amounts_payable, 2) ?></td>
                     </tr>
                 </tbody>
+
             </table>
             <div class="flexrow">
                 <strong>Rendered by:</strong> <span><?= $clientService->rendered_by ?></span>
