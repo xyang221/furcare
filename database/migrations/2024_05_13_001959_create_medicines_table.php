@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->double('price');
             $table->string('unit');
-            $table->integer('injectable');
+            $table->integer('medication');
             $table->timestamps();
             $table->softDeletes();
         });

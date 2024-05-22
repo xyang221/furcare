@@ -28,8 +28,10 @@ class MedicationResource extends JsonResource
             'deleted_at' => $this->deleted_at,
 
             'treatment_id' => $this->treatment_id,
+            'services_availed_id' => $this->services_availed_id,
 
             'medicine' => new MedicineResource($this->whenLoaded('medicine')),
+            'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];
     }

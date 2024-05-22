@@ -81,12 +81,13 @@ class MedicationController extends Controller
         }
 
         $quantity = $request->input('dosage');
+        $unit = $request->input('med_id');
 
         $servicesAvailed = ServicesAvailed::create([
             'date' => Carbon::now(),
             'service_id' => $service->id,
-            'unit' => 'shot',
-            'unit_price' => 100,
+            'unit' => ($unit === "mL") ? "shot" : $unit,
+            'unit_price' => $findMedicine->price,
             'quantity' => ($quantity > 1) ? $quantity : 1,
             'client_deposit_id' => $clientService->id,
             'pet_id' => $treatment->pet->id,
@@ -104,6 +105,7 @@ class MedicationController extends Controller
             'med_id' => $request->input('med_id'),
             'am' =>  $request->input('am'),
             'pm' =>  $request->input('pm'),
+            'services_availed_id' => $servicesAvailed->id
         ]);
 
         return new MedicationResource($medication, 201);
@@ -157,6 +159,9 @@ class MedicationController extends Controller
     {
         $medication = Medication::findOrFail($id);
         $medication->forceDelete();
+        // $service = Service::where('service', $medication->med_id->name)->latest()->first();
+        $serviceavailed = ServicesAvailed::where('id', $medication->services_availed_id);
+        $serviceavailed->forceDelete();
         return response()->json(['message' => 'The pet medication record within this treatment was deleted.'], 204);
     }
 

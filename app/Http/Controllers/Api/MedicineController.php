@@ -23,9 +23,9 @@ class MedicineController extends Controller
         return MedicineResource::collection($medicines);
     }
 
-    public function injectables()
+    public function formedications()
     {
-        $medicines = Medicine::query()->where('injectable',1)->orderBy('name', 'asc')->get();
+        $medicines = Medicine::query()->where('medication',1)->orderBy('name', 'asc')->get();
 
         if ($medicines->isEmpty()) {
             return response()->json(['message' => 'No medicines found.'], 404);

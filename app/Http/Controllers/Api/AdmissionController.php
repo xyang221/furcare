@@ -163,7 +163,7 @@ class AdmissionController extends Controller
         return new AdmissionResource($admission);
     }
 
-    public function perdeceased(UpdateAdmissionRequest $request, Admission $admission, $id)
+    public function petdeceased(UpdateAdmissionRequest $request, Admission $admission, $id)
     {
         $admission = Admission::findOrFail($id);
         $data = $request->validated();

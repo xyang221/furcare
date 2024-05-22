@@ -294,7 +294,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/archives/medications/{id}', [MedicationController::class, 'forcedelete']);
 
     Route::get('/medicines', [MedicineController::class, 'index']);
-    Route::get('/medicines/injectables', [MedicineController::class, 'injectables']);
+    Route::get('/medicines/medications', [MedicineController::class, 'formedications']);
+    Route::post('medicines/{id}', [MedicationController::class, 'store']);
+    Route::put('medicines/{id}', [MedicationController::class, 'update']);
+    Route::get('medicines/{id}', [MedicationController::class, 'show']);
 
     Route::get('/admissions', [AdmissionController::class, 'index']);
     Route::post('/admissions/petowner/{poid}/service/{sid}', [AdmissionController::class, 'store']);
@@ -305,7 +308,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/archives/admissions', [AdmissionController::class, 'archivelist']);
     Route::put('/archives/admissions/{id}', [AdmissionController::class, 'restore']);
     Route::put('/admissions/released/{id}', [AdmissionController::class, 'petrealesed']);
-    Route::put('/admissions/deceased/{id}', [AdmissionController::class, 'perdeceased']);
+    Route::put('/admissions/deceased/{id}', [AdmissionController::class, 'petdeceased']);
     Route::delete('/archives/admissions/{id}', [AdmissionController::class, 'forcedelete']);
 
     Route::get('/appointments-triger/today', [AppointmentController::class, 'listenForTodayAppointments']);
