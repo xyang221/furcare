@@ -23,7 +23,7 @@ class StoreTestResultRequest extends FormRequest
     {
         return [
             'date' => 'date',
-            'attachment' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:5048',
+            'attachment' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5048',
             'description' => 'nullable|string',
             'pet_id' => 'exists:pets,id',
             'services_availed_id' => 'exists:services_availed,id'

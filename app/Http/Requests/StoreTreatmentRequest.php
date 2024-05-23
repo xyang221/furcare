@@ -37,6 +37,7 @@ class StoreTreatmentRequest extends FormRequest
 
             'pet_id' => 'exists:pets,id',
             'admisson_id' => 'exists:admisson,id',
+            'vet_id' => 'exists:veterinarians,id',
 
         ];
     }

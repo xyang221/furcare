@@ -81,18 +81,29 @@ class MedicationController extends Controller
         }
 
         $quantity = $request->input('dosage');
-        $unit = $request->input('med_id');
+        $unit = $request->input('unit');
+        $amintake = $request->input('am');
+        $pmintake = $request->input('pm');
+        if ($amintake && $pmintake) {
+            $quantity = 2;
+        }
+        $servicesAvailed = ServicesAvailed::where('service_id', $service->id)->where('status', "To Pay")->latest()->first();
+        if ($servicesAvailed) {
+            $servicesAvailed->update(['quantity' => $servicesAvailed->quantity + 1]);
+        } else {
+            $servicesAvailed = ServicesAvailed::create([
+                'date' => Carbon::now(),
+                'service_id' => $service->id,
+                'unit' => $unit,
+                'unit_price' => $findMedicine->price,
+                'quantity' => ($quantity > 1 && !$quantity === 0) ? $quantity : 1,
+                'client_deposit_id' => $clientService->id,
+                'pet_id' => $treatment->pet->id,
+                'status' => "To Pay",
+            ]);
+        }
 
-        $servicesAvailed = ServicesAvailed::create([
-            'date' => Carbon::now(),
-            'service_id' => $service->id,
-            'unit' => ($unit === "mL") ? "shot" : $unit,
-            'unit_price' => $findMedicine->price,
-            'quantity' => ($quantity > 1) ? $quantity : 1,
-            'client_deposit_id' => $clientService->id,
-            'pet_id' => $treatment->pet->id,
-            'status' => "To Pay",
-        ]);
+
 
         $medication = Medication::create([
             'date' => Carbon::now(),
@@ -148,6 +159,13 @@ class MedicationController extends Controller
         $medication = Medication::findOrFail($id);
         $data = $request->validated();
         $medication->update($data);
+
+        $amintake = $request->input('am');
+        $pmintake = $request->input('pm');
+        $service = ServicesAvailed::find($medication->services_availed_id); // Assuming you have the service ID
+        if ($service) {
+            $service->update(['quantity' => $amintake && $pmintake ? 2 : 1]);
+        }
 
         return response()->json(['message' => 'Medication updated successfully.'], 204);
     }

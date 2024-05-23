@@ -166,7 +166,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/servicesavailed', [ServicesAvailedController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
-    Route::post('/servicesavailed/store-medicine/petowner/{id}', [ServicesAvailedController::class, 'storeMedicine']);
+    Route::post('/servicesavailed/store-medicine/{mid}/petowner/{id}', [ServicesAvailedController::class, 'storeMedicine']);
     Route::post('/servicesavailed/store-product/petowner/{id}', [ServicesAvailedController::class, 'storeProduct']);
 
     Route::get('/servicesavailed/{id}', [ServicesAvailedController::class, 'show']);
@@ -295,9 +295,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/medicines', [MedicineController::class, 'index']);
     Route::get('/medicines/medications', [MedicineController::class, 'formedications']);
-    Route::post('medicines/{id}', [MedicationController::class, 'store']);
-    Route::put('medicines/{id}', [MedicationController::class, 'update']);
-    Route::get('medicines/{id}', [MedicationController::class, 'show']);
+    Route::post('/medicines', [MedicineController::class, 'store']);
+    Route::put('/medicines/{id}', [MedicineController::class, 'update']);
+    Route::get('/medicines/{id}', [MedicineController::class, 'show']);
 
     Route::get('/admissions', [AdmissionController::class, 'index']);
     Route::post('/admissions/petowner/{poid}/service/{sid}', [AdmissionController::class, 'store']);

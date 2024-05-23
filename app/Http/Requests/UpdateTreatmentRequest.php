@@ -34,6 +34,9 @@ class UpdateTreatmentRequest extends FormRequest
             'body_condition_score' => 'nullable|string',
             'fluid_rate' => 'nullable|string',
             'comments' => 'nullable|string',
+
+            'vet_id' => 'exists:veterinarians,id',
+
         ];
     }
 }

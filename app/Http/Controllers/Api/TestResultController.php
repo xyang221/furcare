@@ -73,23 +73,35 @@ class TestResultController extends Controller
             'client_deposit_id' => $clientService->id,
             'pet_id' => $sarequest->input('pet_id'),
             'status' => "To Pay",
+            'unit' => "test",
         ]);
 
-        if (!$trrequest->hasFile('attachment')) {
-            return response()->json(["message" => "Please upload an image attachment."], 400);
+        // if (!$trrequest->hasFile('attachment')) {
+        //     return response()->json(["message" => "Please upload an image attachment."], 400);
+        // }
+
+        if ($trrequest->hasFile('attachment')) {
+            $file = $trrequest->file('attachment');
+            $name = time() . '.' . $file->getClientOriginalExtension();
+            $name_path = $file->move('storage/testresult-attachments/', $name);
+
+            $testResult = TestResult::create([
+                'date' => Carbon::now(),
+                'pet_id' => $servicesAvailed->pet_id,
+                'attachment' => $name_path,
+                'description' => $trrequest->input('description'),
+                'services_availed_id' => $servicesAvailed->id,
+            ]);
+        } else {
+            $testResult = TestResult::create([
+                'date' => Carbon::now(),
+                'pet_id' => $servicesAvailed->pet_id,
+                'description' => $trrequest->input('description'),
+                'services_availed_id' => $servicesAvailed->id,
+            ]);
         }
 
-        $file = $trrequest->file('attachment');
-        $name = time() . '.' . $file->getClientOriginalExtension();
-        $name_path = $file->move('storage/testresult-attachments/', $name);
 
-        $testResult = TestResult::create([
-            'date' => Carbon::now(),
-            'pet_id' => $servicesAvailed->pet_id,
-            'attachment' => $name_path,
-            'description' => $trrequest->input('description'),
-            'services_availed_id' => $servicesAvailed->id,
-        ]);
 
         return new TestResultResource($testResult, 201);
     }

@@ -38,23 +38,30 @@ class MedicineController extends Controller
      */
     public function store(StoreMedicineRequest $request)
     {
-        //
+        $data = $request->validated(); //get the data
+        $medicine = Medicine::create($data);
+        return new MedicineResource($medicine, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Medicine $medicine)
+    public function show(Medicine $medicine,$id)
     {
-        //
+        $medicine = Medicine::findOrFail($id);
+        return new MedicineResource($medicine);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicineRequest $request, Medicine $medicine)
+    public function update(UpdateMedicineRequest $request, Medicine $medicine,$id)
     {
-        //
+        $medicine = Medicine::findOrFail($id);
+        $data = $request->validated();
+        $medicine->update($data);
+
+        return new MedicineResource($medicine);
     }
 
     /**
@@ -62,6 +69,7 @@ class MedicineController extends Controller
      */
     public function destroy(Medicine $medicine)
     {
-        //
+        $medicine->delete();
+        return response("This medicine was permanently deleted");
     }
 }

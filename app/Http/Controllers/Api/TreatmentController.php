@@ -74,8 +74,6 @@ class TreatmentController extends Controller
             ]);
         }
 
-      
-
         $treatment = Treatment::create([
             'date' => Carbon::now(),
             'day' => $request->input('day'),
@@ -92,18 +90,9 @@ class TreatmentController extends Controller
             'fluid_rate' => $request->input('fluid_rate'),
             'comments' => $request->input('comments'),
             'admission_id' => $latestAdmission->id,
+            'vet_id' => $request->input('vet_id'),
+
         ]);
-
-        // $servicesAvailed = ServicesAvailed::create([
-        //     'date' => Carbon::now(),
-        //     'service_id' => $service->id,
-        //     'unit_price' => $sarequest->input('unit_price'),
-        //     'client_deposit_id' => $clientService->id,
-        //     'pet_id' => $treatment->pet_id,
-        //     'status' => "To Pay",
-        // ]);
-
-       
 
         return new TreatmentResource($treatment, 201);
     }

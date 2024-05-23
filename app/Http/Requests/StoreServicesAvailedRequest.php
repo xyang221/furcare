@@ -25,9 +25,9 @@ class StoreServicesAvailedRequest extends FormRequest
             'date'=>'date',
             'status' => 'in:To Pay,Completed',
             'unit' => 'nullable|string',
-            'unit_price' => 'required|numeric',
+            'unit_price' => 'nullable|numeric',
             'quantity' => 'numeric',
-            'service_id' => 'exists:services,id',
+            'service_id' => 'nullable|exists:services,id',
             'client_deposit_id' => 'exists:client_deposits,id',
             'pet_id' => 'exists:pets,id',
 

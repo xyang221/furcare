@@ -36,8 +36,10 @@ class TreatmentResource extends JsonResource
             
             'pet_id' => $this->pet_id,
             'admission_id' => $this->admission_id,
+            'vet_id' => $this->vet_id,
             'pet' => new PetResource($this->whenLoaded('pet')),
             'admission' => new AdmissionResource($this->whenLoaded('admission')),
+            'vet' => new DoctorResource($this->whenLoaded('vet')),
         ];
     }
 }

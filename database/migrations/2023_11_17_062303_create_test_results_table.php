@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
-            $table->string('attachment');
+            $table->string('attachment')->nullable();
             $table->string('description')->nullable();
 
             $table->unsignedBigInteger('services_availed_id');

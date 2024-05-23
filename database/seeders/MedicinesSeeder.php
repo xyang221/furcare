@@ -691,9 +691,9 @@ class MedicinesSeeder extends Seeder
       85 =>
       array(
         'medication' => 1,
-        'name' => 'Liver Guard',
-        'price' => 510,
-        'unit' => 'tab',
+        'name' => 'Liver Supplement',
+        'price' => 100,
+        'unit' => 'shot',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
       86 =>
@@ -795,7 +795,7 @@ class MedicinesSeeder extends Seeder
       98 =>
       array(
         'medication' => 1,
-        'name' => 'Septo',
+        'name' => 'Septotryl',
         'price' => 100,
         'unit' => 'shot',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -878,6 +878,22 @@ class MedicinesSeeder extends Seeder
         'name' => 'Plate leaf',
         'price' => 100,
         'unit' => 'shot',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      109 =>
+      array(
+        'medication' => 1,
+        'name' => 'Papi Doxy',
+        'price' => 30,
+        'unit' => 'tab',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      110 =>
+      array(
+        'medication' => 1,
+        'name' => 'Nefrotec',
+        'price' => 80,
+        'unit' => 'tab',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
     ]);

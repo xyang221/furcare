@@ -27,7 +27,6 @@ class UpdateMedicationRequest extends FormRequest
             'unit' => 'required|string',
             'am'=>'nullable|boolean',
             'pm'=>'nullable|boolean',
-            'services_availed_id' => 'exists:treatment,id',
         ];
     }
 }

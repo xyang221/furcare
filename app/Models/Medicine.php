@@ -12,7 +12,7 @@ class Medicine extends Model
 
     protected $table = 'medicines';
 
-    protected $fillable = ['name', 'price', 'unit'];
+    protected $fillable = ['medication', 'name', 'price', 'unit'];
 
     protected $dates = ['deleted_at'];
 }

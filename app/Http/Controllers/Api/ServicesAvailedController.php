@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateServicesAvailedRequest;
 use App\Http\Resources\MedicationResource;
 use App\Http\Resources\ServicesAvailedResource;
 use App\Models\Medication;
+use App\Models\Medicine;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,7 +73,7 @@ class ServicesAvailedController extends Controller
         return response()->json(['message' => 'Service availed was successfully saved.'], 201);
     }
 
-    public function storeMedicine(StoreServicesAvailedRequest $request, StoreServiceRequest $sreq, $id)
+    public function storeMedicine(StoreServicesAvailedRequest $request, $mid ,$id)
     {
         $clientService = ClientService::where('petowner_id', $id)->where('status', "To Pay")->first();
 
@@ -98,11 +99,12 @@ class ServicesAvailedController extends Controller
 
             $clientService = $newclientService;
         }
+        $findMedicine = Medicine::findOrFail($mid);
+        $findservice = Service::where('service', $findMedicine->name)->first();
 
-        $findservice = Service::where('service', $sreq->input('service'))->first();
         if (!$findservice) {
             $service = Service::create([
-                'service' => $sreq->input('service'),
+                'service' => $findMedicine->name,
                 'cat_id' => 8,
                 'isAvailable' => 1,
             ]);
@@ -116,6 +118,8 @@ class ServicesAvailedController extends Controller
         $requestData['client_deposit_id'] = $clientService->id;
         $requestData['service_id'] = $service->id;
         $requestData['status'] = "To Pay";
+        $requestData['unit_price'] = $findMedicine->price;
+        $requestData['unit'] = $findMedicine->unit;
         ServicesAvailed::create($requestData);
         return response()->json(['message' => 'Service availed was successfully saved.'], 201);
     }
