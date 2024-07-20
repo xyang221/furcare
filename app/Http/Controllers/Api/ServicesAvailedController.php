@@ -327,6 +327,8 @@ class ServicesAvailedController extends Controller
         return ServicesAvailedResource::collection($servicesAvailed);
     }
 
+   
+
     public function getProductPetownerServices($id)
     {
         $services = Service::where('cat_id', 9)->get();
@@ -344,6 +346,22 @@ class ServicesAvailedController extends Controller
         return ServicesAvailedResource::collection($servicesAvailed);
     }
 
+    public function getSurgeryPetownerServices($id)
+    {
+        $services = Service::where('cat_id', 13)->get();
+        $clientServiceIds = ClientService::where('petowner_id', $id)->pluck('id');
+
+        $servicesAvailed = ServicesAvailed::whereIn('client_deposit_id', $clientServiceIds)
+            ->whereIn('service_id', $services->pluck('id'))
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($servicesAvailed->isEmpty()) {
+            return response()->json(['message' => 'No list of surgeries found.'], 404);
+        }
+
+        return ServicesAvailedResource::collection($servicesAvailed);
+    }
     /**
      * Update the specified resource in storage.
      */

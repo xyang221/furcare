@@ -683,8 +683,8 @@ class MedicinesSeeder extends Seeder
       84 =>
       array(
         'medication' => 0,
-        'name' => 'Nona Folha',
-        'price' => 950,
+        'name' => 'Papi Bion',
+        'price' => 350,
         'unit' => 'bottle',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
@@ -894,6 +894,30 @@ class MedicinesSeeder extends Seeder
         'name' => 'Nefrotec',
         'price' => 80,
         'unit' => 'tab',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      111 =>
+      array(
+        'medication' => 1,
+        'name' => 'Anesthesia',
+        'price' => 1600,
+        'unit' => 'shot',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      112 =>
+      array(
+        'medication' => 1,
+        'name' => 'Duphalyte',
+        'price' => 100,
+        'unit' => 'shot',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      ),
+      112 =>
+      array(
+        'medication' => 1,
+        'name' => 'Liv 52',
+        'price' => 17,
+        'unit' => 'tab/s',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
       ),
     ]);

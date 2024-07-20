@@ -21,7 +21,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::whereNotIn('cat_id', [12, 9, 8])
+        $services = Service::whereNotIn('cat_id', [12, 9, 8,13])
             ->orderBy('cat_id', 'asc')
             ->get();
 
@@ -43,7 +43,7 @@ class ServiceController extends Controller
     public function noothertestresults()
     {
         $services = Service::whereNotIn('service', ['EHRLICHIA', 'ANAPLASMA', 'HEARTWORM TEST', 'LYME DISEASE'])
-            ->whereNotIn('cat_id', [12, 9, 8])
+            ->whereNotIn('cat_id', [12, 9, 8,13])
             ->orderBy('cat_id', 'asc')
             ->get();
 

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MedicationResource extends JsonResource
+class SurgeryResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -16,22 +16,15 @@ class MedicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id'=> $this->id,
             'date' => $this->date,
-            'description' => $this->description,
-            'dosage' => $this->dosage,
-            'unit' => $this->unit,
-            'am' => $this->am,
-            'pm' => $this->pm,
-            'charge' => $this->charge,
-            'med_id' => $this->med_id,
+            'procedure' => $this->procedure,
+            'chart_num' => $this->chart_num,
 
-            'deleted_at' => $this->deleted_at,
-
-            'treatment_id' => $this->treatment_id,
+            'pet_id' => $this->pet_id,
             'services_availed_id' => $this->services_availed_id,
 
-            'medicine' => new MedicineResource($this->whenLoaded('medicine')),
+            'pet' => new PetResource($this->whenLoaded('pet')),
             'servicesavailed' => new ServicesAvailedResource($this->whenLoaded('servicesavailed')),
 
         ];

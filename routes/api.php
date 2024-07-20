@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentRecordController;
 use App\Http\Controllers\Api\PDFController;
 use App\Http\Controllers\Api\PetStatusController;
+use App\Http\Controllers\Api\SurgeryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -164,6 +165,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/diagnosis/{id}', [DiagnosisController::class, 'update']);
     Route::delete('/diagnosis/{id}/forcedelete', [DiagnosisController::class, 'destroy']);
 
+    Route::get('/surgery', [SurgeryController::class, 'index']);
+    Route::get('/surgery/pet/{id}/{date}', [SurgeryController::class, 'getSurgerybyDate']);
+    Route::post('/surgery/petowner/{id}', [SurgeryController::class, 'store']);
+    Route::get('/surgery/{id}', [SurgeryController::class, 'show']);
+    Route::get('/surgery/pet/{id}', [SurgeryController::class, 'getbyPet']);
+    Route::get('/surgery/petowner/{id}/service/{sid}', [SurgeryController::class, 'getSurgeryByServiceandPetowner']);
+    Route::put('/surgery/{id}', [SurgeryController::class, 'update']);
+    Route::delete('/surgery/{id}/forcedelete', [SurgeryController::class, 'destroy']);
+
     Route::get('/servicesavailed', [ServicesAvailedController::class, 'index']);
     Route::post('/servicesavailed/petowner/{id}/service/{sid}', [ServicesAvailedController::class, 'store']);
     Route::post('/servicesavailed/store-medicine/{mid}/petowner/{id}', [ServicesAvailedController::class, 'storeMedicine']);
@@ -186,6 +196,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/servicesavailed/others/petowner/{id}', [ServicesAvailedController::class, 'getOtherByServiceandPetowner']);
     Route::get('/servicesavailed/medicines/petowner/{id}', [ServicesAvailedController::class, 'getMedicinePetownerServices']);
     Route::get('/servicesavailed/products/petowner/{id}', [ServicesAvailedController::class, 'getProductPetownerServices']);
+    Route::get('/servicesavailed/surgery/petowner/{id}', [ServicesAvailedController::class, 'getSurgeryPetownerServices']);
 
     Route::get('/clientdeposits/{id}/generate-chargeslip', [PDFController::class, 'generatePDF']);
     Route::get('/clientdeposits/{id}/generate-chargeslip/balancepaid', [PDFController::class, 'generatePDFBalancePaid']);
@@ -285,6 +296,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/medications', [MedicationController::class, 'index']);
     Route::post('/medications/petowner/{id}/treatment/{tid}', [MedicationController::class, 'store']);
+    Route::post('/medications/treatment/{tid}', [MedicationController::class, 'storeMedicationonly']);
     Route::put('/medications/{id}', [MedicationController::class, 'update']);
     Route::get('/medications/{id}', [MedicationController::class, 'show']);
     Route::get('/medications/petowner/{id}/service/{sid}', [MedicationController::class, 'showPetownerMedication']);
